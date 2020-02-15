@@ -18,7 +18,7 @@ auto gpu_sgemm_sh_reg_entry(const Matrix<float> &A, const Matrix<float> &B)
   float *d_A, *d_B, *d_C;
   cudaMalloc(&d_A, A.bytesize());
   cudaMalloc(&d_B, B.bytesize());
-  cudaMalloc(&d_C, m * n * sizeof(float));
+  cudaMalloc(&d_C, output_bytesize);
 
   // copy inputs to device
   cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
@@ -51,7 +51,7 @@ auto gpu_sgemm_naive_entry(const Matrix<float> &A, const Matrix<float> &B)
   float *d_A, *d_B, *d_C;
   cudaMalloc(&d_A, A.bytesize());
   cudaMalloc(&d_B, B.bytesize());
-  cudaMalloc(&d_C, m * n * sizeof(float));
+  cudaMalloc(&d_C, output_bytesize);
 
   // copy inputs to device
   cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
@@ -82,7 +82,7 @@ auto cublas_sgemm_entry(const Matrix<float> &A, const Matrix<float> &B) -> Matri
   float *d_A, *d_B, *d_C;
   cudaMalloc(&d_A, A.bytesize());
   cudaMalloc(&d_B, B.bytesize());
-  cudaMalloc(&d_C, m * n * sizeof(float));
+  cudaMalloc(&d_C, output_bytesize);
 
   // copy inputs to device
   cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);

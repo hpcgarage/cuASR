@@ -17,9 +17,9 @@ target_link_libraries(cpu_bench
 
 # GPU Benchmarks
 set(gpu_bench_src
-  gpu_bench.cpp
+  gpu_bench.cu
 )
-add_executable(gpu_bench ${gpu_bench_src})
+CUDA_ADD_EXECUTABLE(gpu_bench ${gpu_bench_src})
 target_link_libraries(gpu_bench
   benchmark
   benchmark_main
