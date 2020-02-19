@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 #include <iostream>
 
-TEST(FWGPUGemm, NaiveCorrect) {
+TEST(FWGPU_Gemm, CpuNaiveCorrect) {
   // [8.0   3.0   0.0   1.0]    [5.0 8.0 0.0 6.6]   [ 53    82.5    11.5    60.5]
   // [2.0   5.0   4.0   9.0]  * [4.0 6.0 3.5 0.1] = [ 51    78.5    36.1   118.3]
   // [7.0   6.0   10.   13.]    [3.0 7.0 2.4 9.5]   [102   168.5    58.0   238.0]
@@ -23,7 +23,7 @@ TEST(FWGPUGemm, NaiveCorrect) {
       { 5.0f, 4.0f, 3.0f, 1.0f, 8.0f, 6.0f, 7.0f, 0.5f, 0.0f, 3.5f, 2.4f, 1.0f, 6.6f,
         0.1f, 9.5f, 7.4f });
 
-  auto c = fwgpu::naive_mm(a, b);
+  auto c = fwgpu::cpu_gemm_naive_entry(a, b);
 
   EXPECT_EQ(size_t { 12 }, c.size());
   EXPECT_EQ(size_t { 3 }, c.num_rows());
@@ -33,7 +33,7 @@ TEST(FWGPUGemm, NaiveCorrect) {
   EXPECT_FLOAT_EQ(58.0f, c(2, 2));
 }
 
-TEST(FWGPUGemm, CublasCorrect) {
+TEST(FWGPU_Gemm, CublasCorrect) {
   // [1.8   7.0   2.8   3.0]    [5.1 2.4]   [56.04,  98.74]
   // [2.0   5.2   4.7   4.1]  * [4.6 6.1] = [56.95, 115.85]
   // [4.0   1.2   5.0   8.0]    [3.2 9.9]   [57.12, 130.42]
@@ -54,7 +54,7 @@ TEST(FWGPUGemm, CublasCorrect) {
   EXPECT_FLOAT_EQ(130.42f, c(2, 1));
 }
 
-TEST(FWGPUGemm, CpuNaiveSameAsCublas) {
+TEST(FWGPU_Gemm, CpuNaiveEqCublas) {
   // two random matrices
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
@@ -70,7 +70,7 @@ TEST(FWGPUGemm, CpuNaiveSameAsCublas) {
   }
 }
 
-TEST(FWGPUGemm, GpuSimpleSgemmSaveAsCpuNaive) {
+TEST(FWGPU_Gemm, GpuNaiveEqCpuNaive) {
   // two random matrices
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
@@ -86,7 +86,7 @@ TEST(FWGPUGemm, GpuSimpleSgemmSaveAsCpuNaive) {
   }
 }
 
-TEST(FWGPUGemm, GpuSgemmNaiveSameAsCublas) {
+TEST(FWGPU_Gemm, GpuNaiveEqCublas) {
   // two random matrices
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
@@ -102,7 +102,7 @@ TEST(FWGPUGemm, GpuSgemmNaiveSameAsCublas) {
   }
 }
 
-TEST(FWGPUGemm, GpuSgemmShRegSameAsCublas) {
+TEST(FWGPU_Gemm, GpuShRegEqCublas) {
   // two random matrices
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);

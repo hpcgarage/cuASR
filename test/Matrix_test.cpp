@@ -3,7 +3,7 @@
 
 #include "include/Matrix.hpp"
 
-TEST(FWGPUMatrix, BasicConstructor) {
+TEST(FWGPU_Matrix, BasicConstructorCorrect) {
   auto x = fwgpu::Matrix<float>(6, 2);
   for (auto i = 0u; i < 12; ++i) {
     x(i) = (float)i;
@@ -19,7 +19,7 @@ TEST(FWGPUMatrix, BasicConstructor) {
   EXPECT_FLOAT_EQ(11.0f, x(5, 1));
 }
 
-TEST(FWGPUMatrix, InitializerListConstructor) {
+TEST(FWGPU_Matrix, InitializerListConstructorCorrect) {
   // [8.0   3.0   0.0   1.0]
   // [2.0   5.0   4.0   9.0]
   // [7.0   6.0   10.   13.]
@@ -35,7 +35,7 @@ TEST(FWGPUMatrix, InitializerListConstructor) {
   EXPECT_FLOAT_EQ(10.0f, x(2, 2));
 }
 
-TEST(FWGPUMatrix, RandomMatrixConstructor) {
+TEST(FWGPU_Matrix, RandomMatrixConstructorCorrect) {
   size_t const seed  = 8;
   auto const minimum = 1.0545;
   auto const maximum = 28.1;
