@@ -2,7 +2,6 @@
 #include "include/cpu_gemm.hpp"
 #include "include/gpu_gemm_entry.cuh"
 #include "gtest/gtest.h"
-#include <iostream>
 
 TEST(FWGPU_Gemm, CpuNaiveCorrect) {
   // [8.0   3.0   0.0   1.0]    [5.0 8.0 0.0 6.6]   [ 53    82.5    11.5    60.5]
