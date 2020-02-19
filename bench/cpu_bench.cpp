@@ -8,7 +8,7 @@ static void BM_CPUSimpleGemm(benchmark::State &state) {
     auto x       = fwgpu::Matrix<float>(N, N, 1.5f);
     auto y       = fwgpu::Matrix<float>(N, N, 1.5f);
     state.ResumeTiming();
-    auto z = fwgpu::simple_gemm_entry(x, y);
+    auto z = fwgpu::cpu_gemm_naive_entry(x, y);
   }
 }
 BENCHMARK(BM_CPUSimpleGemm)->RangeMultiplier(2)->Range(64, 1024);
