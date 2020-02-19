@@ -1,6 +1,10 @@
 #ifndef FWGPU_INTERNAL_UTILS
 #define FWGPU_INTERNAL_UTILS
 
+#include <tuple>
+
+#include "../Matrix.hpp"
+
 namespace fwgpu {
 namespace internal {
   template <typename T>
@@ -10,7 +14,6 @@ namespace internal {
     const auto k         = A.num_cols(); // B.num_rows();
     const auto n         = B.num_cols();
     auto output_bytesize = m * n * sizeof(T);
-    T *c_bytes           = new T[m * n];
 
     // allocate for inputs and outputs on device
     T *d_A, *d_B, *d_C;
