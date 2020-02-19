@@ -8,29 +8,32 @@
 namespace fwgpu {
 
 template <typename T>
-auto simple_gemm(int m, int n, int k, const T *A, const T *B, T *C) -> void {
-  for (auto i = 0; i < n; i++) {
-    for (auto j = 0; j < n; j++) {
-      for (auto k = 0; k < n; k++) {
-        // column major indexing
-        C[i + (n * j)] += A[i + (n * k)] * B[k + (n * j)];
+inline auto cpu_gemm_naive(int m, int n, int k, const T *A, const T *B, T *C) -> void {
+  int lda = m;
+  int ldb = k;
+  int ldc = m;
+  for (int row = 0; row < m; ++row) {
+    for (int col = 0; col < n; ++col) {
+      C[row + (col * ldc)] = 0.0;
+      for (int i = 0; i < k; ++i) {
+        C[row + (col * ldc)] += A[row + (i * lda)] * B[i + (col * ldb)];
       }
     }
   }
 }
 
 template <typename T>
-auto simple_gemm_entry(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
+inline auto cpu_gemm_naive_entry(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
   const auto m = A.num_rows();
   const auto k = A.num_cols(); // B.num_rows();
   const auto n = B.num_cols();
   auto C       = Matrix<T>(m, n);
-  simple_gemm(m, n, k, A.get_buf(), B.get_buf(), C.get_buf());
+  cpu_gemm_naive<T>(m, n, k, A.get_buf(), B.get_buf(), C.get_buf());
   return C;
 }
 
 template <typename T>
-auto simple_srgemm(int m, int n, int k, const T *A, const T *B, T *C) -> void {
+inline auto cpu_srgemm_naive(int m, int n, int k, const T *A, const T *B, T *C) -> void {
   for (int i = 0; i < n; ++i) {
     for (int j = 0; j < n; ++j) {
       T prod = A[i + (n * 0)] + B[0 + (n * j)];
@@ -43,17 +46,17 @@ auto simple_srgemm(int m, int n, int k, const T *A, const T *B, T *C) -> void {
 }
 
 template <typename T>
-auto simple_srgemm_entry(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
+inline auto cpu_srgemm_naive_entry(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
   const auto m = A.num_rows();
   const auto k = A.num_cols(); // B.num_rows();
   const auto n = B.num_cols();
   auto C       = Matrix<T>(m, n);
-  simple_srgemm(m, n, k, A.get_buf(), B.get_buf(), C.get_buf());
+  cpu_srgemm_naive(m, n, k, A.get_buf(), B.get_buf(), C.get_buf());
   return C;
 }
 
 template <typename TData, typename TIdx>
-auto simple_fwgemm(
+inline auto cpu_fwgemm_naive(
     int m, int n, int k, const TData *A, const TData *B, TData *dist, TIdx *parent)
     -> void {
   for (int i = 0; i < n; ++i) {
@@ -75,7 +78,7 @@ auto simple_fwgemm(
 }
 
 template <typename T>
-auto naive_mm(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
+inline auto naive_mm(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
   const auto m = A.num_rows();
   const auto n = B.num_cols();
   const auto k = A.num_cols();

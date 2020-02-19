@@ -38,10 +38,6 @@ TEST(FWGPUGemm, CublasCorrect) {
   // [2.0   5.2   4.7   4.1]  * [4.6 6.1] = [56.95, 115.85]
   // [4.0   1.2   5.0   8.0]    [3.2 9.9]   [57.12, 130.42]
   //                            [1.9 8.0]
-  // >>> import numpy as np
-  // >>> a = [[1.8, 7.0, 2.8, 3.0], [2.0, 5.2, 4.7, 4.1], [4.0, 1.2, 5.0, 8.0]]
-  // >>> b = [[5.1, 2.4], [4.6, 6.1], [3.2, 9.9], [1.9, 8.0]]
-  // >>> np.matmul(a, b)
 
   auto a = fwgpu::Matrix<float>(
       3, 4, { 1.8f, 2.0f, 4.0f, 7.0f, 5.2f, 1.2f, 2.8f, 4.7f, 5.0f, 3.0f, 4.1f, 8.0f });
@@ -58,18 +54,66 @@ TEST(FWGPUGemm, CublasCorrect) {
   EXPECT_FLOAT_EQ(130.42f, c(2, 1));
 }
 
-TEST(FWGPUGemm, CublasSameAsNaive) {
+TEST(FWGPUGemm, CpuNaiveSameAsCublas) {
   // two random matrices
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
 
-  auto c_naive = fwgpu::naive_mm(a, b);
-  auto c_cuda  = fwgpu::cublas_sgemm_entry(a, b);
+  auto c_cpu_naive = fwgpu::cpu_gemm_naive_entry(a, b);
+  auto c_cublas    = fwgpu::cublas_sgemm_entry(a, b);
 
-  EXPECT_EQ(c_naive.size(), c_cuda.size());
-  EXPECT_EQ(c_naive.num_rows(), c_cuda.num_rows());
-  EXPECT_EQ(c_naive.num_cols(), c_cuda.num_cols());
-  for (auto i = 0ull; i < c_naive.size(); ++i) {
-    EXPECT_FLOAT_EQ(c_naive[i], c_cuda[i]);
+  EXPECT_EQ(c_cpu_naive.size(), c_cublas.size());
+  EXPECT_EQ(c_cpu_naive.num_rows(), c_cublas.num_rows());
+  EXPECT_EQ(c_cpu_naive.num_cols(), c_cublas.num_cols());
+  for (auto i = 0ull; i < c_cpu_naive.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_cpu_naive[i], c_cublas[i]);
+  }
+}
+
+TEST(FWGPUGemm, GpuSimpleSgemmSaveAsCpuNaive) {
+  // two random matrices
+  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
+  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+
+  auto c_cpu_naive = fwgpu::cpu_gemm_naive_entry(a, b);
+  auto c_gpu_naive = fwgpu::gpu_sgemm_naive_entry(a, b);
+
+  EXPECT_EQ(c_cpu_naive.size(), c_gpu_naive.size());
+  EXPECT_EQ(c_cpu_naive.num_rows(), c_gpu_naive.num_rows());
+  EXPECT_EQ(c_cpu_naive.num_cols(), c_gpu_naive.num_cols());
+  for (auto i = 0ull; i < c_cpu_naive.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_cpu_naive[i], c_gpu_naive[i]);
+  }
+}
+
+TEST(FWGPUGemm, GpuSgemmNaiveSameAsCublas) {
+  // two random matrices
+  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
+  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+
+  auto c_gpu_naive = fwgpu::gpu_sgemm_naive_entry(a, b);
+  auto c_cublas    = fwgpu::cublas_sgemm_entry(a, b);
+
+  EXPECT_EQ(c_gpu_naive.size(), c_cublas.size());
+  EXPECT_EQ(c_gpu_naive.num_rows(), c_cublas.num_rows());
+  EXPECT_EQ(c_gpu_naive.num_cols(), c_cublas.num_cols());
+  for (auto i = 0ull; i < c_gpu_naive.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_gpu_naive[i], c_cublas[i]);
+  }
+}
+
+TEST(FWGPUGemm, GpuSgemmShRegSameAsCublas) {
+  // two random matrices
+  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
+  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+
+  auto c_gpu_sh_reg = fwgpu::gpu_sgemm_sh_reg_entry(a, b);
+  auto c_cublas     = fwgpu::cublas_sgemm_entry(a, b);
+
+  EXPECT_EQ(c_gpu_sh_reg.size(), c_cublas.size());
+  EXPECT_EQ(c_gpu_sh_reg.num_rows(), c_cublas.num_rows());
+  EXPECT_EQ(c_gpu_sh_reg.num_cols(), c_cublas.num_cols());
+  for (auto i = 0ull; i < c_gpu_sh_reg.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_gpu_sh_reg[i], c_cublas[i]);
   }
 }
