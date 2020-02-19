@@ -117,3 +117,19 @@ TEST(FWGPU_Gemm, GpuShRegEqCublas) {
     EXPECT_FLOAT_EQ(c_gpu_sh_reg[i], c_cublas[i]);
   }
 }
+
+TEST(FWGPU_Gemm, GpuShRegEqCpuNaive) {
+  // two random matrices
+  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
+  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+
+  auto c_gpu_sh_reg = fwgpu::gpu_sgemm_sh_reg_entry(a, b);
+  auto c_cpu_naive  = fwgpu::cpu_gemm_naive_entry(a, b);
+
+  EXPECT_EQ(c_gpu_sh_reg.size(), c_cpu_naive.size());
+  EXPECT_EQ(c_gpu_sh_reg.num_rows(), c_cpu_naive.num_rows());
+  EXPECT_EQ(c_gpu_sh_reg.num_cols(), c_cpu_naive.num_cols());
+  for (auto i = 0ull; i < c_gpu_sh_reg.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_gpu_sh_reg[i], c_cpu_naive[i]);
+  }
+}
