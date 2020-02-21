@@ -1,7 +1,6 @@
 #include <cublas_v2.h>
 
 #include "include/Matrix.hpp"
-#include "include/gpu_gemm_entry.cuh"
 
 namespace fwgpu {
 

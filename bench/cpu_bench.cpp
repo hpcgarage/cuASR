@@ -5,8 +5,9 @@ static void BM_CPUSimpleGemm(benchmark::State &state) {
   const auto N = state.range(0);
   auto x       = fwgpu::Matrix<float>(N, N, 1.5f);
   auto y       = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto z       = fwgpu::Matrix<float>(N, N);
   for (auto _ : state) {
-    benchmark::DoNotOptimize(fwgpu::cpu_gemm_naive_entry(x, y));
+    fwgpu::cpu_gemm_naive(N, N, N, x.get_buf(), y.get_buf(), z.get_buf());
   }
   double flops_per_itr = 2 * N * N * N;
   state.counters["Flop/s"]

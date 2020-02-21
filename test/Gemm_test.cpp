@@ -1,6 +1,5 @@
+#include "GemmEntry.cuh"
 #include "include/Matrix.hpp"
-#include "include/cpu_gemm.hpp"
-#include "include/gpu_gemm_entry.cuh"
 #include "gtest/gtest.h"
 
 TEST(FWGPU_Gemm, CpuNaiveCorrect) {
@@ -22,7 +21,7 @@ TEST(FWGPU_Gemm, CpuNaiveCorrect) {
       { 5.0f, 4.0f, 3.0f, 1.0f, 8.0f, 6.0f, 7.0f, 0.5f, 0.0f, 3.5f, 2.4f, 1.0f, 6.6f,
         0.1f, 9.5f, 7.4f });
 
-  auto c = fwgpu::cpu_gemm_naive_entry(a, b);
+  auto c = fwgpu::testing::cpu_gemm_naive_entry(a, b);
 
   EXPECT_EQ(size_t { 12 }, c.size());
   EXPECT_EQ(size_t { 3 }, c.num_rows());
@@ -43,7 +42,7 @@ TEST(FWGPU_Gemm, CublasCorrect) {
 
   auto b = fwgpu::Matrix<float>(4, 2, { 5.1f, 4.6f, 3.2f, 1.9f, 2.4f, 6.1f, 9.9f, 8.0f });
 
-  auto c = fwgpu::cublas_sgemm_entry(a, b);
+  auto c = fwgpu::testing::cublas_sgemm_entry(a, b);
 
   EXPECT_EQ(size_t { 6 }, c.size());
   EXPECT_EQ(size_t { 3 }, c.num_rows());
@@ -58,8 +57,8 @@ TEST(FWGPU_Gemm, CpuNaiveEqCublas) {
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
 
-  auto c_cpu_naive = fwgpu::cpu_gemm_naive_entry(a, b);
-  auto c_cublas    = fwgpu::cublas_sgemm_entry(a, b);
+  auto c_cpu_naive = fwgpu::testing::cpu_gemm_naive_entry(a, b);
+  auto c_cublas    = fwgpu::testing::cublas_sgemm_entry(a, b);
 
   EXPECT_EQ(c_cpu_naive.size(), c_cublas.size());
   EXPECT_EQ(c_cpu_naive.num_rows(), c_cublas.num_rows());
@@ -74,8 +73,8 @@ TEST(FWGPU_Gemm, GpuNaiveEqCpuNaive) {
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
 
-  auto c_cpu_naive = fwgpu::cpu_gemm_naive_entry(a, b);
-  auto c_gpu_naive = fwgpu::gpu_sgemm_naive_entry(a, b);
+  auto c_cpu_naive = fwgpu::testing::cpu_gemm_naive_entry(a, b);
+  auto c_gpu_naive = fwgpu::testing::gpu_sgemm_naive_entry(a, b);
 
   EXPECT_EQ(c_cpu_naive.size(), c_gpu_naive.size());
   EXPECT_EQ(c_cpu_naive.num_rows(), c_gpu_naive.num_rows());
@@ -90,8 +89,8 @@ TEST(FWGPU_Gemm, GpuNaiveEqCublas) {
   auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
   auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
 
-  auto c_gpu_naive = fwgpu::gpu_sgemm_naive_entry(a, b);
-  auto c_cublas    = fwgpu::cublas_sgemm_entry(a, b);
+  auto c_gpu_naive = fwgpu::testing::gpu_sgemm_naive_entry(a, b);
+  auto c_cublas    = fwgpu::testing::cublas_sgemm_entry(a, b);
 
   EXPECT_EQ(c_gpu_naive.size(), c_cublas.size());
   EXPECT_EQ(c_gpu_naive.num_rows(), c_cublas.num_rows());

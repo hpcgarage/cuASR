@@ -1,9 +1,10 @@
 add_subdirectory(gtest)
 
-include_directories(./gtest/googletest/include)
+include_directories(gtest/googletest/include)
 
 set(test_src
   harness.cpp
+  GemmEntry.cu
   Matrix_test.cpp
   Gemm_test.cpp
 )

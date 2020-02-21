@@ -1,6 +1,5 @@
 set(fwgpu_src
   cublas_sgemm.cu
-  gpu_gemm_entry.cu
 )
 
 cuda_add_library(${FWGPU_LIB_NAME} ${FWGPU_LIB_TYPE} ${fwgpu_src})

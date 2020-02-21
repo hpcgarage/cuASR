@@ -3,8 +3,8 @@
 #include <tuple>
 
 #include "benchmark/benchmark.h"
+#include "include/Matrix.hpp"
 #include "include/gpu_gemm.cuh"
-#include "include/gpu_gemm_entry.cuh"
 #include "include/internal/utils.cuh"
 
 static void BM_GpuGemmNaive(benchmark::State &state) {

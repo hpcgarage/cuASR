@@ -23,16 +23,6 @@ inline auto cpu_gemm_naive(int m, int n, int k, const T *A, const T *B, T *C) ->
 }
 
 template <typename T>
-inline auto cpu_gemm_naive_entry(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
-  const auto m = A.num_rows();
-  const auto k = A.num_cols(); // B.num_rows();
-  const auto n = B.num_cols();
-  auto C       = Matrix<T>(m, n);
-  cpu_gemm_naive<T>(m, n, k, A.get_buf(), B.get_buf(), C.get_buf());
-  return C;
-}
-
-template <typename T>
 inline auto cpu_srgemm_naive(int m, int n, int k, const T *A, const T *B, T *C) -> void {
   for (int i = 0; i < n; ++i) {
     for (int j = 0; j < n; ++j) {
@@ -43,16 +33,6 @@ inline auto cpu_srgemm_naive(int m, int n, int k, const T *A, const T *B, T *C) 
       C[i * (n * j)] = prod;
     }
   }
-}
-
-template <typename T>
-inline auto cpu_srgemm_naive_entry(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
-  const auto m = A.num_rows();
-  const auto k = A.num_cols(); // B.num_rows();
-  const auto n = B.num_cols();
-  auto C       = Matrix<T>(m, n);
-  cpu_srgemm_naive(m, n, k, A.get_buf(), B.get_buf(), C.get_buf());
-  return C;
 }
 
 template <typename TData, typename TIdx>
