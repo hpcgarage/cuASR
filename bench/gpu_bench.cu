@@ -39,12 +39,16 @@ static void BM_GpuGemmNaive(benchmark::State &state) {
     state.SetIterationTime(milliseconds / 1000);
   }
 
+  double flops_per_itr = 2 * N * N * N;
+  state.counters["Flop/s"]
+      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   // free device buffers
   fwgpu::internal::dealloc_gemm_mats_on_gpu<float>(dptrs);
 }
-BENCHMARK(BM_GpuGemmNaive)->RangeMultiplier(2)->Range(64, 1024)->UseManualTime();
+BENCHMARK(BM_GpuGemmNaive)->RangeMultiplier(2)->Range(64, 4096)->UseManualTime();
 
 static void BM_CublasSgemm(benchmark::State &state) {
   const auto N = state.range(0);
@@ -75,6 +79,10 @@ static void BM_CublasSgemm(benchmark::State &state) {
     cudaEventElapsedTime(&milliseconds, start, stop);
     state.SetIterationTime(milliseconds / 1000);
   }
+
+  double flops_per_itr = 2 * N * N * N;
+  state.counters["Flop/s"]
+      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
