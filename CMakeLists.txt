@@ -30,10 +30,10 @@ set(CMAKE_CXX_FLAGS_DEBUG   "-O0 -Wall -Wextra -fno-exceptions -DDEBUG -g")
 find_package(CUDA REQUIRED)
 if (CUDA_FOUND)
   if (NOT CMAKE_CUDA_FLAGS)
-    cuda_select_nvcc_arch_flags(CMAKE_CUDA_FLAGS Auto)
+    cuda_select_nvcc_arch_flags(CUDA_ARCH_FLAGS Auto)
   endif()
-  set(CUDA_NVCC_FLAGS_RELEASE "-O3 -DNDEBUG ${CMAKE_CUDA_FLAGS}")
-  set(CUDA_NVCC_FLAGS_DEBUG "-O0 -DDEBUG -g ${CMAKE_CUDA_FLAGS}")
+  set(CUDA_NVCC_FLAGS_RELEASE "-O3 -DNDEBUG ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
+  set(CUDA_NVCC_FLAGS_DEBUG "-O0 -DDEBUG -g ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
 endif()
 
 # Source directory structure
