@@ -7,6 +7,7 @@ set(test_src
   GemmEntry.cu
   Matrix_test.cpp
   Gemm_test.cpp
+  Srgemm_test.cpp
 )
 
 add_executable(test_fwgpu ${test_src})

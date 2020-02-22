@@ -1,5 +1,6 @@
 #include "benchmark/benchmark.h"
 #include "include/cpu_gemm.hpp"
+#include "include/cpu_srgemm.hpp"
 
 static void BM_CPUSimpleGemm(benchmark::State &state) {
   const auto N = state.range(0);
@@ -27,3 +28,17 @@ static void BM_CPUNaiveGemm(benchmark::State &state) {
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_CPUNaiveGemm)->RangeMultiplier(2)->Range(64, 1024);
+
+static void BM_CPUNaiveSrgemm(benchmark::State &state) {
+  const auto N = state.range(0);
+  auto x       = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto y       = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto z       = fwgpu::Matrix<float>(N, N);
+  for (auto _ : state) {
+    fwgpu::cpu_srgemm_naive(N, N, N, x.get_buf(), y.get_buf(), z.get_buf());
+  }
+  double flops_per_itr = 2 * N * N * N;
+  state.counters["Flop/s"]
+      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+}
+BENCHMARK(BM_CPUNaiveSrgemm)->RangeMultiplier(2)->Range(64, 1024);
