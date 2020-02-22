@@ -14,7 +14,7 @@
 *.obj
 
 # Build directory
-bulid/
+/build/*
 
 # Precompiled Headers
 *.gch
@@ -52,3 +52,6 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+
+# GDB history
+.gdb_history
