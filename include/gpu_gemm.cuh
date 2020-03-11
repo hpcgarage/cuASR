@@ -3,10 +3,25 @@
 
 #include "Matrix.hpp"
 
+#include <cuda.h>
+
 namespace fwgpu {
 auto cublas_sgemm(
     const float *A, const float *B, float *C, const int m, const int k, const int n)
     -> void;
+
+auto cutlass_sgemm_nn(
+    int M,
+    int N,
+    int K,
+    float alpha,
+    float const *A,
+    int lda,
+    float const *B,
+    int ldb,
+    float beta,
+    float *C,
+    int ldc) -> cudaError_t;
 
 template <typename T>
 __global__ auto gpu_gemm_naive(
