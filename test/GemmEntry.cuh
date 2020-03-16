@@ -13,6 +13,9 @@ namespace testing {
   auto cutlass_sgemm_entry(const Matrix<float> &A, const Matrix<float> &B)
       -> Matrix<float>;
 
+  auto cutlass_srsgemm_entry(const Matrix<float> &A, const Matrix<float> &B)
+      -> Matrix<float>;
+
   auto gpu_sgemm_naive_entry(const Matrix<float> &A, const Matrix<float> &B)
       -> Matrix<float>;
 

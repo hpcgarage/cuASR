@@ -2,6 +2,17 @@
 
 namespace fwgpu {
 
+auto cutlass_srsgemm_nn(
+    int M,
+    int N,
+    int K,
+    float const *A,
+    int lda,
+    float const *B,
+    int ldb,
+    float *C,
+    int ldc) -> cudaError_t;
+
 // TODO: here, left, right and dist can all be the same input matrix...
 template <typename T>
 __global__ auto gpu_srgemm_naive(int m, int n, int k, T *left, T *right, T *dist)
