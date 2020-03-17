@@ -14,10 +14,9 @@ auto cutlass_srsgemm_nn(
     float *C,
     int ldc,
     cudaStream_t stream) -> cudaError_t {
-
   using ColumnMajor   = cutlass::layout::ColumnMajor;
   using OperatorClass = cutlass::arch::OpClassSimt;
-  using ArchTag       = cutlass::arch::Sm70;
+  using ArchTag       = cutlass::arch::Sm50;
 
   using DefaultConfig = typename cutlass::gemm::device::DefaultSrgemmConfiguration<
       OperatorClass, ArchTag, float, float, float, float>;
@@ -29,7 +28,7 @@ auto cutlass_srsgemm_nn(
   using ThreadblockSwizzle = cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle;
   using Operator           = DefaultConfig::Operator;
 
-  using CutlassSrgemm = cutlass::gemm::device::Gemm<
+  using CutlassSrgemm = cutlass::gemm::device::Srgemm<
       float,                                 //
       ColumnMajor,                           //
       float,                                 //
