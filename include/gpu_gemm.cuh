@@ -21,7 +21,8 @@ auto cutlass_sgemm_nn(
     int ldb,
     float beta,
     float *C,
-    int ldc) -> cudaError_t;
+    int ldc,
+    cudaStream_t stream = nullptr) -> cudaError_t;
 
 template <typename T>
 __global__ auto gpu_gemm_naive(

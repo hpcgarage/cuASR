@@ -29,17 +29,7 @@ static void BM_GpuGemmCutlass(benchmark::State &state) {
   // loop over benchmark for this size
   for (auto _ : state) {
     cudaEventRecord(start);
-    fwgpu::cutlass_sgemm_nn(N,
-      N,
-      N,
-      1.0,
-      d_A,
-      N,
-      d_B,
-      N,
-      0.0,
-      d_C,
-      N);
+    fwgpu::cutlass_sgemm_nn(N, N, N, 1.0, d_A, N, d_B, N, 0.0, d_C, N);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
@@ -57,7 +47,6 @@ static void BM_GpuGemmCutlass(benchmark::State &state) {
   fwgpu::internal::dealloc_gemm_mats_on_gpu<float>(dptrs);
 }
 BENCHMARK(BM_GpuGemmCutlass)->RangeMultiplier(2)->Range(64, 4096)->UseManualTime();
-
 
 
 static void BM_GpuSrgemmCutlass(benchmark::State &state) {
@@ -82,16 +71,7 @@ static void BM_GpuSrgemmCutlass(benchmark::State &state) {
   // loop over benchmark for this size
   for (auto _ : state) {
     cudaEventRecord(start);
-    fwgpu::cutlass_srsgemm_nn(
-      N,
-      N,
-      N,
-      d_A,
-      N,
-      d_B,
-      N,
-      d_C,
-      N);
+    fwgpu::cutlass_srsgemm_nn(N, N, N, d_A, N, d_B, N, d_C, N);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 

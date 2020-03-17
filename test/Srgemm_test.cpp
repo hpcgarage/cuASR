@@ -21,7 +21,7 @@ TEST(FWGPU_Srgemm, GpuNaiveEqCutlass) {
   auto a = fwgpu::Matrix<float>(1 << 7, 1 << 7, 0xCAFED00D, 1.0, 1000.0);
   auto b = fwgpu::Matrix<float>(1 << 7, 1 << 7, 0xCAFED00D, 1.0, 1000.0);
 
-  auto c_gpu_naive = fwgpu::testing::gpu_srgemm_naive_entry(a, b);
+  auto c_gpu_naive   = fwgpu::testing::gpu_srgemm_naive_entry(a, b);
   auto c_gpu_cutlass = fwgpu::testing::cutlass_srsgemm_entry(a, b);
 
   EXPECT_EQ(c_gpu_naive.size(), c_gpu_cutlass.size());

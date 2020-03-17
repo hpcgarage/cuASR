@@ -102,15 +102,15 @@ namespace testing {
 
   auto cutlass_sgemm_entry(const Matrix<float> &A, const Matrix<float> &B)
       -> Matrix<float> {
-    const auto m         = A.num_rows();
-    const auto k         = A.num_cols(); // B.num_rows();
-    const auto n         = B.num_cols();
+    const auto m = A.num_rows();
+    const auto k = A.num_cols(); // B.num_rows();
+    const auto n = B.num_cols();
 
-    int lda = m;
-    int ldb = k;
-    int ldc = m;
-    float alpha = 1.0;
-    float beta  = 0.0;
+    int lda              = m;
+    int ldb              = k;
+    int ldc              = m;
+    float alpha          = 1.0;
+    float beta           = 0.0;
     auto output_bytesize = m * n * sizeof(float);
     float *c_bytes       = new float[m * n];
 
@@ -124,8 +124,7 @@ namespace testing {
     cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
 
-    fwgpu::cutlass_sgemm_nn(
-      m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
+    fwgpu::cutlass_sgemm_nn(m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
 
     // copy output to host
     cudaMemcpy(c_bytes, d_C, output_bytesize, cudaMemcpyDeviceToHost);
@@ -139,13 +138,13 @@ namespace testing {
 
   auto cutlass_srsgemm_entry(const Matrix<float> &A, const Matrix<float> &B)
       -> Matrix<float> {
-    const auto m         = A.num_rows();
-    const auto k         = A.num_cols(); // B.num_rows();
-    const auto n         = B.num_cols();
+    const auto m = A.num_rows();
+    const auto k = A.num_cols(); // B.num_rows();
+    const auto n = B.num_cols();
 
-    int lda = m;
-    int ldb = k;
-    int ldc = m;
+    int lda              = m;
+    int ldb              = k;
+    int ldc              = m;
     auto output_bytesize = m * n * sizeof(float);
     float *c_bytes       = new float[m * n];
 
@@ -159,8 +158,7 @@ namespace testing {
     cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
 
-    fwgpu::cutlass_srsgemm_nn(
-      m, n, k, d_A, lda, d_B, ldb, d_C, ldc);
+    fwgpu::cutlass_srsgemm_nn(m, n, k, d_A, lda, d_B, ldb, d_C, ldc);
 
     // copy output to host
     cudaMemcpy(c_bytes, d_C, output_bytesize, cudaMemcpyDeviceToHost);

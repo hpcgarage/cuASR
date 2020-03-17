@@ -11,7 +11,8 @@ auto cutlass_srsgemm_nn(
     float const *B,
     int ldb,
     float *C,
-    int ldc) -> cudaError_t;
+    int ldc,
+    cudaStream_t stream = nullptr) -> cudaError_t;
 
 // TODO: here, left, right and dist can all be the same input matrix...
 template <typename T>
