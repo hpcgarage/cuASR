@@ -3,6 +3,7 @@
 #include "include/Matrix.hpp"
 #include "include/gpu_gemm.cuh"
 #include "include/gpu_srgemm.cuh"
+#include "include/utils.hpp"
 
 namespace fwgpu {
 namespace testing {
@@ -16,20 +17,21 @@ namespace testing {
 
     // allocate for inputs and outputs on device
     float *d_A, *d_B, *d_C;
-    cudaMalloc(&d_A, A.bytesize());
-    cudaMalloc(&d_B, B.bytesize());
-    cudaMalloc(&d_C, output_bytesize);
+    fwgpu::malloc_device((void**)(&d_A), A.bytesize());
+    fwgpu::malloc_device((void**)(&d_B), B.bytesize());
+    fwgpu::malloc_device((void**)(&d_C), output_bytesize);
 
     // copy inputs to device
-    cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
+    fwgpu::memcpy_h2d(d_A, A.get_buf(), A.bytesize());
+    fwgpu::memcpy_h2d(d_B, B.get_buf(), B.bytesize());
 
     dim3 threads(16, 16);
     dim3 blocks((m - 1) / 16 + 1, (n - 1) / 16 + 1);
     fwgpu::gpu_gemm_naive<float><<<blocks, threads>>>(m, n, k, d_A, d_B, d_C);
 
     // copy output to host
-    cudaMemcpy(c_bytes, d_C, output_bytesize, cudaMemcpyDeviceToHost);
+    fwgpu::memcpy_d2h(c_bytes, d_C, output_bytesize);
+
     cudaFree(d_A);
     cudaFree(d_B);
     cudaFree(d_C);
@@ -48,20 +50,21 @@ namespace testing {
 
     // allocate for inputs and outputs on device
     float *d_A, *d_B, *d_C;
-    cudaMalloc(&d_A, A.bytesize());
-    cudaMalloc(&d_B, B.bytesize());
-    cudaMalloc(&d_C, output_bytesize);
+    fwgpu::malloc_device((void**)(&d_A), A.bytesize());
+    fwgpu::malloc_device((void**)(&d_B), B.bytesize());
+    fwgpu::malloc_device((void**)(&d_C), output_bytesize);
 
     // copy inputs to device
-    cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
+    fwgpu::memcpy_h2d(d_A, A.get_buf(), A.bytesize());
+    fwgpu::memcpy_h2d(d_B, B.get_buf(), B.bytesize());
 
     dim3 threads(16, 16);
     dim3 blocks((m - 1) / 16 + 1, (n - 1) / 16 + 1);
     fwgpu::gpu_srgemm_naive<float><<<blocks, threads>>>(m, n, k, d_A, d_B, d_C);
 
     // copy output to host
-    cudaMemcpy(c_bytes, d_C, output_bytesize, cudaMemcpyDeviceToHost);
+    fwgpu::memcpy_d2h(c_bytes, d_C, output_bytesize);
+
     cudaFree(d_A);
     cudaFree(d_B);
     cudaFree(d_C);
@@ -80,18 +83,18 @@ namespace testing {
 
     // allocate for inputs and outputs on device
     float *d_A, *d_B, *d_C;
-    cudaMalloc(&d_A, A.bytesize());
-    cudaMalloc(&d_B, B.bytesize());
-    cudaMalloc(&d_C, output_bytesize);
+    fwgpu::malloc_device((void**)(&d_A), A.bytesize());
+    fwgpu::malloc_device((void**)(&d_B), B.bytesize());
+    fwgpu::malloc_device((void**)(&d_C), output_bytesize);
 
     // copy inputs to device
-    cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
+    fwgpu::memcpy_h2d(d_A, A.get_buf(), A.bytesize());
+    fwgpu::memcpy_h2d(d_B, B.get_buf(), B.bytesize());
 
     fwgpu::cublas_sgemm(d_A, d_B, d_C, m, k, n);
 
     // copy output to host
-    cudaMemcpy(c_bytes, d_C, output_bytesize, cudaMemcpyDeviceToHost);
+    fwgpu::memcpy_d2h(c_bytes, d_C, output_bytesize);
 
     cudaFree(d_A);
     cudaFree(d_B);
@@ -116,18 +119,18 @@ namespace testing {
 
     // allocate for inputs and outputs on device
     float *d_A, *d_B, *d_C;
-    cudaMalloc(&d_A, A.bytesize());
-    cudaMalloc(&d_B, B.bytesize());
-    cudaMalloc(&d_C, output_bytesize);
+    fwgpu::malloc_device((void**)(&d_A), A.bytesize());
+    fwgpu::malloc_device((void**)(&d_B), B.bytesize());
+    fwgpu::malloc_device((void**)(&d_C), output_bytesize);
 
     // copy inputs to device
-    cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
+    fwgpu::memcpy_h2d(d_A, A.get_buf(), A.bytesize());
+    fwgpu::memcpy_h2d(d_B, B.get_buf(), B.bytesize());
 
     fwgpu::cutlass_sgemm_nn(m, n, k, alpha, d_A, lda, d_B, ldb, beta, d_C, ldc);
 
     // copy output to host
-    cudaMemcpy(c_bytes, d_C, output_bytesize, cudaMemcpyDeviceToHost);
+    fwgpu::memcpy_d2h(c_bytes, d_C, output_bytesize);
 
     cudaFree(d_A);
     cudaFree(d_B);
@@ -150,18 +153,18 @@ namespace testing {
 
     // allocate for inputs and outputs on device
     float *d_A, *d_B, *d_C;
-    cudaMalloc(&d_A, A.bytesize());
-    cudaMalloc(&d_B, B.bytesize());
-    cudaMalloc(&d_C, output_bytesize);
+    fwgpu::malloc_device((void**)(&d_A), A.bytesize());
+    fwgpu::malloc_device((void**)(&d_B), B.bytesize());
+    fwgpu::malloc_device((void**)(&d_C), output_bytesize);
 
     // copy inputs to device
-    cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
+    fwgpu::memcpy_h2d(d_A, A.get_buf(), A.bytesize());
+    fwgpu::memcpy_h2d(d_B, B.get_buf(), B.bytesize());
 
     fwgpu::cutlass_srsgemm_nn(m, n, k, d_A, lda, d_B, ldb, d_C, ldc);
 
     // copy output to host
-    cudaMemcpy(c_bytes, d_C, output_bytesize, cudaMemcpyDeviceToHost);
+    fwgpu::memcpy_d2h(c_bytes, d_C, output_bytesize);
 
     cudaFree(d_A);
     cudaFree(d_B);
