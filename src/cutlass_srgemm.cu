@@ -1,3 +1,5 @@
+#include "include/gpu_srgemm.hpp"
+
 #include "cutlass/gemm/device/default_gemm_configuration.h"
 #include "cutlass/gemm/device/gemm.h"
 
@@ -67,9 +69,9 @@ auto cutlass_srsgemm_nn(
   cutlass::Status status = srgemm_operator(args, nullptr, stream);
 
   if (status != cutlass::Status::kSuccess) {
-    static_cast<int>(cudaErrorUnknown);
+    return static_cast<int>(cudaErrorUnknown);
   }
-  static_cast<int>(cudaSuccess);
+  return static_cast<int>(cudaSuccess);
 }
 
 } // namespace fwgpu
