@@ -13,7 +13,8 @@ auto cutlass_srsgemm_nn(
     int ldb,
     float *C,
     int ldc,
-    cudaStream_t stream) -> cudaError_t {
+    void *stream_) -> int {
+  auto stream         = static_cast<cudaStream_t>(stream_);
   using ColumnMajor   = cutlass::layout::ColumnMajor;
   using OperatorClass = cutlass::arch::OpClassSimt;
   using ArchTag       = cutlass::arch::Sm50;
@@ -66,9 +67,9 @@ auto cutlass_srsgemm_nn(
   cutlass::Status status = srgemm_operator(args, nullptr, stream);
 
   if (status != cutlass::Status::kSuccess) {
-    return cudaErrorUnknown;
+    static_cast<int>(cudaErrorUnknown);
   }
-  return cudaSuccess;
+  static_cast<int>(cudaSuccess);
 }
 
 } // namespace fwgpu

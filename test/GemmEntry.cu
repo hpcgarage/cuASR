@@ -3,6 +3,7 @@
 #include "include/Matrix.hpp"
 #include "include/gpu_gemm.cuh"
 #include "include/gpu_srgemm.cuh"
+#include "include/gpu_srgemm.hpp"
 #include "include/utils.hpp"
 
 namespace fwgpu {
