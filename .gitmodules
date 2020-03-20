@@ -4,3 +4,6 @@
 [submodule "bench/benchmark"]
 	path = bench/benchmark
 	url = https://github.com/google/benchmark.git
+[submodule "cutlass"]
+	path = cutlass
+	url = https://github.com/thakkarV/cutlass.git
