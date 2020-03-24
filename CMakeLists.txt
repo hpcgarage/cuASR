@@ -10,7 +10,7 @@ endif ()
 # Switches for testing, benchmarks or static lib builds
 option(FWGPU_TEST   "FWGPU_TEST"   ON)
 option(FWGPU_BENCH  "FWGPU_BENCH"  ON)
-option(FWGPU_STATIC "FWGPU_STATIC" OFF)
+option(FWGPU_STATIC "FWGPU_STATIC" ON)
 
 # static or dynamic lib build targets
 if (FWGPU_STATIC)
@@ -48,6 +48,30 @@ endif ()
 if (FWGPU_BENCH)
   add_subdirectory(bench)
 endif ()
+
+# fwgpu library configuration
+set(fwgpu_src
+  ./src/cublas_sgemm.cu
+  ./src/cutlass_sgemm.cu
+  ./src/cutlass_srgemm.cu
+  ./src/utils.cu
+)
+
+cuda_add_library(${FWGPU_LIB_NAME} ${FWGPU_LIB_TYPE} ${fwgpu_src})
+
+target_link_libraries(
+  ${FWGPU_LIB_NAME}
+  ${CUDA_CUBLAS_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT}
+)
+
+include_directories(
+  ${PROJECT_SOURCE_DIR}
+  "${PROJECT_SOURCE_DIR}/cutlass/include"
+  ${CUDA_INCLUDE_DIRS})
+
+install(TARGETS ${FWGPU_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+install(DIRECTORY ${FWGPU_LIB_NAME}/include DESTINATION include)
 
 message(STATUS "")
 message(STATUS "BUILD SUMMARY:")
