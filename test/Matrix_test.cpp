@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "include/Matrix.hpp"
+#include "fwgpu/Matrix.hpp"
 
 TEST(FWGPU_Matrix, BasicConstructorCorrect) {
   auto x = fwgpu::Matrix<float>(6, 2);

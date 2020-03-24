@@ -1,5 +1,5 @@
 #include "GemmEntry.cuh"
-#include "include/Matrix.hpp"
+#include "fwgpu/Matrix.hpp"
 #include "gtest/gtest.h"
 
 TEST(FWGPU_Gemm, CpuNaiveCorrect) {

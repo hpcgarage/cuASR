@@ -1,9 +1,9 @@
 #ifndef GPU_GEMM_BM_ENTRY
 #define GPU_GEMM_BM_ENTRY
 
-#include "include/Matrix.hpp"
-#include "include/cpu_gemm.hpp"
-#include "include/cpu_srgemm.hpp"
+#include "fwgpu/Matrix.hpp"
+#include "fwgpu/cpu_gemm.hpp"
+#include "fwgpu/cpu_srgemm.hpp"
 
 namespace fwgpu {
 namespace testing {

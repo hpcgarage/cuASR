@@ -1,11 +1,11 @@
 #include <tuple>
 
 #include "benchmark/benchmark.h"
-#include "include/Matrix.hpp"
-#include "include/gpu_gemm.cuh"
-#include "include/gpu_srgemm.cuh"
-#include "include/gpu_srgemm.hpp"
-#include "include/internal/utils.cuh"
+#include "fwgpu/Matrix.hpp"
+#include "fwgpu/gpu_gemm.cuh"
+#include "fwgpu/gpu_srgemm.cuh"
+#include "fwgpu/gpu_srgemm.hpp"
+#include "fwgpu/internal/utils.cuh"
 
 
 static void BM_GpuGemmCutlass(benchmark::State &state) {
