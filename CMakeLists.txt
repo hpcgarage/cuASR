@@ -37,8 +37,7 @@ if (CUDA_FOUND)
 endif()
 
 # Source directory structure
-add_subdirectory(src)
-include_directories(${PROJECT_SOURCE_DIR} ${CUDA_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS})
 
 if (FWGPU_TEST)
   enable_testing()

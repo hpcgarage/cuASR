@@ -1,6 +1,6 @@
 #include "benchmark/benchmark.h"
-#include "include/cpu_gemm.hpp"
-#include "include/cpu_srgemm.hpp"
+#include "fwgpu/cpu_gemm.hpp"
+#include "fwgpu/cpu_srgemm.hpp"
 
 static void BM_CPUSimpleGemm(benchmark::State &state) {
   const auto N = state.range(0);

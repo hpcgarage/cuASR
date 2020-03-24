@@ -1,4 +1,4 @@
-#include "include/utils.hpp"
+#include "fwgpu/utils.hpp"
 
 namespace fwgpu {
 

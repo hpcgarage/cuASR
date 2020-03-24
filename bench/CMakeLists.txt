@@ -1,7 +1,7 @@
 set(BENCHMARK_ENABLE_TESTING OFF)
 
 add_subdirectory(benchmark)
-include_directories(${PROJECT_SOURCE_DIR} benchmark/include)
+include_directories(${PROJECT_SOURCE_DIR}/include benchmark/include)
 
 # CPU benchmarks
 set(cpu_bench_src

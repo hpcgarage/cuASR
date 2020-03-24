@@ -1,4 +1,4 @@
-#include "include/gpu_srgemm.hpp"
+#include "fwgpu/gpu_srgemm.hpp"
 
 #include "cutlass/gemm/device/default_gemm_configuration.h"
 #include "cutlass/gemm/device/gemm.h"

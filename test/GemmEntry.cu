@@ -1,10 +1,10 @@
 #include <cublas_v2.h>
 
-#include "include/Matrix.hpp"
-#include "include/gpu_gemm.cuh"
-#include "include/gpu_srgemm.cuh"
-#include "include/gpu_srgemm.hpp"
-#include "include/utils.hpp"
+#include "fwgpu/Matrix.hpp"
+#include "fwgpu/gpu_gemm.cuh"
+#include "fwgpu/gpu_srgemm.cuh"
+#include "fwgpu/gpu_srgemm.hpp"
+#include "fwgpu/utils.hpp"
 
 namespace fwgpu {
 namespace testing {

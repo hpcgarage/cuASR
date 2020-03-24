@@ -1,6 +1,6 @@
 #include <cublas_v2.h>
 
-#include "include/Matrix.hpp"
+#include "fwgpu/Matrix.hpp"
 
 namespace fwgpu {
 

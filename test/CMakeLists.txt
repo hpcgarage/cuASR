@@ -1,6 +1,7 @@
 add_subdirectory(gtest)
 
 include_directories(gtest/googletest/include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 ### Matrix tests
 set(Matrix_test_src
