@@ -16,6 +16,15 @@ auto memcpy_h2d(void *dest, const void *src, size_t size) -> int {
   return static_cast<int>(cudaMemcpy(dest, src, size, cudaMemcpyHostToDevice));
 }
 
+auto memcpy_h2h(void *dest, const void *src, size_t size) -> int {
+  return static_cast<int>(cudaMemcpy(dest, src, size, cudaMemcpyDeviceToDevice));
+}
+
+
+auto memcpy_d2d(void *dest, const void *src, size_t size) -> int {
+  return static_cast<int>(cudaMemcpy(dest, src, size, cudaMemcpyHostToHost));
+}
+
 auto memcpy_2d_h2d(
     void *dest,
     size_t dpitch,

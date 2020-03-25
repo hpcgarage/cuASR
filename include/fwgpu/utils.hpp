@@ -9,6 +9,8 @@ auto free_device(void *dptr) -> int;
 
 auto memcpy_d2h(void *dest, const void *src, size_t size) -> int;
 auto memcpy_h2d(void *dest, const void *src, size_t size) -> int;
+auto memcpy_h2h(void *dest, const void *src, size_t size) -> int;
+auto memcpy_d2d(void *dest, const void *src, size_t size) -> int;
 
 auto memcpy_2d_h2d(
     void *deset,
