@@ -14,9 +14,10 @@ static void BM_GpuGemmCutlass(benchmark::State &state) {
   // init input matrices for this benchmark size N
   auto A = fwgpu::Matrix<float>(N, N, 1.5f);
   auto B = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto C = fwgpu::Matrix<float>(N, N, 0.0f);
 
   // allocate device buffers
-  auto dptrs = fwgpu::internal::alloc_gemm_mats_on_gpu<float>(A, B);
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats<float>(A, B, C);
   float *d_A = std::get<0>(dptrs);
   float *d_B = std::get<1>(dptrs);
   float *d_C = std::get<2>(dptrs);
@@ -45,10 +46,9 @@ static void BM_GpuGemmCutlass(benchmark::State &state) {
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   // free device buffers
-  fwgpu::internal::dealloc_gemm_mats_on_gpu<float>(dptrs);
+  fwgpu::internal::dealloc_device_gemm_mats<float>(dptrs);
 }
 BENCHMARK(BM_GpuGemmCutlass)->RangeMultiplier(2)->Range(64, 4096)->UseManualTime();
-
 
 static void BM_GpuSrgemmCutlass(benchmark::State &state) {
   const auto N = state.range(0);
@@ -56,9 +56,10 @@ static void BM_GpuSrgemmCutlass(benchmark::State &state) {
   // init input matrices for this benchmark size N
   auto A = fwgpu::Matrix<float>(N, N, 1.5f);
   auto B = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto C = fwgpu::Matrix<float>(N, N, 0.0f);
 
   // allocate device buffers
-  auto dptrs = fwgpu::internal::alloc_gemm_mats_on_gpu<float>(A, B);
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats<float>(A, B, C);
   float *d_A = std::get<0>(dptrs);
   float *d_B = std::get<1>(dptrs);
   float *d_C = std::get<2>(dptrs);
@@ -87,10 +88,9 @@ static void BM_GpuSrgemmCutlass(benchmark::State &state) {
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   // free device buffers
-  fwgpu::internal::dealloc_gemm_mats_on_gpu<float>(dptrs);
+  fwgpu::internal::dealloc_device_gemm_mats<float>(dptrs);
 }
 BENCHMARK(BM_GpuSrgemmCutlass)->RangeMultiplier(2)->Range(64, 4096)->UseManualTime();
-
 
 static void BM_GpuSrgemmNaive(benchmark::State &state) {
   const auto N = state.range(0);
@@ -98,9 +98,10 @@ static void BM_GpuSrgemmNaive(benchmark::State &state) {
   // init input matrices for this benchmark size N
   auto A = fwgpu::Matrix<float>(N, N, 1.5f);
   auto B = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto C = fwgpu::Matrix<float>(N, N, 0.0f);
 
   // allocate device buffers
-  auto dptrs = fwgpu::internal::alloc_gemm_mats_on_gpu<float>(A, B);
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats<float>(A, B, C);
   float *d_A = std::get<0>(dptrs);
   float *d_B = std::get<1>(dptrs);
   float *d_C = std::get<2>(dptrs);
@@ -131,7 +132,7 @@ static void BM_GpuSrgemmNaive(benchmark::State &state) {
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   // free device buffers
-  fwgpu::internal::dealloc_gemm_mats_on_gpu<float>(dptrs);
+  fwgpu::internal::dealloc_device_gemm_mats<float>(dptrs);
 }
 BENCHMARK(BM_GpuSrgemmNaive)->RangeMultiplier(2)->Range(64, 4096)->UseManualTime();
 
@@ -141,9 +142,10 @@ static void BM_GpuGemmNaive(benchmark::State &state) {
   // init input matrices for this benchmark size N
   auto A = fwgpu::Matrix<float>(N, N, 1.5f);
   auto B = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto C = fwgpu::Matrix<float>(N, N, 0.0f);
 
   // allocate device buffers
-  auto dptrs = fwgpu::internal::alloc_gemm_mats_on_gpu<float>(A, B);
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats<float>(A, B, C);
   float *d_A = std::get<0>(dptrs);
   float *d_B = std::get<1>(dptrs);
   float *d_C = std::get<2>(dptrs);
@@ -174,7 +176,7 @@ static void BM_GpuGemmNaive(benchmark::State &state) {
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   // free device buffers
-  fwgpu::internal::dealloc_gemm_mats_on_gpu<float>(dptrs);
+  fwgpu::internal::dealloc_device_gemm_mats<float>(dptrs);
 }
 BENCHMARK(BM_GpuGemmNaive)->RangeMultiplier(2)->Range(64, 4096)->UseManualTime();
 
@@ -184,9 +186,10 @@ static void BM_CublasSgemm(benchmark::State &state) {
   // init input matrices for this benchmark size N
   auto A = fwgpu::Matrix<float>(N, N, 1.5f);
   auto B = fwgpu::Matrix<float>(N, N, 1.5f);
+  auto C = fwgpu::Matrix<float>(N, N, 0.0f);
 
   // allocate device buffers
-  auto dptrs = fwgpu::internal::alloc_gemm_mats_on_gpu<float>(A, B);
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats<float>(A, B, C);
   float *d_A = std::get<0>(dptrs);
   float *d_B = std::get<1>(dptrs);
   float *d_C = std::get<2>(dptrs);
@@ -215,6 +218,6 @@ static void BM_CublasSgemm(benchmark::State &state) {
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
   // free device buffers
-  fwgpu::internal::dealloc_gemm_mats_on_gpu<float>(dptrs);
+  fwgpu::internal::dealloc_device_gemm_mats<float>(dptrs);
 }
 BENCHMARK(BM_CublasSgemm)->RangeMultiplier(2)->Range(64, 4096)->UseManualTime();

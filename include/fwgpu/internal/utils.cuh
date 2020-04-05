@@ -8,28 +8,24 @@
 namespace fwgpu {
 namespace internal {
   template <typename T>
-  inline auto alloc_gemm_mats_on_gpu(const Matrix<T> &A, const Matrix<T> &B)
+  inline auto alloc_and_init_device_gemm_mats(const Matrix<T> &A, const Matrix<T> &B, const Matrix<T> &C)
       -> std::tuple<T *, T *, T *> {
-    const auto m         = A.num_rows();
-    const auto k         = A.num_cols(); // B.num_rows();
-    const auto n         = B.num_cols();
-    auto output_bytesize = m * n * sizeof(T);
-
     // allocate for inputs and outputs on device
     T *d_A, *d_B, *d_C;
     cudaMalloc(&d_A, A.bytesize());
     cudaMalloc(&d_B, B.bytesize());
-    cudaMalloc(&d_C, output_bytesize);
+    cudaMalloc(&d_C, C.bytesize());
 
     // copy inputs to device
     cudaMemcpy(d_A, A.get_buf(), A.bytesize(), cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, B.get_buf(), B.bytesize(), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_C, C.get_buf(), C.bytesize(), cudaMemcpyHostToDevice);
 
     return std::make_tuple(d_A, d_B, d_C);
   }
 
   template <typename T>
-  inline auto dealloc_gemm_mats_on_gpu(std::tuple<T *, T *, T *> device_ptrs) -> void {
+  inline auto dealloc_device_gemm_mats(std::tuple<T *, T *, T *> device_ptrs) -> void {
     cudaFree(std::get<0>(device_ptrs));
     cudaFree(std::get<1>(device_ptrs));
     cudaFree(std::get<2>(device_ptrs));
