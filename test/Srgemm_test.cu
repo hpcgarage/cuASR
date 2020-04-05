@@ -60,7 +60,7 @@ TEST(FWGPU_Srgemm, GpuNaiveEqCutlass) {
   fwgpu::gpu_srgemm_naive<<<blocks, threads>>>(N, N, N, d_A, N, d_B, N, d_C_naive, N);
   fwgpu::memcpy_d2h(c_gpu_naive.get_buf(), d_C_naive, c_gpu_naive.bytesize());
 
-  fwgpu::cutlass_srsgemm_nn(N, N, N, d_A, N, d_B, N, d_C_cutlass, N, nullptr);
+  fwgpu::cutlass_srsgemm_nn(N, N, N, d_A, N, d_B, N, d_C_cutlass, N, true);
   fwgpu::memcpy_d2h(c_gpu_cutlass.get_buf(), d_C_cutlass, c_gpu_cutlass.bytesize());
 
   fwgpu::internal::dealloc_device_gemm_mats(dptrs);

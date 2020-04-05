@@ -13,7 +13,8 @@ auto cutlass_srsgemm_nn(
     int ldb,
     float *C,
     int ldc,
-    void *stream = nullptr) -> int;
+    bool do_epilogue_min = false,
+    void *stream         = nullptr) -> int;
 
 } // namespace fwgpu
 #endif

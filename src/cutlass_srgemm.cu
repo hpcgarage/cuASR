@@ -15,15 +15,17 @@ auto cutlass_srsgemm_nn(
     int ldb,
     float *C,
     int ldc,
-    void *stream_) -> int {
-  auto stream         = static_cast<cudaStream_t>(stream_);
-  using ColumnMajor   = cutlass::layout::ColumnMajor;
-  using OperatorClass = cutlass::arch::OpClassSimt;
-  using ArchTag       = cutlass::arch::Sm50;
+    bool do_epilogue_min,
+    void *stream) -> int {
+  auto stream_ = static_cast<cudaStream_t>(stream);
 
+  // compile time configuration of this srgemm kernel
+  using OperatorClass      = cutlass::arch::OpClassSimt;
+  using ArchTag            = cutlass::arch::Sm50;
   using DefaultConfig = typename cutlass::gemm::device::DefaultSrgemmConfiguration<
       OperatorClass, ArchTag, float, float, float, float>;
 
+  using ColumnMajor        = cutlass::layout::ColumnMajor;
   using ThreadblockShape   = typename DefaultConfig::ThreadblockShape;
   using WarpShape          = typename DefaultConfig::WarpShape;
   using InstructionShape   = typename DefaultConfig::InstructionShape;
@@ -32,30 +34,28 @@ auto cutlass_srsgemm_nn(
   using Operator           = DefaultConfig::Operator;
 
   using CutlassSrgemm = cutlass::gemm::device::Srgemm<
-      float,                                 //
-      ColumnMajor,                           //
-      float,                                 //
-      ColumnMajor,                           //
-      float,                                 //
-      ColumnMajor,                           //
-      float,                                 //
-      OperatorClass,                         //
-      ArchTag,                               //
-      cutlass::gemm::GemmShape<128, 128, 8>, //
-      WarpShape,                             //
-      InstructionShape,                      //
-      EpilogueOutputOp,                      //
-      ThreadblockSwizzle,                    //
-      DefaultConfig::kStages,                //
-      DefaultConfig::kAlignmentA,            //
-      DefaultConfig::kAlignmentB,            //
-      false,                                 // SplitKSerial
-      Operator
-      // true                                // IsBetaZero
-      >; // Layout of C matrix
+      float,                      // element type of A
+      ColumnMajor,                // layout of A
+      float,                      // element type of B
+      ColumnMajor,                // layout of B
+      float,                      // element type of C
+      ColumnMajor,                // layout of C
+      float,                      // element type of D
+      OperatorClass,              // Logical operator class (SIMT/Tensor)
+      ArchTag,                    // cuda architecture
+      ThreadblockShape,           // GEMM shape at CTA level
+      WarpShape,                  // GEMM shape at Warp level
+      InstructionShape,           // GEMM shape at thread level
+      EpilogueOutputOp,           // Epilogue operator at thread level
+      ThreadblockSwizzle,         // GEMM threadblock swizzler
+      DefaultConfig::kStages,     // Pipeline stages for shmem
+      DefaultConfig::kAlignmentA, // Alignment of A elements
+      DefaultConfig::kAlignmentB, // Alignment of B elements
+      false,                      // SplitKSerial
+      Operator                    // Thread level SemiRing operator
+  >;
 
-  CutlassSrgemm srgemm_operator;
-
+  // construct kernel arguments struct
   CutlassSrgemm::Arguments args(
       { M, N, K }, // Problem dimensions
       { A, lda },  // Tensor-ref for source matrix A
@@ -63,15 +63,13 @@ auto cutlass_srsgemm_nn(
       { C, ldc },  // Tensor-ref for source matrix C
       { C, ldc },  // Tensor-ref for destination matrix D (may be different memory than
                    // source C matrix)
-      { 1, 0 });   // Scalars used in the Epilogue
+      { do_epilogue_min } // True if we perform a final min with source matrix C
+  );
 
   // launch SRGEMM kernel
-  cutlass::Status status = srgemm_operator(args, nullptr, stream);
-
-  if (status != cutlass::Status::kSuccess) {
-    return static_cast<int>(cudaErrorUnknown);
-  }
-  return static_cast<int>(cudaSuccess);
+  CutlassSrgemm srgemm_operator;
+  cutlass::Status status = srgemm_operator(args, nullptr, stream_);
+  return static_cast<int>(status);
 }
 
 } // namespace fwgpu
