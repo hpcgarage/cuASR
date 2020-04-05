@@ -39,11 +39,11 @@ __global__ auto gpu_gemm_naive(
   while (n_idx < n) {
     size_t m_idx = tx;
     while (m_idx < m) {
-      T tmp = static_cast<T>(0.0);
+      T tmp = static_cast<T>(0);
       for (size_t k_idx = 0; k_idx < k; ++k_idx) {
         tmp += left[(k_idx * m) + m_idx] * right[(n_idx * k) + k_idx];
       }
-      dest[(n_idx * m) + m_idx] += tmp;
+      dest[(n_idx * m) + m_idx] = tmp;
       m_idx += gridDim.x * blockDim.x;
     }
     n_idx += gridDim.y * blockDim.y;
