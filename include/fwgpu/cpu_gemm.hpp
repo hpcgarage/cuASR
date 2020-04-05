@@ -14,10 +14,11 @@ inline auto cpu_gemm_naive(int m, int n, int k, const T *A, const T *B, T *C) ->
   int ldc = m;
   for (int row = 0; row < m; ++row) {
     for (int col = 0; col < n; ++col) {
-      C[row + (col * ldc)] = 0.0;
+      T tmp = static_cast<T>(0);
       for (int i = 0; i < k; ++i) {
-        C[row + (col * ldc)] += A[row + (i * lda)] * B[i + (col * ldb)];
+        tmp += A[row + (i * lda)] * B[i + (col * ldb)];
       }
+      C[row + (col * ldc)] = tmp;
     }
   }
 }
@@ -30,10 +31,11 @@ inline auto naive_mm(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
   auto c       = Matrix<T>(m, n);
   for (size_t row = 0; row < m; ++row) {
     for (size_t col = 0; col < n; ++col) {
-      c(row, col) = 0.0;
+      T tmp = static_cast<T>(0);
       for (size_t i = 0; i < k; ++i) {
-        c(row, col) += A(row, i) * B(i, col);
+        tmp += A(row, i) * B(i, col);
       }
+      c(row, col);
     }
   }
   return c;

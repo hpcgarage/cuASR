@@ -61,10 +61,9 @@ cuda_add_library(${FWGPU_LIB_NAME} ${FWGPU_LIB_TYPE} ${fwgpu_src})
 target_link_libraries(
   ${FWGPU_LIB_NAME}
   ${CUDA_CUBLAS_LIBRARIES}
-  ${CMAKE_THREAD_LIBS_INIT}
 )
 
-include_directories(
+target_include_directories(${FWGPU_LIB_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}
   "${PROJECT_SOURCE_DIR}/cutlass/include"
   ${CUDA_INCLUDE_DIRS})
