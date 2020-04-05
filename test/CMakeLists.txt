@@ -21,7 +21,6 @@ add_test(
 ### GEMM tests
 set(Gemm_test_src
   harness.cpp
-  GemmEntry.cu
   Gemm_test.cu
 )
 cuda_add_executable(Gemm_tests ${Gemm_test_src})
@@ -37,7 +36,6 @@ add_test(
 ### SemiRing GEMM tests
 set(Srgemm_test_src
   harness.cpp
-  GemmEntry.cu
   Srgemm_test.cu
 )
 cuda_add_executable(Srgemm_tests ${Srgemm_test_src})

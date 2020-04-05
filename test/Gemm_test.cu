@@ -1,5 +1,9 @@
-#include "GemmEntry.cuh"
 #include "fwgpu/Matrix.hpp"
+#include "fwgpu/cpu_gemm.hpp"
+#include "fwgpu/gpu_gemm.cuh"
+#include "fwgpu/internal/utils.cuh"
+#include "fwgpu/utils.hpp"
+
 #include "gtest/gtest.h"
 
 TEST(FWGPU_Gemm, CpuNaiveCorrect) {
@@ -13,15 +17,25 @@ TEST(FWGPU_Gemm, CpuNaiveCorrect) {
   // 0.5, 1.0, 7.4]]
   // >>> np.matmul(a, b)
 
+  auto m = 3;
+  auto k = 4;
+  auto n = 4;
+
   auto a = fwgpu::Matrix<float>(
-      3, 4, { 8.0f, 2.0f, 7.0f, 3.0f, 5.0f, 6.0f, 0.0f, 4.0f, 10.0f, 1.0f, 9.0f, 13.0f });
+      m, k,
+      { 8.0f, 2.0f, 7.0f, 3.0f, //
+        5.0f, 6.0f, 0.0f, 4.0f, //
+        10.0f, 1.0f, 9.0f, 13.0f });
 
   auto b = fwgpu::Matrix<float>(
-      4, 4,
-      { 5.0f, 4.0f, 3.0f, 1.0f, 8.0f, 6.0f, 7.0f, 0.5f, 0.0f, 3.5f, 2.4f, 1.0f, 6.6f,
-        0.1f, 9.5f, 7.4f });
+      k, n,
+      { 5.0f, 4.0f, 3.0f, 1.0f, //
+        8.0f, 6.0f, 7.0f, 0.5f, //
+        0.0f, 3.5f, 2.4f, 1.0f, //
+        6.6f, 0.1f, 9.5f, 7.4f });
 
-  auto c = fwgpu::testing::cpu_gemm_naive_entry(a, b);
+  auto c = fwgpu::Matrix<float>(m, n);
+  fwgpu::cpu_gemm_naive(m, n, k, a.get_buf(), b.get_buf(), c.get_buf());
 
   EXPECT_EQ(size_t { 12 }, c.size());
   EXPECT_EQ(size_t { 3 }, c.num_rows());
@@ -38,11 +52,27 @@ TEST(FWGPU_Gemm, CublasCorrect) {
   //                            [1.9 8.0]
 
   auto a = fwgpu::Matrix<float>(
-      3, 4, { 1.8f, 2.0f, 4.0f, 7.0f, 5.2f, 1.2f, 2.8f, 4.7f, 5.0f, 3.0f, 4.1f, 8.0f });
+      3, 4,
+      { 1.8f, 2.0f, 4.0f, 7.0f, //
+        5.2f, 1.2f, 2.8f, 4.7f, //
+        5.0f, 3.0f, 4.1f, 8.0f });
 
-  auto b = fwgpu::Matrix<float>(4, 2, { 5.1f, 4.6f, 3.2f, 1.9f, 2.4f, 6.1f, 9.9f, 8.0f });
+  auto b = fwgpu::Matrix<float>(
+      4, 2,
+      { 5.1f, 4.6f, 3.2f, 1.9f, //
+        2.4f, 6.1f, 9.9f, 8.0f });
 
-  auto c = fwgpu::testing::cublas_sgemm_entry(a, b);
+  auto c = fwgpu::Matrix<float>(3, 2);
+
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats(a, b, c);
+  float *d_A = std::get<0>(dptrs);
+  float *d_B = std::get<1>(dptrs);
+  float *d_C = std::get<2>(dptrs);
+
+  fwgpu::cublas_sgemm(d_A, d_B, d_C, 3, 4, 2);
+  fwgpu::memcpy_d2h(c.get_buf(), d_C, c.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
 
   EXPECT_EQ(size_t { 6 }, c.size());
   EXPECT_EQ(size_t { 3 }, c.num_rows());
@@ -54,11 +84,30 @@ TEST(FWGPU_Gemm, CublasCorrect) {
 
 TEST(FWGPU_Gemm, CutlassCorrect) {
   auto a = fwgpu::Matrix<float>(
-      3, 4, { 1.8f, 2.0f, 4.0f, 7.0f, 5.2f, 1.2f, 2.8f, 4.7f, 5.0f, 3.0f, 4.1f, 8.0f });
+      3, 4,
+      { 1.8f, 2.0f, 4.0f, 7.0f, //
+        5.2f, 1.2f, 2.8f, 4.7f, //
+        5.0f, 3.0f, 4.1f, 8.0f });
 
-  auto b = fwgpu::Matrix<float>(4, 2, { 5.1f, 4.6f, 3.2f, 1.9f, 2.4f, 6.1f, 9.9f, 8.0f });
+  auto b = fwgpu::Matrix<float>(
+      4, 2,
+      { 5.1f, 4.6f, 3.2f, 1.9f, //
+        2.4f, 6.1f, 9.9f, 8.0f });
 
-  auto c = fwgpu::testing::cutlass_sgemm_entry(a, b);
+  auto c = fwgpu::Matrix<float>(3, 2);
+
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats(a, b, c);
+  float *d_A = std::get<0>(dptrs);
+  float *d_B = std::get<1>(dptrs);
+  float *d_C = std::get<2>(dptrs);
+
+  auto m = 3;
+  auto n = 2;
+  auto k = 4;
+  fwgpu::cutlass_sgemm_nn(m, n, k, 1, d_A, m, d_B, k, 0, d_C, m);
+  fwgpu::memcpy_d2h(c.get_buf(), d_C, c.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
 
   EXPECT_EQ(size_t { 6 }, c.size());
   EXPECT_EQ(size_t { 3 }, c.num_rows());
@@ -70,11 +119,25 @@ TEST(FWGPU_Gemm, CutlassCorrect) {
 
 TEST(FWGPU_Gemm, CpuNaiveEqCublas) {
   // two random matrices
-  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
-  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+  auto m           = 10;
+  auto k           = 8;
+  auto n           = 20;
+  auto a           = fwgpu::Matrix<float>(m, k, 42, 1.5, 2.5);
+  auto b           = fwgpu::Matrix<float>(k, n, 42, 2.5, 5.0);
+  auto c_cpu_naive = fwgpu::Matrix<float>(m, n, 42, 2.5, 5.0);
+  auto c_cublas    = c_cpu_naive;
 
-  auto c_cpu_naive = fwgpu::testing::cpu_gemm_naive_entry(a, b);
-  auto c_cublas    = fwgpu::testing::cublas_sgemm_entry(a, b);
+  fwgpu::cpu_gemm_naive(m, n, k, a.get_buf(), b.get_buf(), c_cpu_naive.get_buf());
+
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats(a, b, c_cublas);
+  float *d_A = std::get<0>(dptrs);
+  float *d_B = std::get<1>(dptrs);
+  float *d_C = std::get<2>(dptrs);
+
+  fwgpu::cublas_sgemm(d_A, d_B, d_C, m, k, n);
+  fwgpu::memcpy_d2h(c_cublas.get_buf(), d_C, c_cublas.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
 
   EXPECT_EQ(c_cpu_naive.size(), c_cublas.size());
   EXPECT_EQ(c_cpu_naive.num_rows(), c_cublas.num_rows());
@@ -86,11 +149,27 @@ TEST(FWGPU_Gemm, CpuNaiveEqCublas) {
 
 TEST(FWGPU_Gemm, GpuNaiveEqCpuNaive) {
   // two random matrices
-  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
-  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+  auto m           = 10;
+  auto k           = 8;
+  auto n           = 20;
+  auto a           = fwgpu::Matrix<float>(m, k, 42, 1.5, 2.5);
+  auto b           = fwgpu::Matrix<float>(k, n, 42, 2.5, 5.0);
+  auto c_cpu_naive = fwgpu::Matrix<float>(m, n, 42, 2.5, 5.0);
+  auto c_gpu_naive = c_cpu_naive;
 
-  auto c_cpu_naive = fwgpu::testing::cpu_gemm_naive_entry(a, b);
-  auto c_gpu_naive = fwgpu::testing::gpu_sgemm_naive_entry(a, b);
+  fwgpu::cpu_gemm_naive(m, n, k, a.get_buf(), b.get_buf(), c_cpu_naive.get_buf());
+
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats(a, b, c_gpu_naive);
+  float *d_A = std::get<0>(dptrs);
+  float *d_B = std::get<1>(dptrs);
+  float *d_C = std::get<2>(dptrs);
+
+  dim3 threads(16, 16);
+  dim3 blocks((m - 1) / 16 + 1, (n - 1) / 16 + 1);
+  fwgpu::gpu_gemm_naive<float><<<blocks, threads>>>(m, n, k, d_A, d_B, d_C);
+  fwgpu::memcpy_d2h(c_gpu_naive.get_buf(), d_C, c_gpu_naive.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
 
   EXPECT_EQ(c_cpu_naive.size(), c_gpu_naive.size());
   EXPECT_EQ(c_cpu_naive.num_rows(), c_gpu_naive.num_rows());
@@ -102,11 +181,30 @@ TEST(FWGPU_Gemm, GpuNaiveEqCpuNaive) {
 
 TEST(FWGPU_Gemm, GpuNaiveEqCublas) {
   // two random matrices
-  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
-  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+  auto m           = 10;
+  auto k           = 8;
+  auto n           = 20;
+  auto a           = fwgpu::Matrix<float>(m, k, 42, 1.5, 2.5);
+  auto b           = fwgpu::Matrix<float>(k, n, 42, 2.5, 5.0);
+  auto c_gpu_naive = fwgpu::Matrix<float>(m, n, 0.0f);
+  auto c_cublas    = c_gpu_naive;
 
-  auto c_gpu_naive = fwgpu::testing::gpu_sgemm_naive_entry(a, b);
-  auto c_cublas    = fwgpu::testing::cublas_sgemm_entry(a, b);
+  auto dptrs
+      = fwgpu::internal::alloc_and_init_device_gemm_mats(a, b, c_gpu_naive, c_cublas);
+  float *d_A        = std::get<0>(dptrs);
+  float *d_B        = std::get<1>(dptrs);
+  float *d_C_naive  = std::get<2>(dptrs);
+  float *d_C_cublas = std::get<3>(dptrs);
+
+  dim3 threads(16, 16);
+  dim3 blocks((m - 1) / 16 + 1, (n - 1) / 16 + 1);
+  fwgpu::gpu_gemm_naive<<<blocks, threads>>>(m, n, k, d_A, d_B, d_C_naive);
+  fwgpu::memcpy_d2h(c_gpu_naive.get_buf(), d_C_naive, c_gpu_naive.bytesize());
+
+  fwgpu::cublas_sgemm(d_A, d_B, d_C_cublas, m, k, n);
+  fwgpu::memcpy_d2h(c_cublas.get_buf(), d_C_cublas, c_cublas.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
 
   EXPECT_EQ(c_gpu_naive.size(), c_cublas.size());
   EXPECT_EQ(c_gpu_naive.num_rows(), c_cublas.num_rows());
@@ -116,19 +214,35 @@ TEST(FWGPU_Gemm, GpuNaiveEqCublas) {
   }
 }
 
-
 TEST(FWGPU_Gemm, CutlassEqCublas) {
   // two random matrices
-  auto a = fwgpu::Matrix<float>(10, 8, 42, 1.5, 2.5);
-  auto b = fwgpu::Matrix<float>(8, 20, 42, 2.5, 5.0);
+  auto m         = 10;
+  auto k         = 8;
+  auto n         = 20;
+  auto a         = fwgpu::Matrix<float>(m, k, 42, 1.5, 2.5);
+  auto b         = fwgpu::Matrix<float>(k, n, 42, 2.5, 5.0);
+  auto c_cutlass = fwgpu::Matrix<float>(m, n, 42, 2.5, 5.0);
+  auto c_cublas  = c_cutlass;
 
-  auto c_gpu_naive = fwgpu::testing::cutlass_sgemm_entry(a, b);
-  auto c_cublas    = fwgpu::testing::cublas_sgemm_entry(a, b);
+  auto dptrs
+      = fwgpu::internal::alloc_and_init_device_gemm_mats(a, b, c_cutlass, c_cublas);
+  float *d_A         = std::get<0>(dptrs);
+  float *d_B         = std::get<1>(dptrs);
+  float *d_C_cutlass = std::get<2>(dptrs);
+  float *d_C_cublas  = std::get<3>(dptrs);
 
-  EXPECT_EQ(c_gpu_naive.size(), c_cublas.size());
-  EXPECT_EQ(c_gpu_naive.num_rows(), c_cublas.num_rows());
-  EXPECT_EQ(c_gpu_naive.num_cols(), c_cublas.num_cols());
-  for (auto i = 0ull; i < c_gpu_naive.size(); ++i) {
-    EXPECT_FLOAT_EQ(c_gpu_naive[i], c_cublas[i]);
+  fwgpu::cutlass_sgemm_nn(m, n, k, 1, d_A, m, d_B, k, 0, d_C_cutlass, m);
+  fwgpu::memcpy_d2h(c_cutlass.get_buf(), d_C_cutlass, c_cutlass.bytesize());
+
+  fwgpu::cublas_sgemm(d_A, d_B, d_C_cublas, m, k, n);
+  fwgpu::memcpy_d2h(c_cublas.get_buf(), d_C_cublas, c_cublas.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
+
+  EXPECT_EQ(c_cutlass.size(), c_cublas.size());
+  EXPECT_EQ(c_cutlass.num_rows(), c_cublas.num_rows());
+  EXPECT_EQ(c_cutlass.num_cols(), c_cublas.num_cols());
+  for (auto i = 0ull; i < c_cutlass.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_cutlass[i], c_cublas[i]);
   }
 }
