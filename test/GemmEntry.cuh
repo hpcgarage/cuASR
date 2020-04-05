@@ -39,7 +39,7 @@ namespace testing {
     const auto k = A.num_cols(); // B.num_rows();
     const auto n = B.num_cols();
     auto C       = Matrix<T>(m, n);
-    fwgpu::cpu_srgemm_naive(m, n, k, A.get_buf(), B.get_buf(), C.get_buf());
+    fwgpu::cpu_srgemm_naive(m, n, k, A.get_buf(), m, B.get_buf(), k, C.get_buf(), m);
     return C;
   }
 } // namespace testing

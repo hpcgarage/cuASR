@@ -2,15 +2,13 @@
 
 namespace fwgpu {
 
-
 template <typename T>
-inline auto cpu_srgemm_naive(int m, int n, int k, const T *A, const T *B, T *C) -> void {
-  int lda = m;
-  int ldb = k;
-  int ldc = m;
+inline auto cpu_srgemm_naive(
+    int m, int n, int k, const T *A, int lda, const T *B, int ldb, T *C, int ldc)
+    -> void {
   for (int row = 0; row < m; ++row) {
     for (int col = 0; col < n; ++col) {
-      T mindist = std::numeric_limits<T>::infinity();
+      T mindist = C[row + (col * ldc)];
       for (int i = 0; i < k; ++i) {
         mindist = std::min(mindist, A[row + (i * lda)] + B[i + (col * ldb)]);
       }
@@ -21,22 +19,30 @@ inline auto cpu_srgemm_naive(int m, int n, int k, const T *A, const T *B, T *C) 
 
 template <typename TData, typename TIdx>
 inline auto cpu_fwgemm_naive(
-    int m, int n, int k, const TData *A, const TData *B, TData *dist, TIdx *parent)
-    -> void {
-  for (int i = 0; i < n; ++i) {
-    for (int j = 0; j < n; ++j) {
+    int m,
+    int n,
+    int k,
+    const TData *A,
+    int lda,
+    const TData *B,
+    int ldb,
+    TData *dist,
+    int ldc,
+    TIdx *parent) -> void {
+  for (int row = 0; row < n; ++row) {
+    for (int col = 0; col < n; ++col) {
       // dist and parent for this vertex pair (i, j)
-      TData curr_dist  = A[i + (n * 0)] + B[0 + (n * j)];
-      TIdx curr_parent = 0;
+      TData curr_dist  = dist[row + (col * ldc)];
+      TIdx curr_parent = parent[row + (col * ldc)];
       for (int k = 0; k < n; ++k) {
-        TData prod = A[i + (k * n)] + B[k + (j * n)];
+        TData prod = A[row + (k * lda)] + B[k + (col * ldb)];
         if (prod < curr_dist) {
           curr_dist   = prod;
           curr_parent = k;
         }
       }
-      dist[i + (n * j)]   = curr_dist;
-      parent[i + (n * j)] = curr_parent;
+      dist[row + (col * ldc)]   = curr_dist;
+      parent[row + (col * ldc)] = curr_parent;
     }
   }
 }

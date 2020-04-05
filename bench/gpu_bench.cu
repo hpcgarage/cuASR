@@ -116,7 +116,7 @@ static void BM_GpuSrgemmNaive(benchmark::State &state) {
   dim3 blocks((N - 1) / 16 + 1, (N - 1) / 16 + 1);
   for (auto _ : state) {
     cudaEventRecord(start);
-    fwgpu::gpu_srgemm_naive<float><<<blocks, threads>>>(N, N, N, d_A, d_B, d_C);
+    fwgpu::gpu_srgemm_naive<float><<<blocks, threads>>>(N, N, N, d_A, N, d_B, N, d_C, N);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 

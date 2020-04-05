@@ -35,7 +35,7 @@ static void BM_CPUNaiveSrgemm(benchmark::State &state) {
   auto y       = fwgpu::Matrix<float>(N, N, 1.5f);
   auto z       = fwgpu::Matrix<float>(N, N);
   for (auto _ : state) {
-    fwgpu::cpu_srgemm_naive(N, N, N, x.get_buf(), y.get_buf(), z.get_buf());
+    fwgpu::cpu_srgemm_naive(N, N, N, x.get_buf(), N, y.get_buf(), N, z.get_buf(), N);
   }
   double flops_per_itr = 2 * N * N * N;
   state.counters["Flop/s"]

@@ -61,7 +61,7 @@ namespace testing {
 
     dim3 threads(16, 16);
     dim3 blocks((m - 1) / 16 + 1, (n - 1) / 16 + 1);
-    fwgpu::gpu_srgemm_naive<float><<<blocks, threads>>>(m, n, k, d_A, d_B, d_C);
+    fwgpu::gpu_srgemm_naive<float><<<blocks, threads>>>(m, n, k, d_A, m, d_B, k, d_C, m);
 
     // copy output to host
     fwgpu::memcpy_d2h(c_bytes, d_C, output_bytesize);
