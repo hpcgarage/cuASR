@@ -1,9 +1,13 @@
+#ifndef FWGPU_GPU_SRGEMM_CUH
+#define FWGPU_GPU_SRGEMM_CUH
+
 #include <limits>
 
 namespace fwgpu {
 
 template <typename T>
-__global__ auto gpu_srgemm_naive(int m, int n, int k, T *A, int lda, T *B, int ldb, T *dist, int ldc)
+__global__ auto
+gpu_srgemm_naive(int m, int n, int k, T *A, int lda, T *B, int ldb, T *dist, int ldc)
     -> void {
   size_t ty = blockIdx.y * blockDim.y + threadIdx.y;
   size_t tx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -30,3 +34,5 @@ __global__ auto gpu_srgemm_naive(int m, int n, int k, T *A, int lda, T *B, int l
 }
 
 } // namespace fwgpu
+
+#endif // FWGPU_GPU_SRGEMM_CUH
