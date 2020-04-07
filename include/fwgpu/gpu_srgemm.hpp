@@ -1,5 +1,5 @@
-#ifndef FWGPU_GPU_GEMM_HPP
-#define FWGPU_GPU_GEMM_HPP
+#ifndef FWGPU_GPU_SRGEMM_HPP
+#define FWGPU_GPU_SRGEMM_HPP
 
 namespace fwgpu {
 
@@ -13,8 +13,9 @@ auto cutlass_srsgemm_nn(
     int ldb,
     float *C,
     int ldc,
-    bool do_epilogue_min = false,
+    bool do_epilogue_min = true,
     void *stream         = nullptr) -> int;
 
 } // namespace fwgpu
-#endif
+
+#endif // FWGPU_GPU_SRGEMM_HPP
