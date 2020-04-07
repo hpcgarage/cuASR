@@ -23,8 +23,9 @@ endif()
 
 # CUDA native compiler (nvcc) only supports upto C++14 for now
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -fno-exceptions -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG   "-O0 -Wall -Wextra -fno-exceptions -DDEBUG -g")
+set(CMAKE_CXX_FLAGS_DEBUG   "-O0 -Wall -Wextra -Wno-unused-parameter -fno-exceptions -DDEBUG -g")
 
 # CUDA build flags
 find_package(CUDA REQUIRED)
@@ -33,7 +34,7 @@ if (CUDA_FOUND)
     cuda_select_nvcc_arch_flags(CUDA_ARCH_FLAGS Auto)
   endif()
   set(CUDA_NVCC_FLAGS_RELEASE "-O3 --expt-relaxed-constexpr -DNDEBUG ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
-  set(CUDA_NVCC_FLAGS_DEBUG "-O0 --expt-relaxed-constexpr -DDEBUG -g ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
+  set(CUDA_NVCC_FLAGS_DEBUG "-O0 --expt-relaxed-constexpr -DDEBUG -g -G ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
 endif()
 
 # Source directory structure
