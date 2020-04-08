@@ -3,6 +3,8 @@
 #include "cutlass/gemm/device/default_gemm_configuration.h"
 #include "cutlass/gemm/device/gemm.h"
 
+#include <cuda_runtime.h>
+
 namespace fwgpu {
 
 auto cutlass_srsgemm_nn(
@@ -15,13 +17,14 @@ auto cutlass_srsgemm_nn(
     int ldb,
     float *C,
     int ldc,
+    float *D,
     bool do_epilogue_min,
     void *stream) -> int {
   auto stream_ = static_cast<cudaStream_t>(stream);
 
   // compile time configuration of this srgemm kernel
-  using OperatorClass      = cutlass::arch::OpClassSimt;
-  using ArchTag            = cutlass::arch::Sm50;
+  using OperatorClass = cutlass::arch::OpClassSimt;
+  using ArchTag       = cutlass::arch::Sm50;
   using DefaultConfig = typename cutlass::gemm::device::DefaultSrgemmConfiguration<
       OperatorClass, ArchTag, float, float, float, float>;
 
@@ -53,16 +56,15 @@ auto cutlass_srsgemm_nn(
       DefaultConfig::kAlignmentB, // Alignment of B elements
       false,                      // SplitKSerial
       Operator                    // Thread level SemiRing operator
-  >;
+      >;
 
   // construct kernel arguments struct
   CutlassSrgemm::Arguments args(
-      { M, N, K }, // Problem dimensions
-      { A, lda },  // Tensor-ref for source matrix A
-      { B, ldb },  // Tensor-ref for source matrix B
-      { C, ldc },  // Tensor-ref for source matrix C
-      { C, ldc },  // Tensor-ref for destination matrix D (may be different memory than
-                   // source C matrix)
+      { M, N, K },        // Problem dimensions
+      { A, lda },         // Tensor-ref for source matrix A
+      { B, ldb },         // Tensor-ref for source matrix B
+      { C, ldc },         // Tensor-ref for source matrix C
+      { D, ldc },         // Tensor-ref for destination matrix D
       { do_epilogue_min } // True if we perform a final min with source matrix C
   );
 
@@ -70,6 +72,21 @@ auto cutlass_srsgemm_nn(
   CutlassSrgemm srgemm_operator;
   cutlass::Status status = srgemm_operator(args, nullptr, stream_);
   return static_cast<int>(status);
+}
+
+auto cutlass_srsgemm_nn(
+    int M,
+    int N,
+    int K,
+    float const *A,
+    int lda,
+    float const *B,
+    int ldb,
+    float *C,
+    int ldc,
+    bool do_epilogue_min,
+    void *stream) -> int {
+  return cutlass_srsgemm_nn(M, N, K, A, lda, B, ldb, C, ldc, C, do_epilogue_min, stream);
 }
 
 } // namespace fwgpu
