@@ -56,4 +56,16 @@ auto memcpy_2d_d2h(
   return retval;
 }
 
+auto memcpy_2d_d2d(
+    void *dest,
+    size_t dpitch,
+    const void *src,
+    size_t spitch,
+    size_t width,
+    size_t height) -> int {
+  auto retval = static_cast<int>(
+      cudaMemcpy2D(dest, dpitch, src, spitch, width, height, cudaMemcpyDeviceToDevice));
+  return retval;
+}
+
 } // namespace fwgpu

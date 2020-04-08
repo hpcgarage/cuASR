@@ -26,6 +26,13 @@ auto memcpy_2d_d2h(
     size_t spitch,
     size_t width,
     size_t height) -> int;
+auto memcpy_2d_d2d(
+    void *dest,
+    size_t dpitch,
+    const void *src,
+    size_t spitch,
+    size_t width,
+    size_t height) -> int;
 
 } // namespace fwgpu
 
