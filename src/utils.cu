@@ -1,9 +1,21 @@
 #include "fwgpu/utils.hpp"
 
+#include <cuda_runtime.h>
+
 namespace fwgpu {
 
 auto malloc_device(void **dptr, size_t size) -> int {
   auto retval = static_cast<int>(cudaMalloc(dptr, size));
+  return retval;
+}
+
+auto malloc_unified(void **dptr, size_t size) -> int {
+  auto retval = static_cast<int>(cudaMallocManaged(dptr, size));
+  return retval;
+}
+
+auto memcpy_inferred(void *dest, const void *src, size_t size) -> int {
+  auto retval = static_cast<int>(cudaMemcpy(dest, src, size, cudaMemcpyDefault));
   return retval;
 }
 
@@ -65,6 +77,18 @@ auto memcpy_2d_d2d(
     size_t height) -> int {
   auto retval = static_cast<int>(
       cudaMemcpy2D(dest, dpitch, src, spitch, width, height, cudaMemcpyDeviceToDevice));
+  return retval;
+}
+
+auto memcpy_2d_inferred(
+    void *dest,
+    size_t dpitch,
+    const void *src,
+    size_t spitch,
+    size_t width,
+    size_t height) -> int {
+  auto retval = static_cast<int>(
+      cudaMemcpy2D(dest, dpitch, src, spitch, width, height, cudaMemcpyDefault));
   return retval;
 }
 
