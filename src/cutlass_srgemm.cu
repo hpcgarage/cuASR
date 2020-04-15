@@ -1,7 +1,7 @@
 #include "fwgpu/gpu_srgemm.hpp"
 
-#include "cutlass/gemm/device/default_gemm_configuration.h"
-#include "cutlass/gemm/device/gemm.h"
+#include "cutlass/gemm/device/default_srgemm_configuration.h"
+#include "cutlass/gemm/device/srgemm.h"
 
 #include <cuda_runtime.h>
 
