@@ -20,8 +20,10 @@ auto cutlass_srsgemm_nn(
     float *D,
     bool do_epilogue_min,
     void *stream) -> int {
-  auto stream_ = static_cast<cudaStream_t>(stream);
-
+  cudaStream_t stream_ = nullptr;
+  if (stream) {
+    stream_ = *(static_cast<cudaStream_t *>(stream));
+  }
   // compile time configuration of this srgemm kernel
   using OperatorClass = cutlass::arch::OpClassSimt;
   using ArchTag       = cutlass::arch::Sm50;
