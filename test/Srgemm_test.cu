@@ -60,7 +60,7 @@ TEST(FWGPU_Srgemm, CpuNaiveCorrect) {
   }
 }
 
-TEST(FWGPU_Srgemm, CutlassNaiveCorrect) {
+TEST(FWGPU_Srgemm, CutlassCorrect) {
   auto a = fwgpu::Matrix<float>(
       4, 2,
       {
@@ -100,7 +100,8 @@ TEST(FWGPU_Srgemm, CutlassNaiveCorrect) {
   float *d_B = std::get<1>(dptrs);
   float *d_C = std::get<2>(dptrs);
 
-  fwgpu::cutlass_srsgemm_nn(4, 4, 2, d_A, a.num_rows(), d_B, b.num_rows(), d_C, c.num_rows(), true);
+  fwgpu::cutlass_srsgemm_nn(
+      4, 4, 2, d_A, a.num_rows(), d_B, b.num_rows(), d_C, c.num_rows(), true);
   fwgpu::memcpy_d2h(c.get_buf(), d_C, c.bytesize());
 
   fwgpu::internal::dealloc_device_gemm_mats(dptrs);
@@ -178,6 +179,76 @@ TEST(FWGPU_Srgemm, GpuNaiveEqCutlass) {
   }
 }
 
+TEST(FWGPU_Srgemm, GpuNaiveEqCutlass_TS_Inner) {
+  auto m             = 125;
+  auto n             = 125;
+  auto k             = 1000;
+  auto a             = fwgpu::Matrix<float>(m, k, 0xCAFED00D, 1.0, 1000.0);
+  auto b             = fwgpu::Matrix<float>(k, n, 0xCAFED00D, 1.0, 1000.0);
+  auto c_gpu_naive   = fwgpu::Matrix<float>(m, n, 0.0f);
+  auto c_gpu_cutlass = c_gpu_naive;
+
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats(
+      a, b, c_gpu_naive, c_gpu_cutlass);
+
+  float *d_A         = std::get<0>(dptrs);
+  float *d_B         = std::get<1>(dptrs);
+  float *d_C_naive   = std::get<2>(dptrs);
+  float *d_C_cutlass = std::get<3>(dptrs);
+
+  dim3 threads(16, 16);
+  dim3 blocks((m - 1) / 16 + 1, (n - 1) / 16 + 1);
+  fwgpu::gpu_srgemm_naive<<<blocks, threads>>>(m, n, k, d_A, m, d_B, k, d_C_naive, m);
+  fwgpu::memcpy_d2h(c_gpu_naive.get_buf(), d_C_naive, c_gpu_naive.bytesize());
+
+  fwgpu::cutlass_srsgemm_nn(m, n, k, d_A, m, d_B, k, d_C_cutlass, m, true);
+  fwgpu::memcpy_d2h(c_gpu_cutlass.get_buf(), d_C_cutlass, c_gpu_cutlass.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
+
+  EXPECT_EQ(c_gpu_naive.size(), c_gpu_cutlass.size());
+  EXPECT_EQ(c_gpu_naive.num_rows(), c_gpu_cutlass.num_rows());
+  EXPECT_EQ(c_gpu_naive.num_cols(), c_gpu_cutlass.num_cols());
+  for (auto i = 0ull; i < c_gpu_naive.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_gpu_naive[i], c_gpu_cutlass[i]);
+  }
+}
+
+TEST(FWGPU_Srgemm, GpuNaiveEqCutlass_TS_Outer) {
+  auto m             = 1000;
+  auto n             = 1000;
+  auto k             = 125;
+  auto a             = fwgpu::Matrix<float>(m, k, 0xCAFED00D, 1.0, 1000.0);
+  auto b             = fwgpu::Matrix<float>(k, n, 0xCAFED00D, 1.0, 1000.0);
+  auto c_gpu_naive   = fwgpu::Matrix<float>(m, n, 0.0f);
+  auto c_gpu_cutlass = c_gpu_naive;
+
+  auto dptrs = fwgpu::internal::alloc_and_init_device_gemm_mats(
+      a, b, c_gpu_naive, c_gpu_cutlass);
+
+  float *d_A         = std::get<0>(dptrs);
+  float *d_B         = std::get<1>(dptrs);
+  float *d_C_naive   = std::get<2>(dptrs);
+  float *d_C_cutlass = std::get<3>(dptrs);
+
+  dim3 threads(16, 16);
+  dim3 blocks((m - 1) / 16 + 1, (n - 1) / 16 + 1);
+  fwgpu::gpu_srgemm_naive<<<blocks, threads>>>(m, n, k, d_A, m, d_B, k, d_C_naive, m);
+  fwgpu::memcpy_d2h(c_gpu_naive.get_buf(), d_C_naive, c_gpu_naive.bytesize());
+
+  fwgpu::cutlass_srsgemm_nn(m, n, k, d_A, m, d_B, k, d_C_cutlass, m, true);
+  fwgpu::memcpy_d2h(c_gpu_cutlass.get_buf(), d_C_cutlass, c_gpu_cutlass.bytesize());
+
+  fwgpu::internal::dealloc_device_gemm_mats(dptrs);
+
+  EXPECT_EQ(c_gpu_naive.size(), c_gpu_cutlass.size());
+  EXPECT_EQ(c_gpu_naive.num_rows(), c_gpu_cutlass.num_rows());
+  EXPECT_EQ(c_gpu_naive.num_cols(), c_gpu_cutlass.num_cols());
+  for (auto i = 0ull; i < c_gpu_naive.size(); ++i) {
+    EXPECT_FLOAT_EQ(c_gpu_naive[i], c_gpu_cutlass[i]);
+  }
+}
+
 TEST(FWGPU_Srgemm, CpuSubEqCutlassSub_TopLeft_2x2x2) {
   auto m     = 2;
   auto n     = 2;
@@ -199,16 +270,7 @@ TEST(FWGPU_Srgemm, CpuSubEqCutlassSub_TopLeft_2x2x2) {
   float *d_C = std::get<2>(dptrs);
 
   fwgpu::cutlass_srsgemm_nn(
-      m,
-      n,
-      k,
-      d_A,
-      a.num_rows(),
-      d_B,
-      b.num_rows(),
-      d_C,
-      c_gpu.num_rows(),
-      true);
+      m, n, k, d_A, a.num_rows(), d_B, b.num_rows(), d_C, c_gpu.num_rows(), true);
   fwgpu::memcpy_d2h(c_gpu.get_buf(), d_C, c_gpu.bytesize());
 
   fwgpu::internal::dealloc_device_gemm_mats(dptrs);
