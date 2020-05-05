@@ -127,7 +127,7 @@ static void BM_GpuSrgemmCutlass_TS_Outer(benchmark::State &state) {
     state.SetIterationTime(milliseconds / 1000);
   }
 
-  double flops_per_itr = 2 * N * N * (N / 4);
+  double flops_per_itr = 2 * m * n * k;
   state.counters["Flop/s"]
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 
@@ -176,7 +176,7 @@ static void BM_GpuSrgemmCutlass_TS_Inner(benchmark::State &state) {
     state.SetIterationTime(milliseconds / 1000);
   }
 
-  double flops_per_itr = 2 * (N / 4) * (N / 4) * N;
+  double flops_per_itr = 2 * m * n * k;
   state.counters["Flop/s"]
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 
