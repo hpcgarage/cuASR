@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <tuple>
 
 #include "benchmark/benchmark.h"
@@ -7,6 +8,8 @@
 #include "fwgpu/gpu_srgemm.hpp"
 #include "fwgpu/internal/utils.cuh"
 
+#include <cuda.h>
+#include <cuda_runtime.h>
 
 static void BM_GpuGemmCutlass(benchmark::State &state) {
   const auto N = state.range(0);
