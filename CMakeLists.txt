@@ -51,9 +51,6 @@ if(CUDA_FOUND)
   set(CUDA_NVCC_FLAGS_RELWITHDEBINFO "-O3 -g -G -DNDEBUG --expt-relaxed-constexpr ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
 endif()
 
-# Source directory structure
-include_directories(${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS})
-
 if(FWGPU_TEST)
   enable_testing()
   add_subdirectory(test)
@@ -79,8 +76,8 @@ target_link_libraries(
 )
 
 target_include_directories(${FWGPU_LIB_NAME} PUBLIC
-  ${PROJECT_SOURCE_DIR}
-  "${PROJECT_SOURCE_DIR}/cutlass/include"
+  ${PROJECT_SOURCE_DIR}/include
+  ${PROJECT_SOURCE_DIR}/cutlass/include
   ${CUDA_INCLUDE_DIRS})
 
 install(TARGETS ${FWGPU_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
