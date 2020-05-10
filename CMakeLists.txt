@@ -73,10 +73,10 @@ target_link_libraries(
   ${CUDA_CUBLAS_LIBRARIES}
 )
 
-target_include_directories(${FWGPU_LIB_NAME} PUBLIC
-  ${PROJECT_SOURCE_DIR}/include
-  ${PROJECT_SOURCE_DIR}/cutlass/include
-  ${CUDA_INCLUDE_DIRS})
+target_include_directories(${FWGPU_LIB_NAME}
+  PUBLIC ${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS}
+  PRIVATE ${PROJECT_SOURCE_DIR}/cutlass/include
+)
 
 install(TARGETS ${FWGPU_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 install(DIRECTORY ${FWGPU_LIB_NAME}/include DESTINATION include)

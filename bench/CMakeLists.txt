@@ -1,13 +1,9 @@
 set(BENCHMARK_ENABLE_TESTING OFF)
-
 add_subdirectory(benchmark)
-include_directories(${PROJECT_SOURCE_DIR}/include benchmark/include)
 
 # CPU benchmarks
-set(cpu_bench_src
-  cpu_bench.cpp
-)
-add_executable(cpu_bench ${cpu_bench_src})
+add_executable(cpu_bench cpu_bench.cpp)
+target_include_directories(cpu_bench PRIVATE benchmark/include)
 target_link_libraries(cpu_bench
   benchmark
   benchmark_main
@@ -16,10 +12,8 @@ target_link_libraries(cpu_bench
 )
 
 # GPU Benchmarks
-set(gpu_bench_src
-  gpu_bench.cu
-)
-CUDA_ADD_EXECUTABLE(gpu_bench ${gpu_bench_src})
+cuda_add_executable(gpu_bench gpu_bench.cu)
+target_include_directories(gpu_bench PRIVATE benchmark/include)
 target_link_libraries(gpu_bench
   benchmark
   benchmark_main
