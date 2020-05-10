@@ -2,7 +2,7 @@
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
   message(STATUS "Checking submodule version for google/benchmark")
   execute_process(
-    COMMAND ${GIT_EXECUTABLE} submodule --quiet update --init ${PROJECT_SOURCE_DIR}/bench/benchmark
+    COMMAND ${GIT_EXECUTABLE} submodule update --init ${PROJECT_SOURCE_DIR}/bench/benchmark
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     OUTPUT_VARIABLE GIT_SUBMOD_STDOUT OUTPUT_STRIP_TRAILING_WHITESPACE
     ERROR_VARIABLE GIT_SUBMOD_STDERR ERROR_STRIP_TRAILING_WHITESPACE
