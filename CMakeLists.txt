@@ -1,18 +1,16 @@
 cmake_minimum_required(VERSION 3.9)
 project(SrgemmCudaKernels CUDA CXX)
 
-string(TOUPPER "${CMAKE_BUILD_TYPE}" uppercase_CMAKE_BUILD_TYPE)
-
 # RELEASE config by default ifnone is provided:
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RELEASE")
   set(BUILD_TYPE_INFERRED_RELEASE TRUE)
-elseif()
-  # otherwise, first convert build type string to uppercase, and then compare
-  if(NOT uppercase_CMAKE_BUILD_TYPE MATCHES "^(DEBUG|RELEASE|RELWITHDEBINFO)$")
-    message(FATAL_ERROR "Invalid value for CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-  endif()
-  set(BUILD_TYPE_INFERRED_RELEASE FALSE)
+endif()
+
+# first convert build type string to uppercase, and then compare
+string(TOUPPER "${CMAKE_BUILD_TYPE}" uppercase_CMAKE_BUILD_TYPE)
+if(NOT uppercase_CMAKE_BUILD_TYPE MATCHES "^(DEBUG|RELEASE|RELWITHDEBINFO)$")
+  message(FATAL_ERROR "Invalid value for CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 endif()
 
 # always dump compiler invocation commands to compile_commands.json
