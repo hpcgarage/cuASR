@@ -14,6 +14,7 @@ if(NOT uppercase_CMAKE_BUILD_TYPE MATCHES "^(DEBUG|RELEASE|RELWITHDEBINFO)$")
 endif()
 
 # always dump compiler invocation commands to compile_commands.json
+# note that this does not include nvcc invocations >:(
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Switches for testing, benchmarks or static lib builds
@@ -47,6 +48,30 @@ if(CUDA_FOUND)
   set(CUDA_NVCC_FLAGS_DEBUG "-O0 -g -G -DDEBUG --expt-relaxed-constexpr ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
   set(CUDA_NVCC_FLAGS_RELEASE "-O3 -DNDEBUG --expt-relaxed-constexpr ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
   set(CUDA_NVCC_FLAGS_RELWITHDEBINFO "-O3 -g -G -DNDEBUG --expt-relaxed-constexpr ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
+endif()
+
+# the sub-modules update themselves with git, so find git
+find_package(Git QUIET)
+
+# make sure we have cutlass checked-out and is up-to-date
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+  message(STATUS "Checking submodule version for thakkarV/cutlass")
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} submodule update --init ${PROJECT_SOURCE_DIR}/cutlass
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_SUBMOD_STDOUT OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_VARIABLE GIT_SUBMOD_STDERR ERROR_STRIP_TRAILING_WHITESPACE
+    RESULT_VARIABLE GIT_SUBMOD_RESULT
+  )
+  if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+    message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout cutlass manually. Git stdout was ${GIT_SUBMOD_STDOUT}. Git stderr was ${GIT_SUBMOD_STDERR}.")
+  elseif(NOT ${GIT_SUBMOD_STDOUT} STREQUAL "")
+    message(STATUS ${GIT_SUBMOD_STDOUT})
+  endif()
+endif()
+
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cutlass/include")
+  message(FATAL_ERROR "Cutlass submodule is not present and automatic checkout failed, please checkout cutlass manually.")
 endif()
 
 if(FWGPU_TEST)
