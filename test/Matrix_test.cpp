@@ -34,7 +34,7 @@ TEST(FWGPU_Matrix, InitializerListConstructorCorrect) {
   EXPECT_FLOAT_EQ(10.0f, x(2, 2));
 }
 
-TEST(FWGPU_Matrix, RandomMatrixConstructorCorrect) {
+TEST(FWGPU_Matrix, RandomFloatMatrixConstructorCorrect) {
   size_t const seed  = 8;
   auto const minimum = 1.0545;
   auto const maximum = 28.1;
@@ -47,6 +47,23 @@ TEST(FWGPU_Matrix, RandomMatrixConstructorCorrect) {
 
   for (auto i = 0u; i < x.size(); ++i) {
     double const val = x(i);
+    EXPECT_TRUE((val >= minimum && val <= maximum));
+  }
+}
+
+TEST(FWGPU_Matrix, RandomIntMatrixConstructorCorrect) {
+  size_t const seed  = 8;
+  auto const minimum = 1;
+  auto const maximum = 128;
+  auto x             = fwgpu::Matrix<int>(7, 5, seed, minimum, maximum);
+
+  EXPECT_EQ(size_t { 7 * 5 }, x.size());
+  EXPECT_EQ(size_t { 7 * 5 * sizeof(int) }, x.bytesize());
+  EXPECT_EQ(size_t { 7 }, x.num_rows());
+  EXPECT_EQ(size_t { 5 }, x.num_cols());
+
+  for (auto i = 0u; i < x.size(); ++i) {
+    int const val = x(i);
     EXPECT_TRUE((val >= minimum && val <= maximum));
   }
 }

@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <ostream>
 #include <random>
+#include <type_traits>
 #include <vector>
 
 namespace fwgpu {
@@ -53,18 +54,15 @@ public:
    * Allocate and initialize buf with input value.
    **/
   Matrix(size_t rows, size_t cols, ElementT val)
-      : m_host_buf(rows * cols)
+      : m_host_buf(rows * cols, val)
       , m_rows(rows)
-      , m_cols(cols) {
-    for (auto i = 0ull; i < (rows * cols); ++i) {
-      m_host_buf[i] = val;
-    }
-  }
+      , m_cols(cols) { }
 
   /*
    * Allocate and initialize of a buffer of size rows*cols.
    * Assign random numbers in the input range.
    **/
+
   Matrix(
       size_t rows,
       size_t cols,
@@ -74,9 +72,13 @@ public:
       : m_host_buf(rows * cols)
       , m_rows(rows)
       , m_cols(cols) {
+    using Distribution = std::conditional_t<
+        std::is_integral<ElementT>::value,       // if ElementT is integral
+        std::uniform_int_distribution<ElementT>, // use int dist
+        std::uniform_real_distribution<ElementT> // otherwise folating point dist
+        >;
     auto rng  = std::mt19937_64(seed);
-    auto dist = std::uniform_real_distribution<ElementT>(min, max);
-    m_host_buf.reserve(cols * rows);
+    auto dist = Distribution(min, max);
     for (auto i = 0ull; i < (rows * cols); ++i) {
       m_host_buf[i] = dist(rng);
     }
