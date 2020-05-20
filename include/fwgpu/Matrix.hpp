@@ -130,7 +130,9 @@ public:
 
   Matrix(Matrix &&other)
       : m_layout(other.m_layout) {
-    m_host_buf = std::move(other.m_host_buf);
+    other.m_layout.m_rows = 0;
+    other.m_layout.m_cols = 0;
+    m_host_buf            = std::move(other.m_host_buf);
   }
 
   /*
@@ -224,7 +226,7 @@ inline auto operator==(const Matrix<ElementT> &lhs, const Matrix<ElementT> &rhs)
 
 // Element-wise inequality test for two matrices of the same template type.
 template <typename ElementT>
-inline auto operator!=(Matrix<ElementT> &lhs, Matrix<ElementT> &rhs) -> bool {
+inline auto operator!=(const Matrix<ElementT> &lhs, const Matrix<ElementT> &rhs) -> bool {
   return !(lhs == rhs);
 }
 
