@@ -67,3 +67,49 @@ TEST(FWGPU_Matrix, RandomIntMatrixConstructorCorrect) {
     EXPECT_TRUE((val >= minimum && val <= maximum));
   }
 }
+
+TEST(FWGPU_Matrix, ColumnMajorLayoutCorrect) {
+  auto mat = fwgpu::Matrix<float, fwgpu::ColumnMajor>(
+      4, 4,
+      {
+          0.840187728, 0.911647379, 0.277774721, 0.364784479, //
+          0.394382924, 0.197551370, 0.553969979, 0.513400912, //
+          0.729605675, 0.335222751, 0.477397054, 0.952229738, //
+          0.798440039, 0.768229604, 0.628870904, 0.916195095  //
+      });
+
+  // corners
+  EXPECT_FLOAT_EQ(mat(0, 0), 0.840187728);
+  EXPECT_FLOAT_EQ(mat(0, 3), 0.798440039);
+  EXPECT_FLOAT_EQ(mat(3, 0), 0.364784479);
+  EXPECT_FLOAT_EQ(mat(3, 3), 0.916195095);
+
+  // middle 2x2
+  EXPECT_FLOAT_EQ(mat(1, 1), 0.197551370);
+  EXPECT_FLOAT_EQ(mat(1, 2), 0.335222751);
+  EXPECT_FLOAT_EQ(mat(2, 1), 0.553969979);
+  EXPECT_FLOAT_EQ(mat(2, 2), 0.477397054);
+}
+
+TEST(FWGPU_Matrix, RowMajorLayoutCorrect) {
+  auto mat = fwgpu::Matrix<float, fwgpu::RowMajor>(
+      4, 4,
+      {
+          0.840187728, 0.911647379, 0.277774721, 0.364784479, //
+          0.394382924, 0.197551370, 0.553969979, 0.513400912, //
+          0.729605675, 0.335222751, 0.477397054, 0.952229738, //
+          0.798440039, 0.768229604, 0.628870904, 0.916195095  //
+      });
+
+  // corners
+  EXPECT_FLOAT_EQ(mat(0, 0), 0.840187728);
+  EXPECT_FLOAT_EQ(mat(0, 3), 0.364784479);
+  EXPECT_FLOAT_EQ(mat(3, 0), 0.798440039);
+  EXPECT_FLOAT_EQ(mat(3, 3), 0.916195095);
+
+  // middle 2x2
+  EXPECT_FLOAT_EQ(mat(1, 1), 0.197551370);
+  EXPECT_FLOAT_EQ(mat(1, 2), 0.553969979);
+  EXPECT_FLOAT_EQ(mat(2, 1), 0.335222751);
+  EXPECT_FLOAT_EQ(mat(2, 2), 0.477397054);
+}

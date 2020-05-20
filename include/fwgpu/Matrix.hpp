@@ -10,16 +10,43 @@
 
 namespace fwgpu {
 
+struct ColumnMajor {
+  size_t m_rows;
+  size_t m_cols;
+
+  ColumnMajor() = delete;
+  ColumnMajor(size_t rows, size_t cols)
+      : m_rows(rows)
+      , m_cols(cols) {};
+
+  auto linearize(size_t row_idx, size_t col_idx) const noexcept -> size_t {
+    return row_idx + (m_rows * col_idx);
+  }
+};
+
+struct RowMajor {
+  size_t m_rows;
+  size_t m_cols;
+
+  RowMajor() = delete;
+  RowMajor(size_t rows, size_t cols)
+      : m_rows(rows)
+      , m_cols(cols) {};
+
+  auto linearize(size_t row_idx, size_t col_idx) const noexcept -> size_t {
+    return (row_idx * m_cols) + col_idx;
+  }
+};
+
 /*
  * Matrix datastructure: Wrapper around a buffer of ElementT.
  * ElementT = float and column major by default.
  **/
-template <typename ElementT = float>
+template <typename ElementT = float, typename Layout = ColumnMajor>
 class Matrix {
 private:
+  Layout m_layout;
   std::vector<ElementT> m_host_buf;
-  size_t m_rows;
-  size_t m_cols;
 
 public:
   /*
@@ -36,8 +63,7 @@ public:
    * De-facto default constructor: allocate ElementT buffer of size rows*cols
    **/
   Matrix(size_t rows, size_t cols)
-      : m_rows(rows)
-      , m_cols(cols) {
+      : m_layout(rows, cols) {
     m_host_buf.reserve(rows * cols);
   }
 
@@ -46,17 +72,15 @@ public:
    * TODO: not sure we should allow this?
    **/
   Matrix(size_t rows, size_t cols, ElementT *buf)
-      : m_host_buf(buf, buf + (rows * cols))
-      , m_rows(rows)
-      , m_cols(cols) { }
+      : m_layout(rows, cols)
+      , m_host_buf(buf, buf + (rows * cols)) { }
 
   /*
    * Allocate and initialize buf with input value.
    **/
   Matrix(size_t rows, size_t cols, ElementT val)
-      : m_host_buf(rows * cols, val)
-      , m_rows(rows)
-      , m_cols(cols) { }
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols, val) { }
 
   /*
    * Allocate and initialize of a buffer of size rows*cols.
@@ -69,9 +93,8 @@ public:
       size_t seed,
       ElementT min = ElementT(0.0),
       ElementT max = ElementT(1.0))
-      : m_host_buf(rows * cols)
-      , m_rows(rows)
-      , m_cols(cols) {
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols) {
     using Distribution = std::conditional_t<
         std::is_integral<ElementT>::value,       // if ElementT is integral
         std::uniform_int_distribution<ElementT>, // use int dist
@@ -89,9 +112,8 @@ public:
    * This mainly makes testing easier.
    **/
   Matrix(size_t rows, size_t cols, const std::initializer_list<ElementT> &elements)
-      : m_host_buf(rows * cols)
-      , m_rows(rows)
-      , m_cols(cols) {
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols) {
     auto i = 0ull;
     for (auto val : elements) {
       m_host_buf[i++] = val;
@@ -102,14 +124,12 @@ public:
    * Copy constructor: allocate new buffer and memcpy from other
    **/
   Matrix(const Matrix &other)
-      : m_rows(other.m_rows)
-      , m_cols(other.m_cols) {
+      : m_layout(other.m_layout) {
     m_host_buf = other.m_host_buf;
   }
 
   Matrix(Matrix &&other)
-      : m_rows(other.m_rows)
-      , m_cols(other.m_cols) {
+      : m_layout(other.m_layout) {
     m_host_buf = std::move(other.m_host_buf);
   }
 
@@ -117,8 +137,7 @@ public:
    * Copy assignment operator.
    **/
   auto operator=(const Matrix &other) -> Matrix & {
-    m_rows     = other.num_rows();
-    m_cols     = other.num_cols();
+    m_layout   = other.m_layout;
     m_host_buf = other.m_host_buf;
     return *this;
   }
@@ -126,7 +145,7 @@ public:
   /*
    * Returns a non-owning, const pointer to the backing buffer of type ElementT[].
    **/
-  auto get_buf() const -> const ElementT * { return m_host_buf.data(); }
+  auto get_buf() const noexcept -> const ElementT * { return m_host_buf.data(); }
 
   /*
    * Returns a non-owning pointer to the backing buffer of type ElementT[].
@@ -136,7 +155,7 @@ public:
   /*
    * Returns total number of elements stored in the matrix.
    **/
-  auto size() const noexcept -> size_t { return m_rows * m_cols; }
+  auto size() const noexcept -> size_t { return m_layout.m_rows * m_layout.m_cols; }
 
   /*
    * Returns total number of bytes occupied by the backing store ElementT[].
@@ -146,17 +165,19 @@ public:
   /*
    * Returns true if matrix has (0, 0) dimentions. False otherwise.
    **/
-  auto is_empty() const noexcept -> size_t { return (m_rows == 0) || (m_cols == 0); }
+  auto is_empty() const noexcept -> size_t {
+    return (m_layout.m_rows == 0) || (m_layout.m_cols == 0);
+  }
 
   /*
    * Returns numbers of rows in the matrix.
    **/
-  auto num_rows() const noexcept -> size_t { return m_rows; }
+  auto num_rows() const noexcept -> size_t { return m_layout.m_rows; }
 
   /*
    * Returns numbers of columns in the matrix.
    **/
-  auto num_cols() const noexcept -> size_t { return m_cols; }
+  auto num_cols() const noexcept -> size_t { return m_layout.m_cols; }
 
   /*
    * Linear index into the flat buffer.
@@ -176,11 +197,11 @@ public:
    * with some template magic.
    */
   auto operator()(size_t row_idx, size_t col_idx) -> ElementT & {
-    return m_host_buf[row_idx + (col_idx * m_rows)];
+    return m_host_buf[m_layout.linearize(row_idx, col_idx)];
   }
 
   auto operator()(size_t row_idx, size_t col_idx) const -> ElementT const & {
-    return m_host_buf[row_idx + (col_idx * m_rows)];
+    return m_host_buf[m_layout.linearize(row_idx, col_idx)];
   }
 };
 
