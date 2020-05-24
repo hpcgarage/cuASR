@@ -34,7 +34,7 @@ TEST(FWGPU_Matrix, InitializerListConstructorCorrect) {
   EXPECT_FLOAT_EQ(10.0f, x(2, 2));
 }
 
-TEST(FWGPU_Matrix, RandomMatrixConstructorCorrect) {
+TEST(FWGPU_Matrix, RandomFloatMatrixConstructorCorrect) {
   size_t const seed  = 8;
   auto const minimum = 1.0545;
   auto const maximum = 28.1;
@@ -49,4 +49,118 @@ TEST(FWGPU_Matrix, RandomMatrixConstructorCorrect) {
     double const val = x(i);
     EXPECT_TRUE((val >= minimum && val <= maximum));
   }
+}
+
+TEST(FWGPU_Matrix, RandomIntMatrixConstructorCorrect) {
+  size_t const seed  = 8;
+  auto const minimum = 1;
+  auto const maximum = 128;
+  auto x             = fwgpu::Matrix<int>(7, 5, seed, minimum, maximum);
+
+  EXPECT_EQ(size_t { 7 * 5 }, x.size());
+  EXPECT_EQ(size_t { 7 * 5 * sizeof(int) }, x.bytesize());
+  EXPECT_EQ(size_t { 7 }, x.num_rows());
+  EXPECT_EQ(size_t { 5 }, x.num_cols());
+
+  for (auto i = 0u; i < x.size(); ++i) {
+    int const val = x(i);
+    EXPECT_TRUE((val >= minimum && val <= maximum));
+  }
+}
+
+TEST(FWGPU_Matrix, CopyConstructorCorrect) {
+  auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
+  auto to   = from;
+  EXPECT_TRUE(from == to);
+}
+
+TEST(FWGPU_Matrix, MoveConstructorCorrect) {
+  auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
+  EXPECT_EQ(from.num_rows(), 5);
+  EXPECT_EQ(from.num_cols(), 7);
+  EXPECT_TRUE(from.get_buf() != nullptr);
+
+  auto to = fwgpu::Matrix<float, fwgpu::ColumnMajor>(std::move(from));
+  EXPECT_EQ(to.num_rows(), 5);
+  EXPECT_EQ(to.num_cols(), 7);
+  EXPECT_TRUE(to.get_buf() != nullptr);
+
+  EXPECT_EQ(from.num_rows(), 0);
+  EXPECT_EQ(from.num_cols(), 0);
+  EXPECT_TRUE(from.get_buf() == nullptr);
+}
+
+TEST(FWGPU_Matrix, ConstantConstructorCorrect) {
+  auto mat = fwgpu::Matrix<int>(6, 2, 42);
+  EXPECT_EQ(mat.num_rows(), 6);
+  EXPECT_EQ(mat.num_cols(), 2);
+  EXPECT_EQ(mat(0, 0), 42);
+  EXPECT_EQ(mat(3, 0), 42);
+  EXPECT_EQ(mat(3, 1), 42);
+  EXPECT_EQ(mat(5, 1), 42);
+}
+
+TEST(FWGPU_Matrix, BufferConstructorCorrect) {
+  std::vector<int> matvals(12, 42);
+  auto mat = fwgpu::Matrix<int>(6, 2, matvals.data());
+
+  EXPECT_EQ(mat.num_rows(), 6);
+  EXPECT_EQ(mat.num_cols(), 2);
+  EXPECT_EQ(mat(0, 0), 42);
+  EXPECT_EQ(mat(3, 0), 42);
+  EXPECT_EQ(mat(3, 1), 42);
+  EXPECT_EQ(mat(5, 1), 42);
+}
+
+TEST(FWGPU_Matrix, CopyAssignmentCorrect) {
+  auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
+  fwgpu::Matrix<float> to(1, 1);
+  to = from;
+  EXPECT_TRUE(from == to);
+}
+
+TEST(FWGPU_Matrix, ColumnMajorLayoutCorrect) {
+  auto mat = fwgpu::Matrix<float, fwgpu::ColumnMajor>(
+      4, 4,
+      {
+          0.840187728, 0.911647379, 0.277774721, 0.364784479, //
+          0.394382924, 0.197551370, 0.553969979, 0.513400912, //
+          0.729605675, 0.335222751, 0.477397054, 0.952229738, //
+          0.798440039, 0.768229604, 0.628870904, 0.916195095  //
+      });
+
+  // corners
+  EXPECT_FLOAT_EQ(mat(0, 0), 0.840187728);
+  EXPECT_FLOAT_EQ(mat(0, 3), 0.798440039);
+  EXPECT_FLOAT_EQ(mat(3, 0), 0.364784479);
+  EXPECT_FLOAT_EQ(mat(3, 3), 0.916195095);
+
+  // middle 2x2
+  EXPECT_FLOAT_EQ(mat(1, 1), 0.197551370);
+  EXPECT_FLOAT_EQ(mat(1, 2), 0.335222751);
+  EXPECT_FLOAT_EQ(mat(2, 1), 0.553969979);
+  EXPECT_FLOAT_EQ(mat(2, 2), 0.477397054);
+}
+
+TEST(FWGPU_Matrix, RowMajorLayoutCorrect) {
+  auto mat = fwgpu::Matrix<float, fwgpu::RowMajor>(
+      4, 4,
+      {
+          0.840187728, 0.911647379, 0.277774721, 0.364784479, //
+          0.394382924, 0.197551370, 0.553969979, 0.513400912, //
+          0.729605675, 0.335222751, 0.477397054, 0.952229738, //
+          0.798440039, 0.768229604, 0.628870904, 0.916195095  //
+      });
+
+  // corners
+  EXPECT_FLOAT_EQ(mat(0, 0), 0.840187728);
+  EXPECT_FLOAT_EQ(mat(0, 3), 0.364784479);
+  EXPECT_FLOAT_EQ(mat(3, 0), 0.798440039);
+  EXPECT_FLOAT_EQ(mat(3, 3), 0.916195095);
+
+  // middle 2x2
+  EXPECT_FLOAT_EQ(mat(1, 1), 0.197551370);
+  EXPECT_FLOAT_EQ(mat(1, 2), 0.553969979);
+  EXPECT_FLOAT_EQ(mat(2, 1), 0.335222751);
+  EXPECT_FLOAT_EQ(mat(2, 2), 0.477397054);
 }

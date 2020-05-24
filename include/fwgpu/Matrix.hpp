@@ -3,25 +3,50 @@
 
 #include <cstring>
 #include <initializer_list>
-#include <memory>
 #include <ostream>
 #include <random>
+#include <type_traits>
+#include <vector>
 
 namespace fwgpu {
 
-/*
- * Matrix datastructure: Wrapper around a buffer of T.
- * T = float and column major by default.
- **/
-template <typename T = float>
-class Matrix {
-  // sizeof(Matrix<T>) == 32 bytes for any T that has a default deleter
-  // NOTE: m_buf_raw is used here only for internal indexing purposes
-private:
-  std::unique_ptr<T> m_buf;
+struct ColumnMajor {
   size_t m_rows;
   size_t m_cols;
-  T *m_buf_raw;
+
+  ColumnMajor() = delete;
+  ColumnMajor(size_t rows, size_t cols)
+      : m_rows(rows)
+      , m_cols(cols) {};
+
+  auto linearize(size_t row_idx, size_t col_idx) const noexcept -> size_t {
+    return row_idx + (m_rows * col_idx);
+  }
+};
+
+struct RowMajor {
+  size_t m_rows;
+  size_t m_cols;
+
+  RowMajor() = delete;
+  RowMajor(size_t rows, size_t cols)
+      : m_rows(rows)
+      , m_cols(cols) {};
+
+  auto linearize(size_t row_idx, size_t col_idx) const noexcept -> size_t {
+    return (row_idx * m_cols) + col_idx;
+  }
+};
+
+/*
+ * Matrix datastructure for a tightly packed 2D array.
+ * ElementT = float and column major by default.
+ **/
+template <typename ElementT = float, typename Layout = ColumnMajor>
+class Matrix {
+private:
+  Layout m_layout;
+  std::vector<ElementT> m_host_buf;
 
 public:
   /*
@@ -30,163 +55,161 @@ public:
   Matrix() = delete;
 
   /*
-   * Default distructor. Unique pointer will take care of buffer lifetime.
+   * Default distructor.
    **/
   ~Matrix() = default;
 
   /*
-   * De-facto default constructor: allocate T buffer of size rows*cols
+   * De-facto default constructor: allocate ElementT buffer of size rows*cols
    **/
   Matrix(size_t rows, size_t cols)
-      : m_buf(new T[rows * cols])
-      , m_rows(rows)
-      , m_cols(cols) {
-    m_buf_raw = m_buf.get();
-  }
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols) { }
 
   /*
    * Assign buf from external source.
    * TODO: not sure we should allow this?
    **/
-  Matrix(size_t rows, size_t cols, T *buf)
-      : m_rows(rows)
-      , m_cols(cols) {
-    m_buf.reset(buf);
-    m_buf_raw = m_buf.get();
-  }
+  Matrix(size_t rows, size_t cols, ElementT *buf)
+      : m_layout(rows, cols)
+      , m_host_buf(buf, buf + (rows * cols)) { }
 
   /*
-   * Allocate and initialize buf with input value.
+   * Allocates and initializes the matrix with input value.
    **/
-  Matrix(size_t rows, size_t cols, T val)
-      : m_buf(new T[rows * cols])
-      , m_rows(rows)
-      , m_cols(cols) {
-    m_buf_raw = m_buf.get();
-    for (auto i = 0ull; i < (rows * cols); ++i) {
-      m_buf_raw[i] = val;
-    }
-  }
+  Matrix(size_t rows, size_t cols, ElementT val)
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols, val) { }
 
   /*
-   * Allocate and initialize of a buffer of size rows*cols.
-   * Assign random numbers in the input range.
+   * Random Fill Constructor: allocates and initializes the matrix
+   * with random numbers in the input range.
    **/
-  Matrix(size_t rows, size_t cols, size_t seed, T min = T(0.0), T max = T(1.0))
-      : m_buf(new T[rows * cols])
-      , m_rows(rows)
-      , m_cols(cols) {
+  Matrix(
+      size_t rows,
+      size_t cols,
+      size_t seed,
+      ElementT min = ElementT(0.0),
+      ElementT max = ElementT(1.0))
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols) {
+    using Distribution = std::conditional_t<
+        std::is_integral<ElementT>::value,       // if ElementT is integral
+        std::uniform_int_distribution<ElementT>, // use int dist
+        std::uniform_real_distribution<ElementT> // otherwise floating point dist
+        >;
     auto rng  = std::mt19937_64(seed);
-    auto dist = std::uniform_real_distribution<T>(min, max);
-    m_buf_raw = m_buf.get();
+    auto dist = Distribution(min, max);
     for (auto i = 0ull; i < (rows * cols); ++i) {
-      m_buf_raw[i] = dist(rng);
+      m_host_buf[i] = dist(rng);
     }
   }
 
   /*
-   * Allocate and initialize buffer from an initializer list.
+   * Allocates and initializes the matrix from an initializer list.
    * This mainly makes testing easier.
    **/
-  Matrix(size_t rows, size_t cols, const std::initializer_list<T> &elements)
-      : m_buf(new T[rows * cols])
-      , m_rows(rows)
-      , m_cols(cols) {
-    m_buf_raw = m_buf.get();
+  Matrix(size_t rows, size_t cols, const std::initializer_list<ElementT> &elements)
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols) {
+    auto i = 0ull;
     for (auto val : elements) {
-      *(m_buf_raw++) = val;
+      m_host_buf[i++] = val;
     }
-    m_buf_raw = get_buf();
   }
 
   /*
-   * Copy constructor: allocate new buffer and memcpy from other
+   * Copy constructor: deep copy other
    **/
   Matrix(const Matrix &other)
-      : m_rows(other.m_rows)
-      , m_cols(other.m_cols) {
-    m_buf.reset(new T[other.size()]);
-    std::memcpy(m_buf.get(), other.m_buf.get(), other.bytesize());
-    m_buf_raw = get_buf();
-  }
+      : m_layout(other.m_layout)
+      , m_host_buf(other.m_host_buf) { }
 
+  /*
+   * Move constructor: sink other into this
+   */
   Matrix(Matrix &&other)
-      : m_rows(other.m_rows)
-      , m_cols(other.m_cols) {
-    m_buf.reset(other.m_buf.release());
-    m_buf_raw = get_buf();
+      : m_layout(other.m_layout)
+      , m_host_buf(std::move(other.m_host_buf)) {
+    other.m_layout.m_rows = 0;
+    other.m_layout.m_cols = 0;
   }
 
   /*
    * Copy assignment operator.
    **/
   auto operator=(const Matrix &other) -> Matrix & {
-    m_rows = other.num_rows();
-    m_cols = other.num_cols();
-    m_buf.reset(new T[other.size()]);
-    std::memcpy(m_buf.get(), other.m_buf.get(), other.bytesize());
-    m_buf_raw = get_buf();
+    m_layout   = other.m_layout;
+    m_host_buf = other.m_host_buf;
     return *this;
   }
 
   /*
-   * Returns a non-owning, const pointer to the backing buffer of type T[].
+   * Returns a non-owning, const pointer to the backing buffer of type ElementT[].
    **/
-  auto get_buf() const -> const T * { return const_cast<const T *>(m_buf.get()); }
+  auto get_buf() const noexcept -> const ElementT * { return m_host_buf.data(); }
 
   /*
-   * Returns a non-owning pointer to the backing buffer of type T[].
+   * Returns a non-owning pointer to the backing buffer of type ElementT[].
    **/
-  auto get_buf() noexcept -> T * { return m_buf.get(); }
+  auto get_buf() noexcept -> ElementT * { return m_host_buf.data(); }
 
   /*
    * Returns total number of elements stored in the matrix.
    **/
-  auto size() const noexcept -> size_t { return m_rows * m_cols; }
+  auto size() const noexcept -> size_t { return m_layout.m_rows * m_layout.m_cols; }
 
   /*
-   * Returns total number of bytes occupied by the backing store T[].
+   * Returns total number of bytes occupied by the backing store ElementT[].
    **/
-  auto bytesize() const noexcept -> size_t { return size() * sizeof(T); }
+  auto bytesize() const noexcept -> size_t { return size() * sizeof(ElementT); }
 
   /*
    * Returns true if matrix has (0, 0) dimentions. False otherwise.
    **/
-  auto is_empty() const noexcept -> size_t { return (m_rows == 0) || (m_cols == 0); }
+  auto is_empty() const noexcept -> size_t {
+    return (m_layout.m_rows == 0) || (m_layout.m_cols == 0);
+  }
 
   /*
    * Returns numbers of rows in the matrix.
    **/
-  auto num_rows() const noexcept -> size_t { return m_rows; }
+  auto num_rows() const noexcept -> size_t { return m_layout.m_rows; }
 
   /*
    * Returns numbers of columns in the matrix.
    **/
-  auto num_cols() const noexcept -> size_t { return m_cols; }
+  auto num_cols() const noexcept -> size_t { return m_layout.m_cols; }
 
   /*
    * Linear index into the flat buffer.
    **/
-  auto operator[](size_t idx) const -> T & { return m_buf_raw[idx]; }
+  auto operator[](size_t idx) -> ElementT & { return m_host_buf[idx]; }
+  auto operator[](size_t idx) const -> ElementT const & { return m_host_buf[idx]; }
 
   /*
    * Linear index into the flat buffer.
    **/
-  auto operator()(size_t idx) const -> T & { return m_buf_raw[idx]; }
+  auto operator()(size_t idx) -> ElementT & { return m_host_buf[idx]; }
+  auto operator()(size_t idx) const -> ElementT const & { return m_host_buf[idx]; }
 
   /*
    * Matrix index with major dimention offset.
    * Column major for now, but we can add support for changing to row major later
    * with some template magic.
    */
-  auto operator()(size_t row_idx, size_t col_idx) const -> T & {
-    return m_buf_raw[row_idx + (col_idx * m_rows)];
+  auto operator()(size_t row_idx, size_t col_idx) -> ElementT & {
+    return m_host_buf[m_layout.linearize(row_idx, col_idx)];
+  }
+
+  auto operator()(size_t row_idx, size_t col_idx) const -> ElementT const & {
+    return m_host_buf[m_layout.linearize(row_idx, col_idx)];
   }
 };
 
 // Element-wise equality test for two matrices of the same template type.
-template <typename T>
-inline auto operator==(const Matrix<T> &lhs, const Matrix<T> &rhs) -> bool {
+template <typename ElementT>
+inline auto operator==(const Matrix<ElementT> &lhs, const Matrix<ElementT> &rhs) -> bool {
   // both dims much match first
   if ((lhs.num_rows() != rhs.num_rows()) || (lhs.num_cols() != rhs.num_cols())) {
     return false;
@@ -202,14 +225,14 @@ inline auto operator==(const Matrix<T> &lhs, const Matrix<T> &rhs) -> bool {
 }
 
 // Element-wise inequality test for two matrices of the same template type.
-template <typename T>
-inline auto operator!=(Matrix<T> &lhs, Matrix<T> &rhs) -> bool {
+template <typename ElementT>
+inline auto operator!=(const Matrix<ElementT> &lhs, const Matrix<ElementT> &rhs) -> bool {
   return !(lhs == rhs);
 }
 
-// Prints matrix to stdout for sanity-checks etc.
-template <typename T>
-inline auto operator<<(std::ostream &os, const Matrix<T> &mat) -> std::ostream & {
+// Prints matrix to stdout; prefer using this only for small matrices.
+template <typename ElementT>
+inline auto operator<<(std::ostream &os, const Matrix<ElementT> &mat) -> std::ostream & {
   for (auto row_idx = 0ull; row_idx < mat.num_rows(); ++row_idx) {
     os << '[' << mat(row_idx, 0);
 
