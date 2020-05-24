@@ -68,6 +68,12 @@ TEST(FWGPU_Matrix, RandomIntMatrixConstructorCorrect) {
   }
 }
 
+TEST(FWGPU_Matrix, CopyConstructorCorrect) {
+  auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
+  auto to   = from;
+  EXPECT_TRUE(from == to);
+}
+
 TEST(FWGPU_Matrix, MoveConstructorCorrect) {
   auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
   EXPECT_EQ(from.num_rows(), 5);
@@ -104,6 +110,13 @@ TEST(FWGPU_Matrix, BufferConstructorCorrect) {
   EXPECT_EQ(mat(3, 0), 42);
   EXPECT_EQ(mat(3, 1), 42);
   EXPECT_EQ(mat(5, 1), 42);
+}
+
+TEST(FWGPU_Matrix, CopyAssignmentCorrect) {
+  auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
+  fwgpu::Matrix<float> to(1, 1);
+  to = from;
+  EXPECT_TRUE(from == to);
 }
 
 TEST(FWGPU_Matrix, ColumnMajorLayoutCorrect) {

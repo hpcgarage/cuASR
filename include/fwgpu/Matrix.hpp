@@ -39,7 +39,7 @@ struct RowMajor {
 };
 
 /*
- * Matrix datastructure: Wrapper around a buffer of ElementT.
+ * Matrix datastructure for a tightly packed 2D array.
  * ElementT = float and column major by default.
  **/
 template <typename ElementT = float, typename Layout = ColumnMajor>
@@ -63,9 +63,8 @@ public:
    * De-facto default constructor: allocate ElementT buffer of size rows*cols
    **/
   Matrix(size_t rows, size_t cols)
-      : m_layout(rows, cols) {
-    m_host_buf.reserve(rows * cols);
-  }
+      : m_layout(rows, cols)
+      , m_host_buf(rows * cols) { }
 
   /*
    * Assign buf from external source.
@@ -76,17 +75,16 @@ public:
       , m_host_buf(buf, buf + (rows * cols)) { }
 
   /*
-   * Allocate and initialize buf with input value.
+   * Allocates and initializes the matrix with input value.
    **/
   Matrix(size_t rows, size_t cols, ElementT val)
       : m_layout(rows, cols)
       , m_host_buf(rows * cols, val) { }
 
   /*
-   * Allocate and initialize of a buffer of size rows*cols.
-   * Assign random numbers in the input range.
+   * Random Fill Constructor: allocates and initializes the matrix
+   * with random numbers in the input range.
    **/
-
   Matrix(
       size_t rows,
       size_t cols,
@@ -98,7 +96,7 @@ public:
     using Distribution = std::conditional_t<
         std::is_integral<ElementT>::value,       // if ElementT is integral
         std::uniform_int_distribution<ElementT>, // use int dist
-        std::uniform_real_distribution<ElementT> // otherwise folating point dist
+        std::uniform_real_distribution<ElementT> // otherwise floating point dist
         >;
     auto rng  = std::mt19937_64(seed);
     auto dist = Distribution(min, max);
@@ -108,7 +106,7 @@ public:
   }
 
   /*
-   * Allocate and initialize buffer from an initializer list.
+   * Allocates and initializes the matrix from an initializer list.
    * This mainly makes testing easier.
    **/
   Matrix(size_t rows, size_t cols, const std::initializer_list<ElementT> &elements)
@@ -121,18 +119,20 @@ public:
   }
 
   /*
-   * Copy constructor: allocate new buffer and memcpy from other
+   * Copy constructor: deep copy other
    **/
   Matrix(const Matrix &other)
-      : m_layout(other.m_layout) {
-    m_host_buf = other.m_host_buf;
-  }
+      : m_layout(other.m_layout)
+      , m_host_buf(other.m_host_buf) { }
 
+  /*
+   * Move constructor: sink other into this
+   */
   Matrix(Matrix &&other)
-      : m_layout(other.m_layout) {
+      : m_layout(other.m_layout)
+      , m_host_buf(std::move(other.m_host_buf)) {
     other.m_layout.m_rows = 0;
     other.m_layout.m_cols = 0;
-    m_host_buf            = std::move(other.m_host_buf);
   }
 
   /*
