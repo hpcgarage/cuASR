@@ -47,3 +47,12 @@ add_test(
   NAME Srgemm_tests
   COMMAND Srgemm_tests
 )
+
+## Floydd-Wrashall GEMM tests with distance and parent matrix update
+cuda_add_executable(Fwgemm_tests harness.cpp Fwgemm_test.cu)
+target_include_directories(Fwgemm_tests PRIVATE gtest/googletest/include)
+target_link_libraries(Fwgemm_tests gtest ${FWGPU_LIB_NAME})
+add_test(
+  NAME Fwgemm_tests
+  COMMAND Fwgemm_tests
+)
