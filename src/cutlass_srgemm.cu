@@ -1,9 +1,8 @@
 #include "fwgpu/gpu_srgemm.hpp"
 
-#include "cutlass/gemm/device/default_srgemm_configuration.h"
-#include "cutlass/gemm/device/srgemm.h"
-
-#include <cuda_runtime.h>
+#include "fwgpu/srgemm/arch/srmma.h"
+#include "fwgpu/srgemm/device/default_srgemm_configuration.h"
+#include "fwgpu/srgemm/device/srgemm.h"
 
 namespace fwgpu {
 
@@ -25,20 +24,22 @@ auto cutlass_srsgemm_nn(
     stream_ = *(static_cast<cudaStream_t *>(stream));
   }
   // compile time configuration of this srgemm kernel
-  using OperatorClass = cutlass::arch::OpClassSimt;
-  using ArchTag       = cutlass::arch::Sm50;
-  using DefaultConfig = typename cutlass::gemm::device::DefaultSrgemmConfiguration<
-      OperatorClass, ArchTag, float, float, float, float>;
+  using OperatorClass    = cutlass::arch::OpClassSimt;
+  using ArchTag          = cutlass::arch::Sm50;
+  using SemiRingOperator = cutlass::arch::OpSumMin;
+  using DefaultConfig    = typename cutlass::gemm::device::DefaultSrgemmConfiguration<
+      OperatorClass, SemiRingOperator, ArchTag, float, float, float, float>;
 
-  using ColumnMajor        = cutlass::layout::ColumnMajor;
-  using ThreadblockShape   = typename DefaultConfig::ThreadblockShape;
-  using WarpShape          = typename DefaultConfig::WarpShape;
-  using InstructionShape   = typename DefaultConfig::InstructionShape;
-  using EpilogueOutputOp   = typename DefaultConfig::EpilogueOutputOp;
-  using ThreadblockSwizzle = cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle;
-  using Operator           = DefaultConfig::Operator;
+  using ColumnMajor      = cutlass::layout::ColumnMajor;
+  using ThreadblockShape = typename DefaultConfig::ThreadblockShape;
+  using WarpShape        = typename DefaultConfig::WarpShape;
+  using InstructionShape = typename DefaultConfig::InstructionShape;
+  using EpilogueOutputOp = typename DefaultConfig::EpilogueOutputOp;
+  using ThreadblockSwizzle =
+      typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>;
 
   using CutlassSrgemm = cutlass::gemm::device::Srgemm<
+      SemiRingOperator,           // Thread level SemiRing operator
       float,                      // element type of A
       ColumnMajor,                // layout of A
       float,                      // element type of B
@@ -56,9 +57,8 @@ auto cutlass_srsgemm_nn(
       DefaultConfig::kStages,     // Pipeline stages for shmem
       DefaultConfig::kAlignmentA, // Alignment of A elements
       DefaultConfig::kAlignmentB, // Alignment of B elements
-      false,                      // SplitKSerial
-      Operator                    // Thread level SemiRing operator
-      >;
+      false                       // SplitKSerial
+  >;
 
   // construct kernel arguments struct
   CutlassSrgemm::Arguments args(

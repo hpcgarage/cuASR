@@ -1,0 +1,63 @@
+/***************************************************************************************************
+ * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
+ **************************************************************************************************/
+/*! \file
+    \brief Templates exposing architecture support for warp-level multiply-add operations
+*/
+
+#pragma once
+
+#include "cutlass/cutlass.h"
+#include "cutlass/array.h"
+#include "cutlass/numeric_types.h"
+#include "cutlass/gemm/gemm.h"
+#include "cutlass/arch/mma.h"
+
+#include "cutlass/gemm/thread/mma.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace cutlass {
+namespace gemm {
+namespace thread {
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// Structure to compute the matrix product
+template <
+  /// Size of the Gemm problem - concept: gemm::GemmShape<>
+  typename Shape,
+  /// Data type of A elements
+  typename ElementA,
+  /// Layout of A matrix (concept: MatrixLayout)
+  typename LayoutA,
+  /// Data type of B elements
+  typename ElementB,
+  /// Layout of B matrix (concept: MatrixLayout)
+  typename LayoutB,
+  /// Element type of C matrix
+  typename ElementC,
+  /// Layout of C matrix (concept: MatrixLayout)
+  typename LayoutC,
+  /// Concept: arch::OpMultiplyAdd or arch::Mma<>
+  typename SemiRingOperator,
+  /// Used for partial specialization
+  typename Enable = bool
+>
+struct Srmma;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+} // namespace thread
+} // namespace gemm
+} // namespace cutlass
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+//
+// Overloads specialized for existing architectures
+//
+
+#include "fwgpu/srgemm/thread/srmma_sm50.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
