@@ -6,4 +6,4 @@
 	url = https://github.com/google/benchmark.git
 [submodule "cutlass"]
 	path = cutlass
-	url = https://github.com/thakkarV/cutlass.git
+	url = https://github.com/NVIDIA/cutlass.git
