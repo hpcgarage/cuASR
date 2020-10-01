@@ -44,8 +44,10 @@ template <
   typename LayoutC_,
   /// Shape of the warp in units of thread (concept: MmaSimtPolicy)
   typename Policy_,
-  /// Set of semi-ring operations to be used for MMA
-  typename SemiRingOperator_,
+  /// Addition of the semi-ring
+  typename AdditionOp_,
+  /// Multiplication operator of the semi-ring
+  typename MultiplicationOp_,
   /// Number of partitions along K dimension
   int PartitionsK = 1,
   /// Used for partial specialization
@@ -80,8 +82,9 @@ public:
   /// Indicates class of matrix operator
   using OperatorClass = arch::OpClassSimt;
 
-  /// Underlying thread MMA semi-ring operation set
-  using SemiRingOperator = SemiRingOperator_;
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   using ThreadLayoutA = typename platform::conditional< platform::is_same< layout::ColumnMajorInterleaved<4>, LayoutA >::value,
                   layout::ColumnMajor,
@@ -116,7 +119,8 @@ public:
     ThreadLayoutB,
     ElementC,
     LayoutC,
-    SemiRingOperator,
+    AdditionOp,
+    MultiplicationOp,
     dp4a_type
   >;
 
@@ -180,9 +184,9 @@ public:
     FragmentB const &b,
     FragmentC const &c, int group_idx = 0) const {
 
-    ThreadMma mma;
+    ThreadMma srmma;
 
-    mma(d, a, b, c);
+    srmma(d, a, b, c);
   }
 };
 

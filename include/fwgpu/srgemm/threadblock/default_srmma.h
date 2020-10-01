@@ -53,14 +53,16 @@ template <
     typename WarpShape_,
     /// Instruction-level tile size (concept: GemmShape)
     typename InstructionShape_,
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_,
     /// Number of stages used in the pipelined mainloop
     int Stages,
-    /// Operation perfomed by GEMM
-    typename Operator,
-    /// Store the accumulators in row major or column major.  Row major is used
-    /// when output layout is interleaved.
+    /// Store the accumulators in row major or column major.
+    /// Row major is used when output layout is interleaved.
     bool AccumulatorsInRowMajor = false
-    >
+>
 struct DefaultSrmma;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,35 +91,37 @@ template <
     typename WarpShape,
     /// Instruction-level tile size (concept: GemmShape)
     typename InstructionShape,
-    /// Operation performed by GEMM
-    typename Operator>
+    /// Addition operator of the semi-ring
+    typename AdditionOp,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp>
 struct DefaultSrmma<ElementA, LayoutA, kAlignmentA, ElementB, LayoutB,
                   kAlignmentB, ElementAccumulator, layout::RowMajor,
                   arch::OpClassSimt, ArchTag, ThreadblockShape, WarpShape,
-                  InstructionShape, 2, Operator, false> {
-  // Define the MmaCore components
-  using MmaCore = typename cutlass::gemm::threadblock::DefaultSrmmaCore<
+                  InstructionShape, AdditionOp, MultiplicationOp, 2, false> {
+  // Define the SrmmaCore components
+  using SrmmaCore = typename cutlass::gemm::threadblock::DefaultSrmmaCore<
       ThreadblockShape, WarpShape, InstructionShape, ElementA, LayoutA,
       ElementB, LayoutB, ElementAccumulator, layout::RowMajor,
-      arch::OpClassSimt, 2, Operator>;
+      arch::OpClassSimt, AdditionOp, MultiplicationOp, 2>;
 
   // Define iterators over tiles from the A operand
   using IteratorA =
       cutlass::transform::threadblock::PredicatedTileIterator<
-          cutlass::MatrixShape<MmaCore::Shape::kM, MmaCore::Shape::kK>,
-          ElementA, LayoutA, 1, typename MmaCore::IteratorThreadMapA, kAlignmentA>;
+          cutlass::MatrixShape<SrmmaCore::Shape::kM, SrmmaCore::Shape::kK>,
+          ElementA, LayoutA, 1, typename SrmmaCore::IteratorThreadMapA, kAlignmentA>;
 
   // Define iterators over tiles from the B operand
   using IteratorB =
       cutlass::transform::threadblock::PredicatedTileIterator<
-          cutlass::MatrixShape<MmaCore::Shape::kK, MmaCore::Shape::kN>,
-          ElementB, LayoutB, 0, typename MmaCore::IteratorThreadMapB, kAlignmentB>;
+          cutlass::MatrixShape<SrmmaCore::Shape::kK, SrmmaCore::Shape::kN>,
+          ElementB, LayoutB, 0, typename SrmmaCore::IteratorThreadMapB, kAlignmentB>;
 
   // Define the threadblock-scoped pipelined matrix multiply
-  using ThreadblockMma = cutlass::gemm::threadblock::SrmmaPipelined<
-      typename MmaCore::Shape, IteratorA, typename MmaCore::SmemIteratorA,
-      IteratorB, typename MmaCore::SmemIteratorB, ElementAccumulator,
-      layout::RowMajor, typename MmaCore::MmaPolicy>;
+  using ThreadblockSrmma = cutlass::gemm::threadblock::SrmmaPipelined<
+      typename SrmmaCore::Shape, IteratorA, typename SrmmaCore::SmemIteratorA,
+      IteratorB, typename SrmmaCore::SmemIteratorB, ElementAccumulator,
+      layout::RowMajor, typename SrmmaCore::MmaPolicy>;
 };
 
 

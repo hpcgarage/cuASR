@@ -39,8 +39,10 @@ template <
   typename ElementC,
   /// Layout of C matrix (concept: MatrixLayout)
   typename LayoutC,
-  /// Concept: arch::OpMultiplyAdd or arch::Mma<>
-  typename SemiRingOperator,
+  /// Addition operator of the semi-ring
+  typename AdditionOp,
+  /// Multiplication operator of the semi-ring
+  typename MultiplicationOp,
   /// Used for partial specialization
   typename Enable = bool
 >

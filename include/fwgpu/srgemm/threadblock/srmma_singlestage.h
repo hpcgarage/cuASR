@@ -108,7 +108,7 @@ public:
     int thread_idx,                                     ///< ID within the threadblock
     int warp_idx,                                       ///< ID of warp
     int lane_idx,                                       ///< ID of each thread within a warp
-    ElementC accum_init_val = ElementC(0)
+    ElementC accum_init_val                             ///< Identity value of multiply op
   ):
     Base(shared_storage, thread_idx, warp_idx, lane_idx),
     smem_iterator_A_(shared_storage.operand_A_ref(), thread_idx),
@@ -148,7 +148,6 @@ public:
 
     // Perform accumulation in the 'd' output operand
     accum = src_accum;
-
 
     FragmentA tb_frag_A;
     FragmentB tb_frag_B;

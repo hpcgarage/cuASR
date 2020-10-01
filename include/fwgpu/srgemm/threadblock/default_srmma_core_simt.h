@@ -74,12 +74,15 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
                       layout::ColumnMajor, ElementB_, layout::RowMajor,
-                      ElementC_, LayoutC_, arch::OpClassSimt, 2, Operator_
-                     > {
+                      ElementC_, LayoutC_, arch::OpClassSimt,
+                      AdditionOp_, MultiplicationOp_, 2
+                       > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
   using InstructionShape = GemmShape<1, 1, 1>;
@@ -92,8 +95,9 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -188,15 +192,16 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   >;
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator      /// Semi-ring operator
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp  /// Multiplication operator of the semi-ring
   >;
 
   /// Policy used to define MmaPipelined
@@ -231,11 +236,14 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
                       layout::RowMajor, ElementB_, layout::ColumnMajor,
-                      ElementC_, LayoutC_, arch::OpClassSimt, 2, Operator_
+                      ElementC_, LayoutC_, arch::OpClassSimt,
+                      AdditionOp_, MultiplicationOp_, 2
                      > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -249,8 +257,9 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -355,15 +364,16 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   >;
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator      /// Semi-ring operator
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp  /// Multiplication operator of the semi-ring
   >;
 
 
@@ -399,12 +409,14 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
                       layout::RowMajor, ElementB_, layout::RowMajor, ElementC_,
-                      LayoutC_, arch::OpClassSimt, 2, Operator_
-                     > {
+                      LayoutC_, arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                       > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
   using InstructionShape = GemmShape<1, 1, 1>;
@@ -417,8 +429,9 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -519,15 +532,16 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   >;
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator      /// Semi-ring operator
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp  /// Multiplication operator of the semi-ring
   >;
 
   /// Policy used to define MmaPipelined
@@ -562,12 +576,15 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
                       layout::ColumnMajor, ElementB_, layout::ColumnMajor,
-                      ElementC_, LayoutC_, arch::OpClassSimt, 2, Operator_
-                     > {
+                      ElementC_, LayoutC_, arch::OpClassSimt,
+                      AdditionOp_, MultiplicationOp_, 2
+                       > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
   using InstructionShape = GemmShape<1, 1, 1>;
@@ -580,8 +597,9 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -682,15 +700,16 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 1>, ElementA_,
   >;
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator      /// Semi-ring operator
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp  /// Multiplication operator of the semi-ring
   >;
 
   /// Policy used to define MmaPipelined
@@ -721,12 +740,14 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
                       layout::ColumnMajor, int8_t, layout::RowMajor, ElementC_,
-                      LayoutC_, arch::OpClassSimt, 2, Operator_
-                    > {
+                      LayoutC_, arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                       > {
 
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -740,8 +761,9 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -836,16 +858,17 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
   >;
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator,     /// Semi-ring operator
-      PartitionsK   /// Number of partitions along K dimension
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp, /// Multiplication operator of the semi-ring
+      PartitionsK       /// Number of partitions along K dimension
   >;
 
   /// Policy used to define MmaPipelined
@@ -876,12 +899,14 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
                       layout::RowMajor, int8_t, layout::ColumnMajor, ElementC_,
-                      LayoutC_, arch::OpClassSimt, 2, Operator_
-                      > {
+                      LayoutC_, arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                       > {
 
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -895,8 +920,10 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -997,16 +1024,17 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
   >;
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator,     /// Semi-ring operator
-      PartitionsK   /// Number of partitions along K dimension
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp, /// Multiplication operator of the semi-ring
+      PartitionsK       /// Number of partitions along K dimension
   >;
 
   static int const kPaddingM = detail::simt_transpose_padding(kWarpSize, Shape::kK, sizeof_bits<ElementA>::value);
@@ -1040,12 +1068,14 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
                       layout::RowMajor, int8_t, layout::RowMajor, ElementC_,
-                      LayoutC_, arch::OpClassSimt, 2, Operator_
-                      > {
+                      LayoutC_, arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                       > {
 
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -1059,8 +1089,10 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -1157,16 +1189,17 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
   >;
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator,     /// Semi-ring operator
-      PartitionsK   /// Number of partitions along K dimension
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp, /// Multiplication operator of the semi-ring
+      PartitionsK       /// Number of partitions along K dimension
   >;
 
   static int const kPaddingM = detail::simt_transpose_padding(kWarpSize, Shape::kK, sizeof_bits<ElementA>::value);
@@ -1200,12 +1233,14 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Operation performed by GEMM
-    typename Operator_>
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
                       layout::ColumnMajor, int8_t, layout::ColumnMajor, ElementC_,
-                      LayoutC_, arch::OpClassSimt, 2, Operator_
-                      > {
+                      LayoutC_, arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                       > {
 
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -1219,8 +1254,9 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
   using OperatorClass = arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Default Operator
-  using Operator = Operator_;
+  /// Underlying semi-ring operators
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
 
   /// Number of warps present
   using WarpCount = GemmShape<
@@ -1319,16 +1355,17 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, GemmShape<1, 1, 4>, int8_t,
 
 
   using MmaWarpSimt = cutlass::gemm::warp::SrmmaSimt<
-      WarpShape,    /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
-      ElementA,     /// Data type of A elements
-      SmemLayoutA,  /// Layout of A matrix (concept: MatrixLayout)
-      ElementB,     /// Data type of B elements
-      SmemLayoutB,  /// Layout of B matrix (concept: MatrixLayout)
-      ElementC,     /// Element type of C matrix
-      LayoutC,      /// Layout of C matrix (concept: MatrixLayout)
-      Policy,       /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      Operator,     /// Semi-ring operator
-      PartitionsK   /// Number of partitions along K dimension
+      WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
+      ElementA,         /// Data type of A elements
+      SmemLayoutA,      /// Layout of A matrix (concept: MatrixLayout)
+      ElementB,         /// Data type of B elements
+      SmemLayoutB,      /// Layout of B matrix (concept: MatrixLayout)
+      ElementC,         /// Element type of C matrix
+      LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
+      Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
+      AdditionOp,       /// Addition operator of the semi-ring
+      MultiplicationOp, /// Multiplication operator of the semi-ring
+      PartitionsK       /// Number of partitions along K dimension
   >;
 
   static int const kPaddingM = detail::simt_transpose_padding(kWarpSize, Shape::kK, sizeof_bits<ElementA>::value);

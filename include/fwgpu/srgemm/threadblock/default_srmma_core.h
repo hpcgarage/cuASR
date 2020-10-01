@@ -11,6 +11,7 @@
 #pragma once
 
 #include "cutlass/cutlass.h"
+#include "cutlass/functional.h"
 #include "cutlass/array.h"
 #include "cutlass/numeric_types.h"
 #include "cutlass/matrix_shape.h"
@@ -52,20 +53,14 @@ template <
     typename LayoutC,
     /// Indicates type of math operator (arch::OpClassSimt or arch::OpClassTensorOp)
     typename OperatorClass,
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_,
     /// Number of stages
     int Stages = 2,
-    /// Operation performed by MMA
-    typename Operator = typename platform::conditional<
-        (platform::is_same<OperatorClass,
-                           cutlass::arch::OpClassTensorOp>::value) &&
-            (platform::is_same<ElementA, int8_t>::value ||
-             platform::is_same<ElementA, int4b_t>::value ||
-             platform::is_same<ElementA, uint8_t>::value ||
-             platform::is_same<ElementA, uint4b_t>::value),
-        cutlass::arch::OpMultiplyAddSaturate,
-        cutlass::arch::OpMultiplyAdd>::type,
-    /// Store the accumulators in row major or column major.  Row major is used
-    /// when output layout is interleaved.
+    /// Store the accumulators in row major or column major.
+    /// Row major is usedd when output layout is interleaved.
     bool AccumulatorsInRowMajor = false
     /// Cache operation of operand A
     , cutlass::arch::CacheOperation::Kind CacheOpA =

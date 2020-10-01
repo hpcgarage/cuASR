@@ -124,7 +124,7 @@ public:
     int thread_idx,                                     ///< ID within the threadblock
     int warp_idx,                                       ///< ID of warp
     int lane_idx,                                       ///< ID of each thread within a warp
-    ElementC accum_init_val = ElementC(0)               ///< Identity value of multiply op
+    ElementC accum_init_val                             ///< Identity value of multiply op
   ):
     Base(shared_storage, thread_idx, warp_idx, lane_idx),
     smem_iterator_A_(shared_storage.operand_A_ref(), thread_idx),
@@ -223,7 +223,6 @@ public:
       //
       // Loop over GEMM K dimension
       //
-
       CUTLASS_PRAGMA_UNROLL
       for (int warp_mma_k = 0; warp_mma_k < Base::kWarpGemmIterations; ++warp_mma_k) {
 

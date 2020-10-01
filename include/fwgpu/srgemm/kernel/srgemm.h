@@ -27,10 +27,11 @@ namespace kernel {
 // SemiRing Gemm kernel that support custom thread level MMA and init values.
 template <
   typename Srmma_,                ///! Threadblock-scoped matrix multiply-accumulate
+  typename AdditionOp_,           ///! Addition operator of the semi-ring
+  typename MultiplicationOp_,     ///! Multiplication operator of the semi-ring
   typename Epilogue_,             ///! Epilogue
   typename ThreadblockSwizzle_,   ///! Threadblock swizzling function
-  bool SplitKSerial,              ///! If true, code supporting split-K via serial reduction is enabled.
-  typename Operator_ = cutlass::arch::OpSumMin
+  bool SplitKSerial               ///! If true, code supporting split-K via serial reduction is enabled.
 >
 struct Srgemm {
 
@@ -38,7 +39,8 @@ struct Srgemm {
   using Epilogue = Epilogue_;
   using OutputOp = typename Epilogue::OutputOp;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
-  using Operator = Operator_;
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
   static bool const kSplitKSerial = SplitKSerial;
 
   /// Warp count (concept: GemmShape)

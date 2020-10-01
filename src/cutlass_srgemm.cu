@@ -4,6 +4,26 @@
 #include "fwgpu/srgemm/device/default_srgemm_configuration.h"
 #include "fwgpu/srgemm/device/srgemm.h"
 
+#include "cutlass/functional.h"
+
+namespace {
+template <typename T>
+struct binary_and {
+  __host__ __device__
+  T operator()(T lhs, T const &rhs) const {
+    return lhs && rhs;
+  }
+};
+
+template <typename T>
+struct binary_or {
+  __host__ __device__
+  T operator()(T lhs, T const &rhs) const {
+    return lhs || rhs;
+  }
+};
+}
+
 namespace fwgpu {
 
 auto cutlass_srsgemm_nn(
@@ -24,40 +44,43 @@ auto cutlass_srsgemm_nn(
     stream_ = *(static_cast<cudaStream_t *>(stream));
   }
   // compile time configuration of this srgemm kernel
-  using OperatorClass    = cutlass::arch::OpClassSimt;
-  using ArchTag          = cutlass::arch::Sm50;
-  using SemiRingOperator = cutlass::arch::OpSumMin;
-  using DefaultConfig    = typename cutlass::gemm::device::DefaultSrgemmConfiguration<
-      OperatorClass, SemiRingOperator, ArchTag, float, float, float, float>;
+  using OperatorClass  = cutlass::arch::OpClassSimt;
+  using SmArch         = cutlass::arch::Sm50;
+  using TropicalConfig = typename cutlass::gemm::device::DefaultSemiRingConfiguration<
+      float, float, float, float,
+      OperatorClass, cutlass::minimum<float>, cutlass::plus<float>, SmArch>;
 
+  using AdditionOp       = TropicalConfig::AdditionOp;
+  using MultiplicationOp = TropicalConfig::MultiplicationOp;
   using ColumnMajor      = cutlass::layout::ColumnMajor;
-  using ThreadblockShape = typename DefaultConfig::ThreadblockShape;
-  using WarpShape        = typename DefaultConfig::WarpShape;
-  using InstructionShape = typename DefaultConfig::InstructionShape;
-  using EpilogueOutputOp = typename DefaultConfig::EpilogueOutputOp;
+  using ThreadblockShape = typename TropicalConfig::ThreadblockShape;
+  using WarpShape        = typename TropicalConfig::WarpShape;
+  using InstructionShape = typename TropicalConfig::InstructionShape;
+  using EpilogueOutputOp = typename TropicalConfig::EpilogueOutputOp;
   using ThreadblockSwizzle =
       typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>;
 
   using CutlassSrgemm = cutlass::gemm::device::Srgemm<
-      SemiRingOperator,           // Thread level SemiRing operator
-      float,                      // element type of A
-      ColumnMajor,                // layout of A
-      float,                      // element type of B
-      ColumnMajor,                // layout of B
-      float,                      // element type of C
-      ColumnMajor,                // layout of C
-      float,                      // element type of D
-      OperatorClass,              // Logical operator class (SIMT/Tensor)
-      ArchTag,                    // cuda architecture
-      ThreadblockShape,           // GEMM shape at CTA level
-      WarpShape,                  // GEMM shape at Warp level
-      InstructionShape,           // GEMM shape at thread level
-      EpilogueOutputOp,           // Epilogue operator at thread level
-      ThreadblockSwizzle,         // GEMM threadblock swizzler
-      DefaultConfig::kStages,     // Pipeline stages for shmem
-      DefaultConfig::kAlignmentA, // Alignment of A elements
-      DefaultConfig::kAlignmentB, // Alignment of B elements
-      false                       // SplitKSerial
+      AdditionOp,                  // Thread level SemiRing operator
+      MultiplicationOp,            // Thread level SemiRing operator
+      float,                       // element type of A
+      ColumnMajor,                 // layout of A
+      float,                       // element type of B
+      ColumnMajor,                 // layout of B
+      float,                       // element type of C
+      ColumnMajor,                 // layout of C
+      float,                       // element type of D
+      OperatorClass,               // Logical operator class (SIMT/Tensor)
+      SmArch,                      // cuda architecture
+      ThreadblockShape,            // GEMM shape at CTA level
+      WarpShape,                   // GEMM shape at Warp level
+      InstructionShape,            // GEMM shape at thread level
+      EpilogueOutputOp,            // Epilogue operator at thread level
+      ThreadblockSwizzle,          // GEMM threadblock swizzler
+      TropicalConfig::kStages,     // Pipeline stages for shmem
+      TropicalConfig::kAlignmentA, // Alignment of A elements
+      TropicalConfig::kAlignmentB, // Alignment of B elements
+      false                        // SplitKSerial
   >;
 
   // construct kernel arguments struct

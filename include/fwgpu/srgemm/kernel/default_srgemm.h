@@ -67,8 +67,12 @@ template <
     typename ThreadblockShape,
     /// Warp-level tile size (concept: GemmShape)
     typename WarpShape,
-    /// Warp-level tile size (concept: GemmShape)
+    /// Instruction-level tile size (concept: GemmShape)
     typename InstructionShape,
+    /// Addition operator of the semi-ring
+    typename AdditionOp,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp,
     /// Epilogue output operator
     typename EpilogueOutputOp,
     /// Threadblock-level swizzling operator
@@ -77,9 +81,7 @@ template <
     int Stages,
     /// If true, kernel is configured to support serial reduction in the
     /// epilogue
-    bool SplitKSerial,
-    /// Operation performed by GEMM
-    typename Operator>
+    bool SplitKSerial>
 struct DefaultSrgemm;
 
 template <
@@ -105,14 +107,16 @@ template <
     typename ThreadblockShape,
     /// Warp-level tile size (concept: GemmShape)
     typename WarpShape,
+    /// Addition operator of the semi-ring
+    typename AdditionOp,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp,
     /// Epilogue output operator
     typename EpilogueOutputOp,
     /// Threadblock-level swizzling operator
     typename ThreadblockSwizzle,
     /// If true, kernel is configured to support serial reduction in the epilogue
-    bool SplitKSerial,
-    /// Operation performed by GEMM
-    typename Operator
+    bool SplitKSerial
 >
 struct DefaultSrgemm<
     ElementA,
@@ -129,11 +133,12 @@ struct DefaultSrgemm<
     ThreadblockShape,
     WarpShape,
     GemmShape<1, 1, 1>,
+    AdditionOp,
+    MultiplicationOp,
     EpilogueOutputOp,
     ThreadblockSwizzle,
     2,
-    SplitKSerial,
-    Operator> {
+    SplitKSerial> {
   /// Define the threadblock-scoped matrix multiply-accumulate
   using Srmma = typename cutlass::gemm::threadblock::DefaultSrmma<
       ElementA,
@@ -149,8 +154,9 @@ struct DefaultSrgemm<
       ThreadblockShape,
       WarpShape,
       GemmShape<1, 1, 1>,
-      2,
-      Operator>::ThreadblockMma;
+      AdditionOp,
+      MultiplicationOp,
+      2>::ThreadblockSrmma;
 
   static int const kEpilogueElementsPerAccess = EpilogueOutputOp::kCount;
   static_assert(kEpilogueElementsPerAccess == 1, "simt epilogue must operate on scalars");
@@ -164,7 +170,14 @@ struct DefaultSrgemm<
       >::Epilogue;
 
   /// Define the kernel-level GEMM operator.
-  using SrgemmKernel = kernel::Srgemm<Srmma, Epilogue, ThreadblockSwizzle, SplitKSerial>;
+  using SrgemmKernel = kernel::Srgemm<
+      Srmma,
+      AdditionOp,
+      MultiplicationOp,
+      Epilogue,
+      ThreadblockSwizzle,
+      SplitKSerial
+  >;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

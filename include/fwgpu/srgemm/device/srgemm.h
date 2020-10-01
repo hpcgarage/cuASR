@@ -29,62 +29,61 @@ namespace device {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <
-    /// Operation performed by GEMM
-    typename Operator_,
-    /// Element type for A matrix operand
-    typename ElementA_,
-    /// Layout type for A matrix operand
-    typename LayoutA_,
-    /// Element type for B matrix operand
-    typename ElementB_,
-    /// Layout type for B matrix operand
-    typename LayoutB_,
-    /// Element type for C and D matrix operands
-    typename ElementC_,
-    /// Layout type for C and D matrix operands
-    typename LayoutC_,
-    /// Element type for internal accumulation
-    typename ElementAccumulator_ = ElementC_,
-    /// Operator class tag
-    typename OperatorClass_ = arch::OpClassSimt,
-    /// Tag indicating architecture to tune for
-    typename ArchTag_ = arch::Sm50,
-    /// Threadblock-level tile size (concept: GemmShape)
-    typename ThreadblockShape_ = typename DefaultSrgemmConfiguration<
-        OperatorClass_, Operator_, ArchTag_, ElementA_, ElementB_, ElementC_,
-        ElementAccumulator_>::ThreadblockShape,
-    /// Warp-level tile size (concept: GemmShape)
-    typename WarpShape_ = typename DefaultSrgemmConfiguration<
-        OperatorClass_, Operator_, ArchTag_, ElementA_, ElementB_, ElementC_,
-        ElementAccumulator_>::WarpShape,
-    /// Instruction-level tile size (concept: GemmShape)
-    typename InstructionShape_ = typename DefaultSrgemmConfiguration<
-        OperatorClass_, Operator_, ArchTag_, ElementA_, ElementB_, ElementC_,
-        ElementAccumulator_>::InstructionShape,
-    /// Epilogue output operator
-    typename EpilogueOutputOp_ = typename DefaultSrgemmConfiguration<
-        OperatorClass_, Operator_, ArchTag_, ElementA_, ElementB_, ElementC_,
-        ElementAccumulator_>::EpilogueOutputOp,
-    /// Threadblock-level swizzling operator
-    typename ThreadblockSwizzle_ =
-        typename threadblock::GemmIdentityThreadblockSwizzle<>,
-    /// Number of stages used in the pipelined mainloop
-    int Stages =
-        DefaultSrgemmConfiguration<
-          OperatorClass_, Operator_, ArchTag_, ElementA_,
-          ElementB_, ElementC_, ElementAccumulator_>::kStages,
-    /// Access granularity of A matrix in units of elements
-    int AlignmentA =
-        DefaultSrgemmConfiguration<
-          OperatorClass_, Operator_, ArchTag_, ElementA_,
-          ElementB_, ElementC_, ElementAccumulator_>::kAlignmentA,
-    /// Access granularity of B matrix in units of elements
-    int AlignmentB =
-        DefaultSrgemmConfiguration<
-          OperatorClass_, Operator_, ArchTag_, ElementA_,
-          ElementB_, ElementC_, ElementAccumulator_>::kAlignmentB,
-    /// If true, kernel supports split-K with serial reduction
-    bool SplitKSerial = false
+  /// Addition operator of the semi-ring
+  typename AdditionOp_,
+  /// Multiplication operator of the semi-ring
+  typename MultiplicationOp_,
+  /// Element type for A matrix operand
+  typename ElementA_,
+  /// Layout type for A matrix operand
+  typename LayoutA_,
+  /// Element type for B matrix operand
+  typename ElementB_,
+  /// Layout type for B matrix operand
+  typename LayoutB_,
+  /// Element type for C and D matrix operands
+  typename ElementC_,
+  /// Layout type for C and D matrix operands
+  typename LayoutC_,
+  /// Element type for internal accumulation
+  typename ElementAccumulator_ = ElementC_,
+  /// Operator class tag
+  typename OperatorClass_ = arch::OpClassSimt,
+  /// Tag indicating architecture to tune for
+  typename ArchTag_ = arch::Sm50,
+  /// Threadblock-level tile size (concept: GemmShape)
+  typename ThreadblockShape_ = typename DefaultSemiRingConfiguration<
+      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
+      ElementA_, ElementB_, ElementC_, ElementAccumulator_>::ThreadblockShape,
+  /// Warp-level tile size (concept: GemmShape)
+  typename WarpShape_ = typename DefaultSemiRingConfiguration<
+      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
+      ElementA_, ElementB_, ElementC_, ElementAccumulator_>::WarpShape,
+  /// Instruction-level tile size (concept: GemmShape)
+  typename InstructionShape_ = typename DefaultSemiRingConfiguration<
+      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
+      ElementA_, ElementB_, ElementC_, ElementAccumulator_>::InstructionShape,
+  /// Epilogue output operator
+  typename EpilogueOutputOp_ = typename DefaultSemiRingConfiguration<
+      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
+      ElementA_, ElementB_, ElementC_, ElementAccumulator_>::EpilogueOutputOp,
+  /// Threadblock-level swizzling operator
+  typename ThreadblockSwizzle_ =
+      typename threadblock::GemmIdentityThreadblockSwizzle<>,
+  /// Number of stages used in the pipelined mainloop
+  int Stages = DefaultSemiRingConfiguration<
+      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
+      ElementA_, ElementB_, ElementC_, ElementAccumulator_>::kStages,
+  /// Access granularity of A matrix in units of elements
+  int AlignmentA = DefaultSemiRingConfiguration<
+      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
+      ElementA_, ElementB_, ElementC_, ElementAccumulator_>::kAlignmentA,
+  /// Access granularity of B matrix in units of elements
+  int AlignmentB = DefaultSemiRingConfiguration<
+      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
+      ElementA_, ElementB_, ElementC_, ElementAccumulator_>::kAlignmentB,
+  /// If true, kernel supports split-K with serial reduction
+  bool SplitKSerial = false
 >
 class Srgemm {
  public:
@@ -107,7 +106,8 @@ class Srgemm {
   using InstructionShape = InstructionShape_;
   using EpilogueOutputOp = EpilogueOutputOp_;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
-  using Operator = Operator_;
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
   static int const kStages = Stages;
   static int const kAlignmentA = AlignmentA;
   static int const kAlignmentB = AlignmentB;
@@ -130,11 +130,12 @@ class Srgemm {
     ThreadblockShape,
     WarpShape,
     InstructionShape,
+    AdditionOp,
+    MultiplicationOp,
     EpilogueOutputOp,
     ThreadblockSwizzle,
     kStages,
-    kSplitKSerial,
-    Operator
+    kSplitKSerial
   >::SrgemmKernel;
 
   /// Argument structure
@@ -364,8 +365,10 @@ public:
 };
 
 template <
-    /// SemiRing Operation performed by GEMM
-    typename Operator_,
+    /// Addition operator of the semi-ring
+    typename AdditionOp_,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp_,
     /// Element type for A matrix operand
     typename ElementA_,
     /// Layout type for A matrix operand
@@ -400,12 +403,13 @@ template <
     int AlignmentB,
     /// If true, kernel supports split-K as a serial reduction
     bool SplitKSerial>
-class Srgemm<Operator_, ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
-           layout::ColumnMajor,  // partially specialized on LayoutC
-           ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
-           WarpShape_, InstructionShape_, EpilogueOutputOp_,
-           ThreadblockSwizzle_, Stages, AlignmentA, AlignmentB, SplitKSerial
-          > {
+class Srgemm<AdditionOp_, MultiplicationOp_,
+            ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
+            layout::ColumnMajor,  // partially specialized on LayoutC
+            ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
+            WarpShape_, InstructionShape_, EpilogueOutputOp_,
+            ThreadblockSwizzle_, Stages, AlignmentA, AlignmentB, SplitKSerial
+            > {
  public:
 
   using ElementA = ElementA_;
@@ -426,14 +430,16 @@ class Srgemm<Operator_, ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
   using InstructionShape = InstructionShape_;
   using EpilogueOutputOp = EpilogueOutputOp_;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
-  using Operator = Operator_;
+  using AdditionOp = AdditionOp_;
+  using MultiplicationOp = MultiplicationOp_;
   static int const kStages = Stages;
   static int const kAlignmentA = AlignmentA;
   static int const kAlignmentB = AlignmentB;
   static bool const kSplitKSerial = SplitKSerial;
 
   using UnderlyingOperator = Srgemm<
-    Operator,
+    AdditionOp,
+    MultiplicationOp,
     ElementB,
     typename layout::LayoutTranspose<LayoutB>::type,
     ElementA,
