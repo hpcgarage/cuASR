@@ -113,7 +113,7 @@ protected:
   /// Iterator to write threadblock-scoped tile of B operand to shared memory
   SmemIteratorB smem_iterator_B_;
 
-  ElementC accum_init_val_;
+  ElementC additive_identity_;
 
 public:
 
@@ -124,12 +124,12 @@ public:
     int thread_idx,                                     ///< ID within the threadblock
     int warp_idx,                                       ///< ID of warp
     int lane_idx,                                       ///< ID of each thread within a warp
-    ElementC accum_init_val                             ///< Identity value of multiply op
+    ElementC additive_identity                             ///< Identity value of multiply op
   ):
     Base(shared_storage, thread_idx, warp_idx, lane_idx),
     smem_iterator_A_(shared_storage.operand_A_ref(), thread_idx),
     smem_iterator_B_(shared_storage.operand_B_ref(), thread_idx),
-    accum_init_val_(accum_init_val) {
+    additive_identity_(additive_identity) {
 
     // Compute warp location within threadblock tile by mapping the warp_id to
     // three coordinates:
@@ -169,8 +169,8 @@ public:
     FragmentA tb_frag_A;
     FragmentB tb_frag_B;
 
-    tb_frag_A.fill(accum_init_val_);
-    tb_frag_B.fill(accum_init_val_);
+    tb_frag_A.fill(additive_identity_);
+    tb_frag_B.fill(additive_identity_);
 
     // The last kblock is loaded in the prolog
     iterator_A.load(tb_frag_A);

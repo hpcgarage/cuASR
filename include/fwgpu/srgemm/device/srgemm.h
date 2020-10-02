@@ -151,7 +151,7 @@ class Srgemm {
     TensorRef<ElementC const, LayoutC> ref_C;
     TensorRef<ElementC, LayoutC> ref_D;
     typename EpilogueOutputOp::Params epilogue;
-    ElementAccumulator accum_init_val;
+    ElementAccumulator additive_identity;
     int split_k_slices;
 
     //
@@ -174,7 +174,7 @@ class Srgemm {
       TensorRef<ElementC, LayoutC> ref_D_,
       typename EpilogueOutputOp::Params epilogue_ =
         typename EpilogueOutputOp::Params(),
-      ElementAccumulator accum_init_val = std::numeric_limits<ElementAccumulator>::infinity(),
+      ElementAccumulator additive_identity = std::numeric_limits<ElementAccumulator>::infinity(),
       int split_k_slices = 1
     ):
       problem_size(problem_size_),
@@ -183,7 +183,7 @@ class Srgemm {
       ref_C(ref_C_),
       ref_D(ref_D_),
       epilogue(epilogue_),
-      accum_init_val(accum_init_val),
+      additive_identity(additive_identity),
       split_k_slices(split_k_slices) {
 
     }
@@ -281,7 +281,7 @@ public:
       args.ref_B.non_const_ref(),
       args.ref_C.non_const_ref(),
       args.ref_D,
-      args.accum_init_val,
+      args.additive_identity,
       args.epilogue,
       static_cast<int *>(workspace)
     };
@@ -478,7 +478,7 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
     TensorRef<ElementC const, LayoutC> ref_C;
     TensorRef<ElementC, LayoutC> ref_D;
     typename EpilogueOutputOp::Params epilogue;
-    ElementAccumulator accum_init_val;
+    ElementAccumulator additive_identity;
     int split_k_slices;
 
     //
@@ -497,9 +497,8 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
       TensorRef<ElementB const, LayoutB> ref_B_,
       TensorRef<ElementC const, LayoutC> ref_C_,
       TensorRef<ElementC, LayoutC> ref_D_,
-      typename EpilogueOutputOp::Params epilogue_ =
-        typename EpilogueOutputOp::Params(),
-      ElementAccumulator accum_init_val = std::numeric_limits<ElementAccumulator>::infinity(),
+      typename EpilogueOutputOp::Params epilogue_,
+      ElementAccumulator additive_identity,
       int split_k_slices = 1
     ):
       problem_size(problem_size_),
@@ -508,7 +507,7 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
       ref_C(ref_C_),
       ref_D(ref_D_),
       epilogue(epilogue_),
-      accum_init_val(accum_init_val),
+      additive_identity(additive_identity),
       split_k_slices(split_k_slices) { }
   };
 
@@ -530,7 +529,7 @@ public:
       {args.ref_C.data(), args.ref_C.stride(0)},
       {args.ref_D.data(), args.ref_D.stride(0)},
       args.epilogue,
-      args.accum_init_val,
+      args.additive_identity,
       args.split_k_slices
     );
   }

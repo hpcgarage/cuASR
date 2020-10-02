@@ -56,15 +56,21 @@ struct DefaultSemiRingConfiguration<
   plus<Element>,
   ArchTag> {
 
-  static int const kAlignmentA = 1;
-  static int const kAlignmentB = 1;
+  static int constexpr kAlignmentA = 1;
+  static int constexpr kAlignmentB = 1;
   using ThreadblockShape = GemmShape<64, 128, 8>;
   using WarpShape = GemmShape<16, 64, 8>;
   using InstructionShape = GemmShape<1, 1, 1>;
-  static int const kStages = 2;
+  static int constexpr kStages = 2;
 
   using AdditionOp = minimum<Element>;
+  static Element constexpr AdditiveIdentity
+      = ::std::numeric_limits<Element>::infinity();
+
   using MultiplicationOp = plus<Element>;
+  static Element constexpr MultiplicativeIdentity
+      = static_cast<Element>(0);
+
   using EpilogueOutputOp = epilogue::thread::MinOp<Element, 1>;
 };
 

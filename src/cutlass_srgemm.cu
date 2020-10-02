@@ -47,8 +47,8 @@ auto cutlass_srsgemm_nn(
   using OperatorClass  = cutlass::arch::OpClassSimt;
   using SmArch         = cutlass::arch::Sm50;
   using TropicalConfig = typename cutlass::gemm::device::DefaultSemiRingConfiguration<
-      float, float, float, float,
-      OperatorClass, cutlass::minimum<float>, cutlass::plus<float>, SmArch>;
+      float, float, float, float, OperatorClass,
+      cutlass::minimum<float>, cutlass::plus<float>, SmArch>;
 
   using AdditionOp       = TropicalConfig::AdditionOp;
   using MultiplicationOp = TropicalConfig::MultiplicationOp;
@@ -85,12 +85,13 @@ auto cutlass_srsgemm_nn(
 
   // construct kernel arguments struct
   CutlassSrgemm::Arguments args(
-      { M, N, K },        // Problem dimensions
-      { A, lda },         // Tensor-ref for source matrix A
-      { B, ldb },         // Tensor-ref for source matrix B
-      { C, ldc },         // Tensor-ref for source matrix C
-      { D, ldc },         // Tensor-ref for destination matrix D
-      { do_epilogue_min } // True if we perform a final min with source matrix C
+      { M, N, K },         // Problem dimensions
+      { A, lda },          // Tensor-ref for source matrix A
+      { B, ldb },          // Tensor-ref for source matrix B
+      { C, ldc },          // Tensor-ref for source matrix C
+      { D, ldc },          // Tensor-ref for destination matrix D
+      { do_epilogue_min }, // True if we perform a final min with source matrix C
+      TropicalConfig::AdditiveIdentity
   );
 
   // launch SRGEMM kernel

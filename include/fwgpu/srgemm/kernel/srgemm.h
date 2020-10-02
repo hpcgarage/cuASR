@@ -59,7 +59,7 @@ struct Srgemm {
     typename Epilogue::OutputTileIterator::TensorRef ref_C;
     typename Epilogue::OutputTileIterator::Params params_D;
     typename Epilogue::OutputTileIterator::TensorRef ref_D;
-    typename OutputOp::Element accum_init_val;
+    typename OutputOp::Element additive_identity;
     typename OutputOp::Params output_op;
     int *semaphore;
     int gemm_k_iterations;
@@ -80,7 +80,7 @@ struct Srgemm {
       typename Srmma::IteratorB::TensorRef ref_B,
       typename Epilogue::OutputTileIterator::TensorRef ref_C,
       typename Epilogue::OutputTileIterator::TensorRef ref_D,
-      typename OutputOp::Element accum_init_val,
+      typename OutputOp::Element additive_identity,
       typename OutputOp::Params output_op = typename OutputOp::Params(),
       int *semaphore = nullptr
     ):
@@ -94,7 +94,7 @@ struct Srgemm {
       ref_C(ref_C),
       params_D(ref_D.layout()),
       ref_D(ref_D),
-      accum_init_val(accum_init_val),
+      additive_identity(additive_identity),
       output_op(output_op),
       semaphore(semaphore) {
 
@@ -217,12 +217,12 @@ struct Srgemm {
     //
 
     // Construct thread-scoped matrix multiply
-    Srmma srmma_thrblock_op(shared_storage.main_loop, thread_idx, warp_idx, lane_idx, params.accum_init_val);
+    Srmma srmma_thrblock_op(shared_storage.main_loop, thread_idx, warp_idx, lane_idx, params.additive_identity);
 
     typename Srmma::FragmentC accumulators;
 
     // need to clear accumulators to infinity for SemiRing Gemm
-    accumulators.fill(params.accum_init_val);
+    accumulators.fill(params.additive_identity);
 
     if (!kSplitKSerial || gemm_k_iterations > 0) {
       // Compute threadblock-scoped matrix multiply-add
