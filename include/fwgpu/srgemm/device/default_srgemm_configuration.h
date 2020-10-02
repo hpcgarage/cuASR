@@ -14,7 +14,7 @@
 #include "fwgpu/srgemm/arch/srmma.h"
 #include "cutlass/gemm/gemm.h"
 
-#include "fwgpu/srgemm/epilogue/thread/min_op.h"
+#include "fwgpu/srgemm/epilogue/thread/semiring_addition_op.h"
 
 #include <limits>
 
@@ -71,7 +71,8 @@ struct DefaultSemiRingConfiguration<
   static Element constexpr MultiplicativeIdentity
       = static_cast<Element>(0);
 
-  using EpilogueOutputOp = epilogue::thread::MinOp<Element, 1>;
+  using EpilogueOutputOp = epilogue::thread::SemiringAdditionOp<
+    minimum<Array<Element, 1>>, Element, 1>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

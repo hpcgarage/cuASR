@@ -6,24 +6,6 @@
 
 #include "cutlass/functional.h"
 
-namespace {
-template <typename T>
-struct binary_and {
-  __host__ __device__
-  T operator()(T lhs, T const &rhs) const {
-    return lhs && rhs;
-  }
-};
-
-template <typename T>
-struct binary_or {
-  __host__ __device__
-  T operator()(T lhs, T const &rhs) const {
-    return lhs || rhs;
-  }
-};
-}
-
 namespace fwgpu {
 
 auto cutlass_srsgemm_nn(
@@ -59,28 +41,31 @@ auto cutlass_srsgemm_nn(
   using EpilogueOutputOp = typename TropicalConfig::EpilogueOutputOp;
   using ThreadblockSwizzle =
       typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>;
+  constexpr int Stages        = TropicalConfig::kStages;
+  constexpr int AlignmentA    = TropicalConfig::kAlignmentA;
+  constexpr int AlignmentB    = TropicalConfig::kAlignmentB;
 
   using CutlassSrgemm = cutlass::gemm::device::Srgemm<
-      AdditionOp,                  // Thread level SemiRing operator
-      MultiplicationOp,            // Thread level SemiRing operator
-      float,                       // element type of A
-      ColumnMajor,                 // layout of A
-      float,                       // element type of B
-      ColumnMajor,                 // layout of B
-      float,                       // element type of C
-      ColumnMajor,                 // layout of C
-      float,                       // element type of D
-      OperatorClass,               // Logical operator class (SIMT/Tensor)
-      SmArch,                      // cuda architecture
-      ThreadblockShape,            // GEMM shape at CTA level
-      WarpShape,                   // GEMM shape at Warp level
-      InstructionShape,            // GEMM shape at thread level
-      EpilogueOutputOp,            // Epilogue operator at thread level
-      ThreadblockSwizzle,          // GEMM threadblock swizzler
-      TropicalConfig::kStages,     // Pipeline stages for shmem
-      TropicalConfig::kAlignmentA, // Alignment of A elements
-      TropicalConfig::kAlignmentB, // Alignment of B elements
-      false                        // SplitKSerial
+      AdditionOp,         // Thread level SemiRing operator
+      MultiplicationOp,   // Thread level SemiRing operator
+      float,              // element type of A
+      ColumnMajor,        // layout of A
+      float,              // element type of B
+      ColumnMajor,        // layout of B
+      float,              // element type of C
+      ColumnMajor,        // layout of C
+      float,              // element type of D
+      OperatorClass,      // Logical operator class (SIMT/Tensor)
+      SmArch,             // cuda architecture
+      ThreadblockShape,   // GEMM shape at CTA level
+      WarpShape,          // GEMM shape at Warp level
+      InstructionShape,   // GEMM shape at thread level
+      EpilogueOutputOp,   // Epilogue operator at thread level
+      ThreadblockSwizzle, // GEMM threadblock swizzler
+      Stages,             // Pipeline stages for shmem
+      AlignmentA,         // Alignment of A elements
+      AlignmentB,         // Alignment of B elements
+      false               // SplitKSerial
   >;
 
   // construct kernel arguments struct
