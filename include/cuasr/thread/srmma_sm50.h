@@ -12,7 +12,7 @@
 #include "cutlass/layout/matrix.h"
 #include "cutlass/gemm/gemm.h"
 
-#include "fwgpu/srgemm/arch/srmma.h"
+#include "cuasr/arch/srmma.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 

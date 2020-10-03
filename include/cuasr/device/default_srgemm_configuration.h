@@ -10,12 +10,12 @@
 #include "cutlass/cutlass.h"
 #include "cutlass/numeric_types.h"
 #include "cutlass/functional.h"
-#include "fwgpu/srgemm/functional.h"
+#include "cuasr/functional.h"
 
-#include "fwgpu/srgemm/arch/srmma.h"
+#include "cuasr/arch/srmma.h"
 #include "cutlass/gemm/gemm.h"
 
-#include "fwgpu/srgemm/epilogue/thread/semiring_addition_op.h"
+#include "cuasr/epilogue/thread/semiring_addition_op.h"
 
 #include <limits>
 

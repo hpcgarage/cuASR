@@ -16,7 +16,7 @@
 #include "cutlass/gemm/warp/mma.h"
 #include "cutlass/gemm/warp/mma_simt_tile_iterator.h"
 
-#include "fwgpu/srgemm/thread/srmma.h"
+#include "cuasr/thread/srmma.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 

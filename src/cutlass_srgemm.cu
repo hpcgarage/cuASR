@@ -1,8 +1,8 @@
 #include "fwgpu/gpu_srgemm.hpp"
 
-#include "fwgpu/srgemm/arch/srmma.h"
-#include "fwgpu/srgemm/device/default_srgemm_configuration.h"
-#include "fwgpu/srgemm/device/srgemm.h"
+#include "cuasr/arch/srmma.h"
+#include "cuasr/device/default_srgemm_configuration.h"
+#include "cuasr/device/srgemm.h"
 
 #include "cutlass/functional.h"
 

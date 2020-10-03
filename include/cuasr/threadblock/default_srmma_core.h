@@ -19,8 +19,8 @@
 #include "cutlass/arch/cache_operation.h"
 #include "cutlass/gemm/warp/mma.h"
 
-#include "fwgpu/srgemm/threadblock/srmma_pipelined.h"
-#include "fwgpu/srgemm/threadblock/srmma_singlestage.h"
+#include "cuasr/threadblock/srmma_pipelined.h"
+#include "cuasr/threadblock/srmma_singlestage.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -82,4 +82,4 @@ struct DefaultSrmmaCore;
 } // namespace gemm
 } // namespace cutlass
 
-#include "fwgpu/srgemm/threadblock/default_srmma_core_simt.h"
+#include "cuasr/threadblock/default_srmma_core_simt.h"

@@ -60,6 +60,6 @@ struct Srmma;
 // Overloads specialized for existing architectures
 //
 
-#include "fwgpu/srgemm/thread/srmma_sm50.h"
+#include "cuasr/thread/srmma_sm50.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -22,8 +22,8 @@
 
 #include "cutlass/gemm/warp/mma_simt_policy.h"
 
-#include "fwgpu/srgemm/threadblock/default_srmma_core.h"
-#include "fwgpu/srgemm/warp/srmma_simt.h"
+#include "cuasr/threadblock/default_srmma_core.h"
+#include "cuasr/warp/srmma_simt.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 

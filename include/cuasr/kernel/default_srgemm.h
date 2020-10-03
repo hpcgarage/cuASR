@@ -28,9 +28,9 @@
 #include "cutlass/epilogue/threadblock/default_epilogue_simt.h"
 #include "cutlass/transform/threadblock/predicated_tile_iterator.h"
 
-#include "fwgpu/srgemm/arch/srmma.h"
-#include "fwgpu/srgemm/kernel/srgemm.h"
-#include "fwgpu/srgemm/threadblock/default_srmma.h"
+#include "cuasr/arch/srmma.h"
+#include "cuasr/kernel/srgemm.h"
+#include "cuasr/threadblock/default_srmma.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

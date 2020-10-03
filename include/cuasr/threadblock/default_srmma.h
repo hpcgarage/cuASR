@@ -16,7 +16,7 @@
 #include "cutlass/transform/threadblock/predicated_tile_iterator.h"
 #include "cutlass/transform/threadblock/predicated_tile_iterator_2dthreadtile.h"
 
-#include "fwgpu/srgemm/threadblock/default_srmma_core.h"
+#include "cuasr/threadblock/default_srmma_core.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -14,9 +14,9 @@
 
 #include "cutlass/gemm/threadblock/threadblock_swizzle.h"
 
-#include "fwgpu/srgemm/device/default_srgemm_configuration.h"
-#include "fwgpu/srgemm/kernel/default_srgemm.h"
-#include "fwgpu/srgemm/kernel/srgemm.h"
+#include "cuasr/device/default_srgemm_configuration.h"
+#include "cuasr/kernel/default_srgemm.h"
+#include "cuasr/kernel/srgemm.h"
 
 #include <limits>
 

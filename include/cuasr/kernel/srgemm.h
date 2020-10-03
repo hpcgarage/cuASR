@@ -14,7 +14,7 @@
 #include "cutlass/matrix_coord.h"
 #include "cutlass/semaphore.h"
 
-#include "fwgpu/srgemm/arch/srmma.h"
+#include "cuasr/arch/srmma.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
