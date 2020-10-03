@@ -19,7 +19,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace threadblock {
 
@@ -50,11 +50,11 @@ template <
   /// Used for partial specialization
   typename Enable = bool
 >
-class SrmmaSingleStage : public MmaBase<Shape_, Policy_, 1> {
+class SrmmaSingleStage : public cutlass::gemm::threadblock::MmaBase<Shape_, Policy_, 1> {
 public:
 
   ///< Base class
-  using Base = MmaBase<Shape_, Policy_, 1>;
+  using Base = cutlass::gemm::threadblock::MmaBase<Shape_, Policy_, 1>;
 
   using Shape = Shape_;             ///< Size of the Gemm problem - concept: gemm::GemmShape<>
   using IteratorA = IteratorA_;     ///< Iterates over tiles of A operand in global memory
@@ -234,4 +234,4 @@ public:
 
 } // namespace threadblock
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr

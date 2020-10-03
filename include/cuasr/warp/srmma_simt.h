@@ -20,7 +20,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace warp {
 
@@ -80,36 +80,45 @@ public:
   using Policy = Policy_;
 
   /// Indicates class of matrix operator
-  using OperatorClass = arch::OpClassSimt;
+  using OperatorClass = cutlass::arch::OpClassSimt;
 
   /// Underlying semi-ring operators
   using AdditionOp = AdditionOp_;
   using MultiplicationOp = MultiplicationOp_;
 
-  using ThreadLayoutA = typename platform::conditional< platform::is_same< layout::ColumnMajorInterleaved<4>, LayoutA >::value,
-                  layout::ColumnMajor,
-                  typename platform::conditional < platform::is_same< layout::RowMajorInterleaved<4>, LayoutA >::value,
-                      layout::RowMajor,
-                      LayoutA>::type
-                 >::type;
+  using ThreadLayoutA = typename cutlass::platform::conditional<
+      cutlass::platform::is_same<cutlass::layout::ColumnMajorInterleaved<4>, LayoutA>::
+          value,
+      cutlass::layout::ColumnMajor,
+      typename cutlass::platform::conditional<
+          cutlass::platform::is_same<cutlass::layout::RowMajorInterleaved<4>, LayoutA>::
+              value,
+          cutlass::layout::RowMajor,
+          LayoutA>::type>::type;
 
-  using ThreadLayoutB = typename platform::conditional< platform::is_same< layout::ColumnMajorInterleaved<4>, LayoutB >::value,
-                  layout::ColumnMajor,
-                  typename platform::conditional < platform::is_same< layout::RowMajorInterleaved<4>, LayoutB >::value,
-                      layout::RowMajor,
-                      LayoutB>::type
-                 >::type;
+  using ThreadLayoutB = typename cutlass::platform::conditional<
+      cutlass::platform::is_same<cutlass::layout::ColumnMajorInterleaved<4>, LayoutB>::
+          value,
+      cutlass::layout::ColumnMajor,
+      typename cutlass::platform::conditional<
+          cutlass::platform::is_same<cutlass::layout::RowMajorInterleaved<4>, LayoutB>::
+              value,
+          cutlass::layout::RowMajor,
+          LayoutB>::type>::type;
 
-  static constexpr bool use_dp4a = (platform::is_same< layout::ColumnMajorInterleaved<4>, LayoutA>::value ||
-                                    platform::is_same< layout::RowMajorInterleaved<4>, LayoutA >::value) &&
-                                    platform::is_same< ElementA, int8_t >::value &&
-                                    platform::is_same< ElementB, int8_t >::value;
+  static constexpr bool use_dp4a
+      = (cutlass::platform::is_same<cutlass::layout::ColumnMajorInterleaved<4>, LayoutA>::
+             value
+         || cutlass::platform::is_same<cutlass::layout::RowMajorInterleaved<4>, LayoutA>::
+             value)
+      && cutlass::platform::is_same<ElementA, int8_t>::value
+      && cutlass::platform::is_same<ElementB, int8_t>::value;
 
-  using dp4a_type = typename platform::conditional< use_dp4a , int8_t, bool >::type;
+  using dp4a_type = typename cutlass::platform::conditional< use_dp4a , int8_t, bool >::type;
 
   /// Thread-level matrix multiply accumulate operator
-  using ThreadMma = thread::Srmma<
-    GemmShape<
+  using ThreadMma = cuasr::gemm::thread::Srmma<
+    cutlass::gemm::GemmShape<
       Shape::kM / Policy::WarpShape::kRow,
       Shape::kN / Policy::WarpShape::kColumn,
       Policy::LaneMmaShape::kK>,
@@ -127,9 +136,9 @@ public:
 public:
 
   /// Iterates over the A operand in memory
-  using IteratorA = MmaSimtTileIterator<
-    MatrixShape<Shape::kM, Policy::LaneMmaShape::kK>,
-    Operand::kA,
+  using IteratorA = cutlass::gemm::warp::MmaSimtTileIterator<
+    cutlass::MatrixShape<Shape::kM, Policy::LaneMmaShape::kK>,
+    cutlass::gemm::Operand::kA,
     ElementA,
     LayoutA,
     Policy,
@@ -141,9 +150,9 @@ public:
   using FragmentA = typename IteratorA::Fragment;
 
   /// Iterates over the B operand in memory
-  using IteratorB = MmaSimtTileIterator<
-    MatrixShape<Policy::LaneMmaShape::kK, Shape::kN>,
-    Operand::kB,
+  using IteratorB = cutlass::gemm::warp::MmaSimtTileIterator<
+    cutlass::MatrixShape<Policy::LaneMmaShape::kK, Shape::kN>,
+    cutlass::gemm::Operand::kB,
     ElementB,
     LayoutB,
     Policy,
@@ -155,9 +164,9 @@ public:
   using FragmentB = typename IteratorB::Fragment;
 
   /// Iterates over the C operand in memory
-  using IteratorC = MmaSimtTileIterator<
-    MatrixShape<Shape::kM, Shape::kN>,
-    Operand::kC,
+  using IteratorC = cutlass::gemm::warp::MmaSimtTileIterator<
+    cutlass::MatrixShape<Shape::kM, Shape::kN>,
+    cutlass::gemm::Operand::kC,
     ElementC,
     LayoutC,
     Policy
@@ -194,4 +203,4 @@ public:
 
 } // namespace warp
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr

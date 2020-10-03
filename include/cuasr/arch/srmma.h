@@ -13,7 +13,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace arch {
 
 /// Matrix product operator for all semi-rings
@@ -46,29 +46,34 @@ struct Srmma;
 
 /// Semi-rings multiply-add specialized for 1 element per instruction
 template <
-  /// Data type of A elements
-  typename ElementA,
-  /// Layout of A matrix (concept: MatrixLayout)
-  typename LayoutA,
-  /// Data type of B elements
-  typename ElementB,
-  /// Layout of B matrix (concept: MatrixLayout)
-  typename LayoutB,
-  /// Element type of C matrix
-  typename ElementC,
-  /// Layout of C matrix (concept: MatrixLayout)
-  typename LayoutC,
-  /// Addition operator of the semi-ring
-  typename AdditionOp,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp
->
+    /// Data type of A elements
+    typename ElementA,
+    /// Layout of A matrix (concept: MatrixLayout)
+    typename LayoutA,
+    /// Data type of B elements
+    typename ElementB,
+    /// Layout of B matrix (concept: MatrixLayout)
+    typename LayoutB,
+    /// Element type of C matrix
+    typename ElementC,
+    /// Layout of C matrix (concept: MatrixLayout)
+    typename LayoutC,
+    /// Addition operator of the semi-ring
+    typename AdditionOp,
+    /// Multiplication operator of the semi-ring
+    typename MultiplicationOp>
 struct Srmma<
-    gemm::GemmShape<1, 1, 1>, 1,
-    ElementA, LayoutA, ElementB, LayoutB, ElementC, LayoutC,
-    AdditionOp, MultiplicationOp
-  > {
-  using Shape = gemm::GemmShape<1, 1, 1>;
+    cutlass::gemm::GemmShape<1, 1, 1>,
+    1,
+    ElementA,
+    LayoutA,
+    ElementB,
+    LayoutB,
+    ElementC,
+    LayoutC,
+    AdditionOp,
+    MultiplicationOp> {
+  using Shape = cutlass::gemm::GemmShape<1, 1, 1>;
 
   // semi-ring operators must be default contructible and
   // have a binary invocation () operator
@@ -77,10 +82,10 @@ struct Srmma<
 
   CUTLASS_HOST_DEVICE
   void operator()(
-    Array<ElementC, 1> &d,
-    Array<ElementA, 1> const &a,
-    Array<ElementB, 1> const &b,
-    Array<ElementC, 1> const &c
+    cutlass::Array<ElementC, 1> &d,
+    cutlass::Array<ElementA, 1> const &a,
+    cutlass::Array<ElementB, 1> const &b,
+    cutlass::Array<ElementC, 1> const &c
   ) {
     d[0] = add(c[0], mult(a[0], b[0]));
   }
@@ -89,6 +94,6 @@ struct Srmma<
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 } // namespace arch
-} // namespace cutlass
+} // namespace cuasr
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

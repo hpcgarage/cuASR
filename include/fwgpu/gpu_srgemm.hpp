@@ -1,5 +1,4 @@
-#ifndef FWGPU_GPU_SRGEMM_HPP
-#define FWGPU_GPU_SRGEMM_HPP
+#pragma once
 
 namespace fwgpu {
 
@@ -33,5 +32,3 @@ auto cutlass_srsgemm_nn(
     void *stream         = nullptr) -> int;
 
 } // namespace fwgpu
-
-#endif // FWGPU_GPU_SRGEMM_HPP

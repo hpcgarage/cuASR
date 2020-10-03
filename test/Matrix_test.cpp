@@ -2,7 +2,7 @@
 
 #include "fwgpu/Matrix.hpp"
 
-TEST(FWGPU_Matrix, BasicConstructorCorrect) {
+TEST(cuASR_Matrix, BasicConstructorCorrect) {
   auto x = fwgpu::Matrix<float>(6, 2);
   for (auto i = 0u; i < 12; ++i) {
     x(i) = (float)i;
@@ -18,7 +18,7 @@ TEST(FWGPU_Matrix, BasicConstructorCorrect) {
   EXPECT_FLOAT_EQ(11.0f, x(5, 1));
 }
 
-TEST(FWGPU_Matrix, InitializerListConstructorCorrect) {
+TEST(cuASR_Matrix, InitializerListConstructorCorrect) {
   // [8.0   3.0   0.0   1.0]
   // [2.0   5.0   4.0   9.0]
   // [7.0   6.0   10.   13.]
@@ -34,7 +34,7 @@ TEST(FWGPU_Matrix, InitializerListConstructorCorrect) {
   EXPECT_FLOAT_EQ(10.0f, x(2, 2));
 }
 
-TEST(FWGPU_Matrix, RandomFloatMatrixConstructorCorrect) {
+TEST(cuASR_Matrix, RandomFloatMatrixConstructorCorrect) {
   size_t const seed  = 8;
   auto const minimum = 1.0545;
   auto const maximum = 28.1;
@@ -51,7 +51,7 @@ TEST(FWGPU_Matrix, RandomFloatMatrixConstructorCorrect) {
   }
 }
 
-TEST(FWGPU_Matrix, RandomIntMatrixConstructorCorrect) {
+TEST(cuASR_Matrix, RandomIntMatrixConstructorCorrect) {
   size_t const seed  = 8;
   auto const minimum = 1;
   auto const maximum = 128;
@@ -68,13 +68,13 @@ TEST(FWGPU_Matrix, RandomIntMatrixConstructorCorrect) {
   }
 }
 
-TEST(FWGPU_Matrix, CopyConstructorCorrect) {
+TEST(cuASR_Matrix, CopyConstructorCorrect) {
   auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
   auto to   = from;
   EXPECT_TRUE(from == to);
 }
 
-TEST(FWGPU_Matrix, MoveConstructorCorrect) {
+TEST(cuASR_Matrix, MoveConstructorCorrect) {
   auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
   EXPECT_EQ(from.num_rows(), 5);
   EXPECT_EQ(from.num_cols(), 7);
@@ -90,7 +90,7 @@ TEST(FWGPU_Matrix, MoveConstructorCorrect) {
   EXPECT_TRUE(from.get_buf() == nullptr);
 }
 
-TEST(FWGPU_Matrix, ConstantConstructorCorrect) {
+TEST(cuASR_Matrix, ConstantConstructorCorrect) {
   auto mat = fwgpu::Matrix<int>(6, 2, 42);
   EXPECT_EQ(mat.num_rows(), 6);
   EXPECT_EQ(mat.num_cols(), 2);
@@ -100,7 +100,7 @@ TEST(FWGPU_Matrix, ConstantConstructorCorrect) {
   EXPECT_EQ(mat(5, 1), 42);
 }
 
-TEST(FWGPU_Matrix, BufferConstructorCorrect) {
+TEST(cuASR_Matrix, BufferConstructorCorrect) {
   std::vector<int> matvals(12, 42);
   auto mat = fwgpu::Matrix<int>(6, 2, matvals.data());
 
@@ -112,14 +112,14 @@ TEST(FWGPU_Matrix, BufferConstructorCorrect) {
   EXPECT_EQ(mat(5, 1), 42);
 }
 
-TEST(FWGPU_Matrix, CopyAssignmentCorrect) {
+TEST(cuASR_Matrix, CopyAssignmentCorrect) {
   auto from = fwgpu::Matrix<float>(5, 7, 0.0f);
   fwgpu::Matrix<float> to(1, 1);
   to = from;
   EXPECT_TRUE(from == to);
 }
 
-TEST(FWGPU_Matrix, ColumnMajorLayoutCorrect) {
+TEST(cuASR_Matrix, ColumnMajorLayoutCorrect) {
   auto mat = fwgpu::Matrix<float, fwgpu::ColumnMajor>(
       4, 4,
       {
@@ -142,7 +142,7 @@ TEST(FWGPU_Matrix, ColumnMajorLayoutCorrect) {
   EXPECT_FLOAT_EQ(mat(2, 2), 0.477397054);
 }
 
-TEST(FWGPU_Matrix, RowMajorLayoutCorrect) {
+TEST(cuASR_Matrix, RowMajorLayoutCorrect) {
   auto mat = fwgpu::Matrix<float, fwgpu::RowMajor>(
       4, 4,
       {

@@ -16,7 +16,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace thread {
 
@@ -24,7 +24,7 @@ namespace thread {
 
 /// Gemplate that handles all packed matrix layouts
 template <
-  /// Size of the Gemm problem - concept: gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
   typename Shape_,
   /// Data type of A elements
   typename ElementA_,
@@ -45,7 +45,7 @@ template <
 >
 struct SrmmaGeneric {
 
-  /// Size of the Gemm problem - concept: gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
   using Shape = Shape_;
 
   /// Data type of operand A
@@ -71,17 +71,17 @@ struct SrmmaGeneric {
   using MultiplicationOp = MultiplicationOp_;
 
   /// A operand storage
-  using FragmentA = Array<ElementA, Shape::kMK>;
+  using FragmentA = cutlass::Array<ElementA, Shape::kMK>;
 
   /// B operand storage
-  using FragmentB = Array<ElementB, Shape::kKN>;
+  using FragmentB = cutlass::Array<ElementB, Shape::kKN>;
 
   /// C operand storage
-  using FragmentC = Array<ElementC, Shape::kMN>;
+  using FragmentC = cutlass::Array<ElementC, Shape::kMN>;
 
   /// Instruction
   using SrmmaOp = arch::Srmma<
-    gemm::GemmShape<1,1,1>,
+    cutlass::gemm::GemmShape<1,1,1>,
     1,
     ElementA, LayoutA,
     ElementB, LayoutB,
@@ -100,13 +100,13 @@ struct SrmmaGeneric {
     FragmentB const & B,
     FragmentC const & C) {
 
-    TensorRef<ElementA const, LayoutA> a_ref(
+    cutlass::TensorRef<ElementA const, LayoutA> a_ref(
       reinterpret_cast<ElementA const *>(&A), LayoutA::packed({Shape::kM, Shape::kK}));
 
-    TensorRef<ElementB const, LayoutB> b_ref(
+    cutlass::TensorRef<ElementB const, LayoutB> b_ref(
       reinterpret_cast<ElementB const *>(&B), LayoutB::packed({Shape::kK, Shape::kN}));
 
-    TensorRef<ElementC, LayoutC> d_ref(
+    cutlass::TensorRef<ElementC, LayoutC> d_ref(
       reinterpret_cast<ElementC *>(&D), LayoutC::packed({ Shape::kM, Shape::kN }));
 
     SrmmaOp srmma_op;
@@ -126,13 +126,13 @@ struct SrmmaGeneric {
 
           int m_serpentine = (n % 2) ? (Shape::kM - 1 - m) : m;
 
-          MatrixCoord mn(m_serpentine, n);
-          MatrixCoord mk(m_serpentine, k);
-          MatrixCoord kn(k, n);
+          cutlass::MatrixCoord mn(m_serpentine, n);
+          cutlass::MatrixCoord mk(m_serpentine, k);
+          cutlass::MatrixCoord kn(k, n);
 
-          Array<ElementC, 1> d;
-          Array<ElementA, 1> a;
-          Array<ElementB, 1> b;
+          cutlass::Array<ElementC, 1> d;
+          cutlass::Array<ElementA, 1> a;
+          cutlass::Array<ElementB, 1> b;
 
           d[0] = d_ref.at(mn);
           a[0] = a_ref.at(mk);
@@ -152,7 +152,7 @@ struct SrmmaGeneric {
 
 /// Gemplate that handles conventional layouts for FFMA and DFMA GEMM
 template <
-  /// Size of the Gemm problem - concept: gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
   typename Shape_,
   /// Data type of A elements
   typename ElementA_,
@@ -184,7 +184,7 @@ struct Srmma<
   bool
 > {
 
-  /// Size of the Gemm problem - concept: gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
   using Shape = Shape_;
 
   /// Data type of operand A
@@ -250,6 +250,6 @@ struct Srmma<
 
 } // namespace thread
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

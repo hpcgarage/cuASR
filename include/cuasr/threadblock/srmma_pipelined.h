@@ -20,7 +20,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace threadblock {
 
@@ -49,24 +49,24 @@ template <
   /// Policy describing tuning details (concept: MmaPolicy)
   typename Policy_,
   /// Transformation applied to A operand
-  typename TransformA_ = NumericArrayConverter<
+  typename TransformA_ = cutlass::NumericArrayConverter<
     typename SmemIteratorA_::Element,
     typename IteratorA_::Element,
     IteratorA_::Fragment::kElements>,
   ///
   /// Transformation applied to A operand
-  typename TransformB_ = NumericArrayConverter<
+  typename TransformB_ = cutlass::NumericArrayConverter<
     typename SmemIteratorB_::Element,
     typename IteratorB_::Element,
     IteratorB_::Fragment::kElements>,
   /// Used for partial specialization
   typename Enable = bool
 >
-class SrmmaPipelined : public MmaBase<Shape_, Policy_, 2> {
+class SrmmaPipelined : public cutlass::gemm::threadblock::MmaBase<Shape_, Policy_, 2> {
 public:
 
   ///< Base class
-  using Base = MmaBase<Shape_, Policy_, 2>;
+  using Base = cutlass::gemm::threadblock::MmaBase<Shape_, Policy_, 2>;
 
   using Shape = Shape_;             ///< Size of the Gemm problem - concept: gemm::GemmShape<>
   using IteratorA = IteratorA_;     ///< Iterates over tiles of A operand in global memory
@@ -292,4 +292,4 @@ public:
 
 } // namespace threadblock
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr

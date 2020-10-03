@@ -28,7 +28,7 @@ auto cutlass_srsgemm_nn(
   // compile time configuration of this srgemm kernel
   using OperatorClass  = cutlass::arch::OpClassSimt;
   using SmArch         = cutlass::arch::Sm50;
-  using TropicalConfig = typename cutlass::gemm::device::DefaultSemiRingConfiguration<
+  using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
       float, float, float, float, OperatorClass,
       cutlass::minimum<float>, cutlass::plus<float>, SmArch>;
 
@@ -45,7 +45,7 @@ auto cutlass_srsgemm_nn(
   constexpr int AlignmentA    = TropicalConfig::kAlignmentA;
   constexpr int AlignmentB    = TropicalConfig::kAlignmentB;
 
-  using CutlassSrgemm = cutlass::gemm::device::Srgemm<
+  using cuASR_MinPlus_SGEMM = cuasr::gemm::device::Srgemm<
       AdditionOp,         // Thread level SemiRing operator
       MultiplicationOp,   // Thread level SemiRing operator
       float,              // element type of A
@@ -69,7 +69,7 @@ auto cutlass_srsgemm_nn(
   >;
 
   // construct kernel arguments struct
-  CutlassSrgemm::Arguments args(
+  cuASR_MinPlus_SGEMM::Arguments args(
       { M, N, K },         // Problem dimensions
       { A, lda },          // Tensor-ref for source matrix A
       { B, ldb },          // Tensor-ref for source matrix B
@@ -80,8 +80,8 @@ auto cutlass_srsgemm_nn(
   );
 
   // launch SRGEMM kernel
-  CutlassSrgemm srgemm_operator;
-  cutlass::Status status = srgemm_operator(args, nullptr, stream_);
+  cuASR_MinPlus_SGEMM minplus_gemm;
+  cutlass::Status status = minplus_gemm(args, nullptr, stream_);
   return static_cast<int>(status);
 }
 

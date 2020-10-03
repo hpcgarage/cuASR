@@ -8,21 +8,18 @@
 #pragma once
 
 #include "cutlass/cutlass.h"
-#include "cutlass/numeric_types.h"
 #include "cutlass/arch/arch.h"
 #include "cutlass/device_kernel.h"
-
 #include "cutlass/gemm/threadblock/threadblock_swizzle.h"
+#include "cutlass/numeric_types.h"
 
 #include "cuasr/device/default_srgemm_configuration.h"
 #include "cuasr/kernel/default_srgemm.h"
 #include "cuasr/kernel/srgemm.h"
 
-#include <limits>
-
 ////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace device {
 
@@ -48,9 +45,9 @@ template <
   /// Element type for internal accumulation
   typename ElementAccumulator_ = ElementC_,
   /// Operator class tag
-  typename OperatorClass_ = arch::OpClassSimt,
+  typename OperatorClass_ = cutlass::arch::OpClassSimt,
   /// Tag indicating architecture to tune for
-  typename ArchTag_ = arch::Sm50,
+  typename ArchTag_ = cutlass::arch::Sm50,
   /// Threadblock-level tile size (concept: GemmShape)
   typename ThreadblockShape_ = typename DefaultSemiRingConfiguration<
       OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
@@ -69,7 +66,7 @@ template <
       ElementA_, ElementB_, ElementC_, ElementAccumulator_>::EpilogueOutputOp,
   /// Threadblock-level swizzling operator
   typename ThreadblockSwizzle_ =
-      typename threadblock::GemmIdentityThreadblockSwizzle<>,
+      typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>,
   /// Number of stages used in the pipelined mainloop
   int Stages = DefaultSemiRingConfiguration<
       OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_,
@@ -90,14 +87,14 @@ class Srgemm {
 
   using ElementA = ElementA_;
   using LayoutA = LayoutA_;
-  using TensorRefA = TensorRef<ElementA const, LayoutA>;
+  using TensorRefA = cutlass::TensorRef<ElementA const, LayoutA>;
   using ElementB = ElementB_;
   using LayoutB = LayoutB_;
-  using TensorRefB = TensorRef<ElementB const, LayoutB>;
+  using TensorRefB = cutlass::TensorRef<ElementB const, LayoutB>;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using TensorRefC = TensorRef<ElementC const, LayoutC>;
-  using TensorRefD = TensorRef<ElementC, LayoutC>;
+  using TensorRefC = cutlass::TensorRef<ElementC const, LayoutC>;
+  using TensorRefD = cutlass::TensorRef<ElementC, LayoutC>;
   using ElementAccumulator = ElementAccumulator_;
   using OperatorClass = OperatorClass_;
   using ArchTag = ArchTag_;
@@ -115,7 +112,7 @@ class Srgemm {
   static bool const kSplitKSerial = SplitKSerial;
 
   /// Define the kernel
-  using SrgemmKernel = typename cutlass::gemm::kernel::DefaultSrgemm<
+  using SrgemmKernel = typename cuasr::gemm::kernel::DefaultSrgemm<
     ElementA,
     LayoutA,
     kAlignmentA,
@@ -145,11 +142,11 @@ class Srgemm {
     // Data members
     //
 
-    GemmCoord problem_size;
-    TensorRef<ElementA const, LayoutA> ref_A;
-    TensorRef<ElementB const, LayoutB> ref_B;
-    TensorRef<ElementC const, LayoutC> ref_C;
-    TensorRef<ElementC, LayoutC> ref_D;
+    cutlass::gemm::GemmCoord problem_size;
+    cutlass::TensorRef<ElementA const, LayoutA> ref_A;
+    cutlass::TensorRef<ElementB const, LayoutB> ref_B;
+    cutlass::TensorRef<ElementC const, LayoutC> ref_C;
+    cutlass::TensorRef<ElementC, LayoutC> ref_D;
     typename EpilogueOutputOp::Params epilogue;
     ElementAccumulator additive_identity;
     int split_k_slices;
@@ -167,14 +164,13 @@ class Srgemm {
     /// Constructs an Arguments structure
     CUTLASS_HOST_DEVICE
     Arguments(
-      GemmCoord problem_size_,
-      TensorRef<ElementA const, LayoutA> ref_A_,
-      TensorRef<ElementB const, LayoutB> ref_B_,
-      TensorRef<ElementC const, LayoutC> ref_C_,
-      TensorRef<ElementC, LayoutC> ref_D_,
-      typename EpilogueOutputOp::Params epilogue_ =
-        typename EpilogueOutputOp::Params(),
-      ElementAccumulator additive_identity = std::numeric_limits<ElementAccumulator>::infinity(),
+      cutlass::gemm::GemmCoord problem_size_,
+      cutlass::TensorRef<ElementA const, LayoutA> ref_A_,
+      cutlass::TensorRef<ElementB const, LayoutB> ref_B_,
+      cutlass::TensorRef<ElementC const, LayoutC> ref_C_,
+      cutlass::TensorRef<ElementC, LayoutC> ref_D_,
+      typename EpilogueOutputOp::Params epilogue_,
+      ElementAccumulator additive_identity,
       int split_k_slices = 1
     ):
       problem_size(problem_size_),
@@ -200,13 +196,13 @@ public:
   Srgemm() { }
 
   /// Determines whether the GEMM can execute the given problem.
-  static Status can_implement(Arguments const &args) {
+  static cutlass::Status can_implement(Arguments const &args) {
 
     if (!kSplitKSerial && args.split_k_slices > 1) {
-      return Status::kErrorInvalidProblem;
+      return cutlass::Status::kErrorInvalidProblem;
     }
 
-    Status status = SrgemmKernel::can_implement(
+    cutlass::Status status = SrgemmKernel::can_implement(
       args.problem_size,
       args.ref_A.non_const_ref(),
       args.ref_B.non_const_ref(),
@@ -214,11 +210,11 @@ public:
       args.ref_D
     );
 
-    if (status != Status::kSuccess) {
+    if (status != cutlass::Status::kSuccess) {
       return status;
     }
 
-    return Status::kSuccess;
+    return cutlass::Status::kSuccess;
   }
 
   /// Gets the workspace size
@@ -241,7 +237,7 @@ public:
   }
 
   /// Initializes GEMM state from arguments.
-  Status initialize(Arguments const &args, void *workspace = nullptr, cudaStream_t stream = nullptr) {
+  cutlass::Status initialize(Arguments const &args, void *workspace = nullptr, cudaStream_t stream = nullptr) {
 
     // Determine grid shape
     ThreadblockSwizzle threadblock_swizzle;
@@ -254,7 +250,7 @@ public:
     if (kSplitKSerial) {
       if (args.split_k_slices > 1) {
         if (!workspace) {
-          return Status::kErrorWorkspaceNull;
+          return cutlass::Status::kErrorWorkspaceNull;
         }
 
         size_t bytes = get_workspace_size(args);
@@ -262,14 +258,14 @@ public:
         cudaError_t result = cudaMemsetAsync(workspace, 0, bytes, stream);
 
         if (result != cudaSuccess) {
-          return Status::kErrorInternal;
+          return cutlass::Status::kErrorInternal;
         }
       }
     }
     else {
 
       if (args.split_k_slices > 1) {
-        return Status::kErrorInvalidProblem;
+        return cutlass::Status::kErrorInvalidProblem;
       }
     }
 
@@ -286,15 +282,15 @@ public:
       static_cast<int *>(workspace)
     };
 
-    return Status::kSuccess;
+    return cutlass::Status::kSuccess;
   }
 
   /// Lightweight update given a subset of arguments
-  Status update(Arguments const &args, void *workspace = nullptr) {
+  cutlass::Status update(Arguments const &args, void *workspace = nullptr) {
 
     if (kSplitKSerial && args.split_k_slices > 1) {
       if (!workspace) {
-        return Status::kErrorWorkspaceNull;
+        return cutlass::Status::kErrorWorkspaceNull;
       }
     }
 
@@ -304,11 +300,11 @@ public:
     params_.ref_D.reset(args.ref_D.data());
     params_.semaphore = static_cast<int *>(workspace);
 
-    return Status::kSuccess;
+    return cutlass::Status::kSuccess;
   }
 
   /// Runs the kernel using initialized state.
-  Status run(cudaStream_t stream = nullptr) {
+  cutlass::Status run(cudaStream_t stream = nullptr) {
 
     ThreadblockSwizzle threadblock_swizzle;
 
@@ -319,20 +315,20 @@ public:
 
     int smem_size = int(sizeof(typename SrgemmKernel::SharedStorage));
     if (smem_size >= (48 << 10)) {
-      result = cudaFuncSetAttribute(Kernel<SrgemmKernel>,
+      result = cudaFuncSetAttribute(cutlass::Kernel<SrgemmKernel>,
                                     cudaFuncAttributeMaxDynamicSharedMemorySize,
                                     smem_size);
 
       if (result != cudaSuccess) {
-        return Status::kErrorInternal;
+        return cutlass::Status::kErrorInternal;
       }
 
       result = cudaFuncSetAttribute(
-          Kernel<SrgemmKernel>,
+          cutlass::Kernel<SrgemmKernel>,
           cudaFuncAttributePreferredSharedMemoryCarveout, 100);
 
       if (result != cudaSuccess) {
-        return Status::kErrorInternal;
+        return cutlass::Status::kErrorInternal;
       }
     }
 
@@ -340,23 +336,23 @@ public:
 
     result = cudaGetLastError();
 
-    return result == cudaSuccess ? Status::kSuccess : Status::kErrorInternal;
+    return result == cudaSuccess ? cutlass::Status::kSuccess : cutlass::Status::kErrorInternal;
   }
 
   /// Runs the kernel using initialized state.
-  Status operator()(cudaStream_t stream = nullptr) {
+  cutlass::Status operator()(cudaStream_t stream = nullptr) {
     return run(stream);
   }
 
   /// Runs the kernel using initialized state.
-  Status operator()(
+  cutlass::Status operator()(
     Arguments const &args,
     void *workspace = nullptr,
     cudaStream_t stream = nullptr) {
 
-    Status status = initialize(args, workspace);
+    cutlass::Status status = initialize(args, workspace);
 
-    if (status == Status::kSuccess) {
+    if (status == cutlass::Status::kSuccess) {
       status = run(stream);
     }
 
@@ -405,7 +401,7 @@ template <
     bool SplitKSerial>
 class Srgemm<AdditionOp_, MultiplicationOp_,
             ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
-            layout::ColumnMajor,  // partially specialized on LayoutC
+            cutlass::layout::ColumnMajor,  // partially specialized on LayoutC
             ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
             WarpShape_, InstructionShape_, EpilogueOutputOp_,
             ThreadblockSwizzle_, Stages, AlignmentA, AlignmentB, SplitKSerial
@@ -414,14 +410,14 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
 
   using ElementA = ElementA_;
   using LayoutA = LayoutA_;
-  using TensorRefA = TensorRef<ElementA const, LayoutA>;
+  using TensorRefA = cutlass::TensorRef<ElementA const, LayoutA>;
   using ElementB = ElementB_;
   using LayoutB = LayoutB_;
-  using TensorRefB = TensorRef<ElementB const, LayoutB>;
+  using TensorRefB = cutlass::TensorRef<ElementB const, LayoutB>;
   using ElementC = ElementC_;
-  using LayoutC = layout::ColumnMajor;
-  using TensorRefC = TensorRef<ElementC const, LayoutC>;
-  using TensorRefD = TensorRef<ElementC, LayoutC>;
+  using LayoutC = cutlass::layout::ColumnMajor;
+  using TensorRefC = cutlass::TensorRef<ElementC const, LayoutC>;
+  using TensorRefD = cutlass::TensorRef<ElementC, LayoutC>;
   using ElementAccumulator = ElementAccumulator_;
   using OperatorClass = OperatorClass_;
   using ArchTag = ArchTag_;
@@ -441,11 +437,11 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
     AdditionOp,
     MultiplicationOp,
     ElementB,
-    typename layout::LayoutTranspose<LayoutB>::type,
+    typename cutlass::layout::LayoutTranspose<LayoutB>::type,
     ElementA,
-    typename layout::LayoutTranspose<LayoutA>::type,
+    typename cutlass::layout::LayoutTranspose<LayoutA>::type,
     ElementC,
-    layout::RowMajor,
+    cutlass::layout::RowMajor,
     ElementAccumulator,
     OperatorClass,
     ArchTag,
@@ -472,11 +468,11 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
     // Data members
     //
 
-    GemmCoord problem_size;
-    TensorRef<ElementA const, LayoutA> ref_A;
-    TensorRef<ElementB const, LayoutB> ref_B;
-    TensorRef<ElementC const, LayoutC> ref_C;
-    TensorRef<ElementC, LayoutC> ref_D;
+    cutlass::gemm::GemmCoord problem_size;
+    cutlass::TensorRef<ElementA const, LayoutA> ref_A;
+    cutlass::TensorRef<ElementB const, LayoutB> ref_B;
+    cutlass::TensorRef<ElementC const, LayoutC> ref_C;
+    cutlass::TensorRef<ElementC, LayoutC> ref_D;
     typename EpilogueOutputOp::Params epilogue;
     ElementAccumulator additive_identity;
     int split_k_slices;
@@ -492,11 +488,11 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
     /// Constructs an Arguments structure
     CUTLASS_HOST_DEVICE
     Arguments(
-      GemmCoord problem_size_,
-      TensorRef<ElementA const, LayoutA> ref_A_,
-      TensorRef<ElementB const, LayoutB> ref_B_,
-      TensorRef<ElementC const, LayoutC> ref_C_,
-      TensorRef<ElementC, LayoutC> ref_D_,
+      cutlass::gemm::GemmCoord problem_size_,
+      cutlass::TensorRef<ElementA const, LayoutA> ref_A_,
+      cutlass::TensorRef<ElementB const, LayoutB> ref_B_,
+      cutlass::TensorRef<ElementC const, LayoutC> ref_C_,
+      cutlass::TensorRef<ElementC, LayoutC> ref_D_,
       typename EpilogueOutputOp::Params epilogue_,
       ElementAccumulator additive_identity,
       int split_k_slices = 1
@@ -535,7 +531,7 @@ public:
   }
 
   /// Determines whether the GEMM can execute the given problem.
-  static Status can_implement(Arguments const &args) {
+  static cutlass::Status can_implement(Arguments const &args) {
     return UnderlyingOperator::can_implement(to_underlying_arguments(args));
   }
 
@@ -545,33 +541,33 @@ public:
   }
 
   /// Initializes GEMM state from arguments.
-  Status initialize(Arguments const &args, void *workspace = nullptr, cudaStream_t stream = nullptr) {
+  cutlass::Status initialize(Arguments const &args, void *workspace = nullptr, cudaStream_t stream = nullptr) {
     return underlying_operator_.initialize(to_underlying_arguments(args), workspace);
   }
 
   /// Lightweight update given a subset of arguments
-  Status update(Arguments const &args, void *workspace = nullptr) {
+  cutlass::Status update(Arguments const &args, void *workspace = nullptr) {
     return underlying_operator_.update(to_underlying_arguments(args), workspace);
   }
 
   /// Runs the kernel using initialized state.
-  Status run(cudaStream_t stream = nullptr) {
+  cutlass::Status run(cudaStream_t stream = nullptr) {
     return underlying_operator_.run(stream);
   }
 
   /// Runs the kernel using initialized state.
-  Status operator()(cudaStream_t stream = nullptr) {
+  cutlass::Status operator()(cudaStream_t stream = nullptr) {
     return run(stream);
   }
 
   /// Runs the kernel using initialized state.
-  Status operator()(
+  cutlass::Status operator()(
     Arguments const &args,
     void *workspace = nullptr,
     cudaStream_t stream = nullptr) {
 
-    Status status = initialize(args, workspace);
-    if (status == Status::kSuccess) {
+    cutlass::Status status = initialize(args, workspace);
+    if (status == cutlass::Status::kSuccess) {
       status = run(stream);
     }
     return status;
@@ -580,4 +576,4 @@ public:
 
 } // namespace device
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr

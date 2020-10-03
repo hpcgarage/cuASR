@@ -1,5 +1,4 @@
-#ifndef FWGPU_CPU_GEMM_HPP
-#define FWGPU_CPU_GEMM_HPP
+#pragma once
 
 #include <algorithm>
 
@@ -42,5 +41,3 @@ inline auto naive_mm(const Matrix<T> &A, const Matrix<T> &B) -> Matrix<T> {
 }
 
 } // namespace fwgpu
-
-#endif // FWGPU_CPU_GEMM_HPP

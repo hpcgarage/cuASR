@@ -1,5 +1,4 @@
-#ifndef FWGPU_MATRIX_HPP
-#define FWGPU_MATRIX_HPP
+#pragma once
 
 #include <cstring>
 #include <initializer_list>
@@ -247,5 +246,3 @@ inline auto operator<<(std::ostream &os, const Matrix<ElementT> &mat) -> std::os
 }
 
 } // namespace fwgpu
-
-#endif // FWGPU_MATRIX_HPP

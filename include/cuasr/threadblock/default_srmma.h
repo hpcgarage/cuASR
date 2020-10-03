@@ -20,7 +20,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace threadblock {
 
@@ -96,14 +96,14 @@ template <
     /// Multiplication operator of the semi-ring
     typename MultiplicationOp>
 struct DefaultSrmma<ElementA, LayoutA, kAlignmentA, ElementB, LayoutB,
-                  kAlignmentB, ElementAccumulator, layout::RowMajor,
-                  arch::OpClassSimt, ArchTag, ThreadblockShape, WarpShape,
+                  kAlignmentB, ElementAccumulator, cutlass::layout::RowMajor,
+                  cutlass::arch::OpClassSimt, ArchTag, ThreadblockShape, WarpShape,
                   InstructionShape, AdditionOp, MultiplicationOp, 2, false> {
   // Define the SrmmaCore components
-  using SrmmaCore = typename cutlass::gemm::threadblock::DefaultSrmmaCore<
+  using SrmmaCore = typename cuasr::gemm::threadblock::DefaultSrmmaCore<
       ThreadblockShape, WarpShape, InstructionShape, ElementA, LayoutA,
-      ElementB, LayoutB, ElementAccumulator, layout::RowMajor,
-      arch::OpClassSimt, AdditionOp, MultiplicationOp, 2>;
+      ElementB, LayoutB, ElementAccumulator, cutlass::layout::RowMajor,
+      cutlass::arch::OpClassSimt, AdditionOp, MultiplicationOp, 2>;
 
   // Define iterators over tiles from the A operand
   using IteratorA =
@@ -118,15 +118,15 @@ struct DefaultSrmma<ElementA, LayoutA, kAlignmentA, ElementB, LayoutB,
           ElementB, LayoutB, 0, typename SrmmaCore::IteratorThreadMapB, kAlignmentB>;
 
   // Define the threadblock-scoped pipelined matrix multiply
-  using ThreadblockSrmma = cutlass::gemm::threadblock::SrmmaPipelined<
+  using ThreadblockSrmma = cuasr::gemm::threadblock::SrmmaPipelined<
       typename SrmmaCore::Shape, IteratorA, typename SrmmaCore::SmemIteratorA,
       IteratorB, typename SrmmaCore::SmemIteratorB, ElementAccumulator,
-      layout::RowMajor, typename SrmmaCore::MmaPolicy>;
+      cutlass::layout::RowMajor, typename SrmmaCore::MmaPolicy>;
 };
 
 
 } // namespace threadblock
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr
 
 ////////////////////////////////////////////////////////////////////////////////

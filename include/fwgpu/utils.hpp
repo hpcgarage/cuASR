@@ -1,5 +1,4 @@
-#ifndef FWGPU_UTILS
-#define FWGPU_UTILS
+#pragma once
 
 namespace fwgpu {
 
@@ -57,5 +56,3 @@ auto memcpy_2d_inferred(
     size_t width,
     size_t height) -> int;
 } // namespace fwgpu
-
-#endif // FWGPU_UTILS

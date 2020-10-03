@@ -1,5 +1,5 @@
-#ifndef FWGPU_INTERNAL_UTILS
-#define FWGPU_INTERNAL_UTILS
+#ifndef cuASR_INTERNAL_UTILS
+#define cuASR_INTERNAL_UTILS
 
 #include <tuple>
 
@@ -67,4 +67,4 @@ inline auto dealloc_device_gemm_mats(std::tuple<T *, T *, T *, T *> device_ptrs)
 } // namespace internal
 } // namespace fwgpu
 
-#endif // FWGPU_INTERNAL_UTILS
+#endif // cuASR_INTERNAL_UTILS

@@ -1,5 +1,4 @@
-#ifndef FWGPU_GPU_SRGEMM_CUH
-#define FWGPU_GPU_SRGEMM_CUH
+#pragma once
 
 #include <limits>
 
@@ -34,5 +33,3 @@ gpu_srgemm_naive(int m, int n, int k, T *A, int lda, T *B, int ldb, T *dist, int
 }
 
 } // namespace fwgpu
-
-#endif // FWGPU_GPU_SRGEMM_CUH

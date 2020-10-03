@@ -12,7 +12,7 @@
 
 #include <tuple>
 
-TEST(FWGPU_Srgemm, CpuNaiveCorrect) {
+TEST(cuASR_Srgemm, CpuNaiveCorrect) {
   auto a = fwgpu::Matrix<float>(
       4, 2,
       {
@@ -61,7 +61,7 @@ TEST(FWGPU_Srgemm, CpuNaiveCorrect) {
   }
 }
 
-TEST(FWGPU_Srgemm, CutlassCorrect) {
+TEST(cuASR_Srgemm, CutlassCorrect) {
   auto a = fwgpu::Matrix<float>(
       4, 2,
       {
@@ -115,7 +115,7 @@ TEST(FWGPU_Srgemm, CutlassCorrect) {
   }
 }
 
-TEST(FWGPU_Srgemm, GpuNaiveEqCpuNaive) {
+TEST(cuASR_Srgemm, GpuNaiveEqCpuNaive) {
   auto m           = 128;
   auto k           = 32;
   auto n           = 128;
@@ -147,7 +147,7 @@ TEST(FWGPU_Srgemm, GpuNaiveEqCpuNaive) {
   }
 }
 
-TEST(FWGPU_Srgemm, GpuNaiveEqCutlass) {
+TEST(cuASR_Srgemm, GpuNaiveEqCutlass) {
   auto N             = 128;
   auto a             = fwgpu::Matrix<float>(N, N, 0xCAFED00D, 1.0, 1000.0);
   auto b             = fwgpu::Matrix<float>(N, N, 0xCAFED00D, 1.0, 1000.0);
@@ -180,7 +180,7 @@ TEST(FWGPU_Srgemm, GpuNaiveEqCutlass) {
   }
 }
 
-TEST(FWGPU_Srgemm, GpuNaiveEqCutlass_TS_Inner) {
+TEST(cuASR_Srgemm, GpuNaiveEqCutlass_TS_Inner) {
   auto m             = 125;
   auto n             = 125;
   auto k             = 1000;
@@ -215,7 +215,7 @@ TEST(FWGPU_Srgemm, GpuNaiveEqCutlass_TS_Inner) {
   }
 }
 
-TEST(FWGPU_Srgemm, GpuNaiveEqCutlass_TS_Outer) {
+TEST(cuASR_Srgemm, GpuNaiveEqCutlass_TS_Outer) {
   auto m             = 1000;
   auto n             = 1000;
   auto k             = 125;
@@ -250,7 +250,7 @@ TEST(FWGPU_Srgemm, GpuNaiveEqCutlass_TS_Outer) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_2x2x2) {
+TEST(cuASR_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_2x2x2) {
   auto m     = 2;
   auto n     = 2;
   auto k     = 2;
@@ -284,7 +284,7 @@ TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_2x2x2) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_8x8x8) {
+TEST(cuASR_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_8x8x8) {
   auto m     = 8;
   auto n     = 8;
   auto k     = 8;
@@ -318,7 +318,7 @@ TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_8x8x8) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_128x128x8) {
+TEST(cuASR_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_128x128x8) {
   auto m     = 128;
   auto n     = 128;
   auto k     = 8;
@@ -352,7 +352,7 @@ TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_TopLeft_128x128x8) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveSubEqGpuNaiveSub_TopLeft_2x2x2) {
+TEST(cuASR_Srgemm, CpuNaiveSubEqGpuNaiveSub_TopLeft_2x2x2) {
   auto m     = 2;
   auto n     = 2;
   auto k     = 2;
@@ -388,7 +388,7 @@ TEST(FWGPU_Srgemm, CpuNaiveSubEqGpuNaiveSub_TopLeft_2x2x2) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveSubEqGpuNaiveSub_TopLeft_128x128x8) {
+TEST(cuASR_Srgemm, CpuNaiveSubEqGpuNaiveSub_TopLeft_128x128x8) {
   auto m     = 128;
   auto n     = 128;
   auto k     = 8;
@@ -424,7 +424,7 @@ TEST(FWGPU_Srgemm, CpuNaiveSubEqGpuNaiveSub_TopLeft_128x128x8) {
   }
 }
 
-TEST(FWGPU_Srgemm, GpuNaiveSubEqCutlassSub_TopLeft_128x128x8) {
+TEST(cuASR_Srgemm, GpuNaiveSubEqCutlassSub_TopLeft_128x128x8) {
   auto m             = 128;
   auto n             = 128;
   auto k             = 8;
@@ -461,7 +461,7 @@ TEST(FWGPU_Srgemm, GpuNaiveSubEqCutlassSub_TopLeft_128x128x8) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveSubEqGpuNaiveSub_BottomRight_128x128x8) {
+TEST(cuASR_Srgemm, CpuNaiveSubEqGpuNaiveSub_BottomRight_128x128x8) {
   auto m     = 128;
   auto n     = 128;
   auto k     = 8;
@@ -498,7 +498,7 @@ TEST(FWGPU_Srgemm, CpuNaiveSubEqGpuNaiveSub_BottomRight_128x128x8) {
   }
 }
 
-TEST(FWGPU_Srgemm, GpuNaiveSubEqCutlassSub_BottomRight_128x128x8) {
+TEST(cuASR_Srgemm, GpuNaiveSubEqCutlassSub_BottomRight_128x128x8) {
   auto m             = 128;
   auto n             = 128;
   auto k             = 8;
@@ -536,7 +536,7 @@ TEST(FWGPU_Srgemm, GpuNaiveSubEqCutlassSub_BottomRight_128x128x8) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveEqCutlass_Small_17x27x17) {
+TEST(cuASR_Srgemm, CpuNaiveEqCutlass_Small_17x27x17) {
   auto m     = 17;
   auto n     = 27;
   auto k     = 17;
@@ -570,7 +570,7 @@ TEST(FWGPU_Srgemm, CpuNaiveEqCutlass_Small_17x27x17) {
   }
 }
 
-TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_Small_7x5x6) {
+TEST(cuASR_Srgemm, CpuNaiveSubEqCutlassSub_Small_7x5x6) {
   auto m     = 7;
   auto n     = 6;
   auto k     = 5;
@@ -604,7 +604,7 @@ TEST(FWGPU_Srgemm, CpuNaiveSubEqCutlassSub_Small_7x5x6) {
   }
 }
 
-TEST(FWGPU_Srgemm, GpuNaiveEqCutlass_Large) {
+TEST(cuASR_Srgemm, GpuNaiveEqCutlass_Large) {
   auto N             = (1 << 15) + 128;
   auto a             = fwgpu::Matrix<float>(N, N, 0xCAFED00D, 1.0, 1000.0);
   auto b             = fwgpu::Matrix<float>(N, N, 0xCAFED00D, 1.0, 1000.0);

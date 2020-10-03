@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(SrgemmCudaKernels CUDA CXX)
+project(cuASR CUDA CXX)
 
 # RELEASE config by default ifnone is provided:
 if(NOT CMAKE_BUILD_TYPE)
@@ -18,17 +18,17 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Switches for testing, benchmarks or static lib builds
-option(FWGPU_TEST   "FWGPU_TEST"   ON)
-option(FWGPU_BENCH  "FWGPU_BENCH"  ON)
-option(FWGPU_STATIC "FWGPU_STATIC" ON)
+option(cuASR_TEST   "cuASR_TEST"   ON)
+option(cuASR_BENCH  "cuASR_BENCH"  ON)
+option(cuASR_STATIC "cuASR_STATIC" ON)
 
 # static or dynamic lib build targets
-if(FWGPU_STATIC)
-  set(FWGPU_LIB_NAME fwgpu_static)
-  set(FWGPU_LIB_TYPE STATIC)
+if(cuASR_STATIC)
+  set(cuASR_LIB_NAME cuasrstatic)
+  set(cuASR_LIB_TYPE STATIC)
 else()
-  set(FWGPU_LIB_NAME fwgpu)
-  set(FWGPU_LIB_TYPE SHARED)
+  set(cuASR_LIB_NAME fwgpu)
+  set(cuASR_LIB_TYPE SHARED)
 endif()
 
 # CUDA native compiler (nvcc) only supports upto C++14 for now
@@ -74,37 +74,37 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cutlass/include")
   message(FATAL_ERROR "Cutlass submodule is not present and automatic checkout failed, please checkout cutlass manually.")
 endif()
 
-if(FWGPU_TEST)
+if(cuASR_TEST)
   enable_testing()
   add_subdirectory(test)
 endif()
 
-if(FWGPU_BENCH)
+if(cuASR_BENCH)
   add_subdirectory(bench)
 endif()
 
 # fwgpu library configuration
-set(fwgpu_src
+set(cuASR_src
   ./src/cublas_sgemm.cu
   ./src/cutlass_sgemm.cu
   ./src/cutlass_srgemm.cu
   ./src/utils.cu
 )
 
-cuda_add_library(${FWGPU_LIB_NAME} ${FWGPU_LIB_TYPE} ${fwgpu_src})
+cuda_add_library(${cuASR_LIB_NAME} ${cuASR_LIB_TYPE} ${cuASR_src})
 
 target_link_libraries(
-  ${FWGPU_LIB_NAME}
+  ${cuASR_LIB_NAME}
   ${CUDA_CUBLAS_LIBRARIES}
 )
 
-target_include_directories(${FWGPU_LIB_NAME}
+target_include_directories(${cuASR_LIB_NAME}
   PUBLIC ${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS}
   PRIVATE ${PROJECT_SOURCE_DIR}/cutlass/include
 )
 
-install(TARGETS ${FWGPU_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-install(DIRECTORY ${FWGPU_LIB_NAME}/include DESTINATION include)
+install(TARGETS ${cuASR_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+install(DIRECTORY ${cuASR_LIB_NAME}/include DESTINATION include)
 
 message(STATUS "")
 message(STATUS "BUILD SUMMARY:")
@@ -114,10 +114,10 @@ message(STATUS "  C++ Compiler         : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  C++ Compiler version : ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "  CUDA Compiler        : ${CMAKE_CUDA_COMPILER}")
 message(STATUS "  CUDA Compiler version: ${CMAKE_CUDA_COMPILER_VERSION}")
-message(STATUS "  Library name         : ${FWGPU_LIB_NAME}")
-message(STATUS "  Library type         : ${FWGPU_LIB_TYPE}")
-message(STATUS "  Build tests          : ${FWGPU_TEST}")
-message(STATUS "  Build benchmarks     : ${FWGPU_BENCH}")
+message(STATUS "  Library name         : ${cuASR_LIB_NAME}")
+message(STATUS "  Library type         : ${cuASR_LIB_TYPE}")
+message(STATUS "  Build tests          : ${cuASR_TEST}")
+message(STATUS "  Build benchmarks     : ${cuASR_BENCH}")
 message(STATUS "  Found CUDA?          : ${CUDA_FOUND}")
 message(STATUS "  CXX flags            : ${CMAKE_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
 message(STATUS "  CUDA flags           : ${CUDA_NVCC_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")

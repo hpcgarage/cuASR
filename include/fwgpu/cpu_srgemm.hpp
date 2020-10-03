@@ -1,5 +1,4 @@
-#ifndef FWGPU_CPU_SRGEMM_HPP
-#define FWGPU_CPU_SRGEMM_HPP
+#pragma once
 
 namespace fwgpu {
 
@@ -49,5 +48,3 @@ inline auto cpu_fwgemm_naive(
 }
 
 } // namespace fwgpu
-
-#endif // FWGPU_CPU_SRGEMM_HPP

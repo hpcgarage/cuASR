@@ -34,7 +34,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace kernel {
 
@@ -126,13 +126,13 @@ struct DefaultSrgemm<
     LayoutB,
     kAlignmentB,
     ElementC,
-    layout::RowMajor,
+    cutlass::layout::RowMajor,
     ElementAccumulator,
-    arch::OpClassSimt,
+    cutlass::arch::OpClassSimt,
     ArchTag,
     ThreadblockShape,
     WarpShape,
-    GemmShape<1, 1, 1>,
+    cutlass::gemm::GemmShape<1, 1, 1>,
     AdditionOp,
     MultiplicationOp,
     EpilogueOutputOp,
@@ -140,7 +140,7 @@ struct DefaultSrgemm<
     2,
     SplitKSerial> {
   /// Define the threadblock-scoped matrix multiply-accumulate
-  using Srmma = typename cutlass::gemm::threadblock::DefaultSrmma<
+  using Srmma = typename cuasr::gemm::threadblock::DefaultSrmma<
       ElementA,
       LayoutA,
       kAlignmentA,
@@ -148,12 +148,12 @@ struct DefaultSrgemm<
       LayoutB,
       kAlignmentB,
       ElementAccumulator,
-      layout::RowMajor,
-      arch::OpClassSimt,
-      arch::Sm50,
+      cutlass::layout::RowMajor,
+      cutlass::arch::OpClassSimt,
+      cutlass::arch::Sm50,
       ThreadblockShape,
       WarpShape,
-      GemmShape<1, 1, 1>,
+      cutlass::gemm::GemmShape<1, 1, 1>,
       AdditionOp,
       MultiplicationOp,
       2>::ThreadblockSrmma;
@@ -170,7 +170,7 @@ struct DefaultSrgemm<
       >::Epilogue;
 
   /// Define the kernel-level GEMM operator.
-  using SrgemmKernel = kernel::Srgemm<
+  using SrgemmKernel = cuasr::gemm::kernel::Srgemm<
       Srmma,
       AdditionOp,
       MultiplicationOp,
@@ -184,6 +184,6 @@ struct DefaultSrgemm<
 
 }  // namespace kernel
 }  // namespace gemm
-}  // namespace cutlass
+}  // namespace cuasr
 
 ////////////////////////////////////////////////////////////////////////////////

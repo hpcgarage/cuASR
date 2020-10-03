@@ -6,7 +6,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(FWGPU_Gemm, CpuNaiveCorrect) {
+TEST(cuASR_Gemm, CpuNaiveCorrect) {
   // [8.0   3.0   0.0   1.0]    [5.0 8.0 0.0 6.6]   [ 53    82.5    11.5    60.5]
   // [2.0   5.0   4.0   9.0]  * [4.0 6.0 3.5 0.1] = [ 51    78.5    36.1   118.3]
   // [7.0   6.0   10.   13.]    [3.0 7.0 2.4 9.5]   [102   168.5    58.0   238.0]
@@ -45,7 +45,7 @@ TEST(FWGPU_Gemm, CpuNaiveCorrect) {
   EXPECT_FLOAT_EQ(58.0f, c(2, 2));
 }
 
-TEST(FWGPU_Gemm, CublasCorrect) {
+TEST(cuASR_Gemm, CublasCorrect) {
   // [1.8   7.0   2.8   3.0]    [5.1 2.4]   [56.04,  98.74]
   // [2.0   5.2   4.7   4.1]  * [4.6 6.1] = [56.95, 115.85]
   // [4.0   1.2   5.0   8.0]    [3.2 9.9]   [57.12, 130.42]
@@ -82,7 +82,7 @@ TEST(FWGPU_Gemm, CublasCorrect) {
   EXPECT_FLOAT_EQ(130.42f, c(2, 1));
 }
 
-TEST(FWGPU_Gemm, CutlassCorrect) {
+TEST(cuASR_Gemm, CutlassCorrect) {
   auto a = fwgpu::Matrix<float>(
       3, 4,
       { 1.8f, 2.0f, 4.0f, 7.0f, //
@@ -117,7 +117,7 @@ TEST(FWGPU_Gemm, CutlassCorrect) {
   EXPECT_FLOAT_EQ(130.42f, c(2, 1));
 }
 
-TEST(FWGPU_Gemm, CpuNaiveEqCublas) {
+TEST(cuASR_Gemm, CpuNaiveEqCublas) {
   // two random matrices
   auto m           = 10;
   auto k           = 8;
@@ -147,7 +147,7 @@ TEST(FWGPU_Gemm, CpuNaiveEqCublas) {
   }
 }
 
-TEST(FWGPU_Gemm, GpuNaiveEqCpuNaive) {
+TEST(cuASR_Gemm, GpuNaiveEqCpuNaive) {
   // two random matrices
   auto m           = 10;
   auto k           = 8;
@@ -179,7 +179,7 @@ TEST(FWGPU_Gemm, GpuNaiveEqCpuNaive) {
   }
 }
 
-TEST(FWGPU_Gemm, GpuNaiveEqCublas) {
+TEST(cuASR_Gemm, GpuNaiveEqCublas) {
   // two random matrices
   auto m           = 10;
   auto k           = 8;
@@ -214,7 +214,7 @@ TEST(FWGPU_Gemm, GpuNaiveEqCublas) {
   }
 }
 
-TEST(FWGPU_Gemm, CutlassEqCublas) {
+TEST(cuASR_Gemm, CutlassEqCublas) {
   // two random matrices
   auto m         = 10;
   auto k         = 8;

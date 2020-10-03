@@ -12,7 +12,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace epilogue {
 namespace thread {
 
@@ -86,4 +86,4 @@ public:
 
 } // namespace thread
 } // namespace epilogue
-} // namespace cutlass
+} // namespace cuasr

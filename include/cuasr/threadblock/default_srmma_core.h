@@ -24,7 +24,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace threadblock {
 
@@ -69,9 +69,9 @@ template <
     cutlass::arch::CacheOperation::Kind CacheOpB =
         cutlass::arch::CacheOperation::Global,
     /// per-element transformation for elements of A
-    ComplexTransform TransformA = ComplexTransform::kNone,
+    cutlass::ComplexTransform TransformA = cutlass::ComplexTransform::kNone,
     /// per-element transformation for elements of B
-    ComplexTransform TransformB = ComplexTransform::kNone,
+    cutlass::ComplexTransform TransformB = cutlass::ComplexTransform::kNone,
     bool IsComplex = false // (is_complex<ElementA>::value || is_complex<ElementB>::value)
 >
 struct DefaultSrmmaCore;
@@ -80,6 +80,6 @@ struct DefaultSrmmaCore;
 
 } // namespace threadblock
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr
 
 #include "cuasr/threadblock/default_srmma_core_simt.h"

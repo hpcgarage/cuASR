@@ -18,7 +18,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace cutlass {
+namespace cuasr {
 namespace gemm {
 namespace kernel {
 
@@ -119,7 +119,7 @@ struct Srgemm {
   Srgemm() { }
 
   /// Determines whether kernel satisfies alignment
-    static Status can_implement(
+    static cutlass::Status can_implement(
       cutlass::gemm::GemmCoord const & problem_size,
       typename Srmma::IteratorA::TensorRef ref_A,
       typename Srmma::IteratorB::TensorRef ref_B,
@@ -131,29 +131,29 @@ struct Srgemm {
     static int const kAlignmentC = Epilogue::OutputTileIterator::kElementsPerAccess;
 
     if (!TensorRef_aligned(ref_A, kAlignmentA)) {
-      return Status::kErrorMisalignedOperand;
+      return cutlass::Status::kErrorMisalignedOperand;
     }
 
     if (!TensorRef_aligned(ref_B, kAlignmentB)) {
-      return Status::kErrorMisalignedOperand;
+      return cutlass::Status::kErrorMisalignedOperand;
     }
 
     if (!TensorRef_aligned(ref_C, kAlignmentC)) {
-      return Status::kErrorMisalignedOperand;
+      return cutlass::Status::kErrorMisalignedOperand;
     }
 
     if (!TensorRef_aligned(ref_D, kAlignmentC)) {
-      return Status::kErrorMisalignedOperand;
+      return cutlass::Status::kErrorMisalignedOperand;
     }
 
     if ((problem_size.m() % kAlignmentA) || (problem_size.k() % kAlignmentA) ||
       (problem_size.n() % kAlignmentB) || (problem_size.k() % kAlignmentB) ||
       (problem_size.m() % kAlignmentC) || (problem_size.n() % kAlignmentC)) {
 
-      return Status::kErrorMisalignedOperand;
+      return cutlass::Status::kErrorMisalignedOperand;
     }
 
-    return Status::kSuccess;
+    return cutlass::Status::kSuccess;
   }
 
   /// Executes one GEMM
@@ -242,7 +242,7 @@ struct Srgemm {
     threadblock_tile_offset = threadblock_swizzle.get_tile_offset(params.grid_tiled_shape);
 
     //assume identity swizzle
-    MatrixCoord threadblock_offset(
+    cutlass::MatrixCoord threadblock_offset(
       threadblock_tile_offset.m() * Srmma::Shape::kM,
       threadblock_tile_offset.n() * Srmma::Shape::kN
     );
@@ -250,7 +250,7 @@ struct Srgemm {
     int block_idx = threadblock_tile_offset.m() + threadblock_tile_offset.n() * params.grid_tiled_shape.m();
 
     // Construct the semaphore.
-    Semaphore semaphore(params.semaphore + block_idx, thread_idx);
+    cutlass::Semaphore semaphore(params.semaphore + block_idx, thread_idx);
 
     // If performing a reduction via split-K, fetch the initial synchronization
     if (kSplitKSerial && params.grid_tiled_shape.k() > 1) {
@@ -330,6 +330,6 @@ struct Srgemm {
 
 } // namespace kernel
 } // namespace gemm
-} // namespace cutlass
+} // namespace cuasr
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

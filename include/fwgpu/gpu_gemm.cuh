@@ -1,5 +1,4 @@
-#ifndef FWGPU_GPU_GEMM_CUH
-#define FWGPU_GPU_GEMM_CUH
+#pragma once
 
 #include "Matrix.hpp"
 
@@ -51,5 +50,3 @@ __global__ auto gpu_gemm_naive(
 }
 
 } // namespace fwgpu
-
-#endif // FWGPU_GPU_GEMM_CUH
