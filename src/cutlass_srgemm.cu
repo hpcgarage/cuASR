@@ -29,8 +29,8 @@ auto cutlass_srsgemm_nn(
   using OperatorClass  = cutlass::arch::OpClassSimt;
   using SmArch         = cutlass::arch::Sm50;
   using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
-      float, float, float, float, OperatorClass,
-      cuasr::minimum<float>, cuasr::plus<float>, SmArch>;
+      float, float, float, float, OperatorClass, cuasr::minimum<float>,
+      cuasr::plus<float>, SmArch>;
 
   using AdditionOp       = TropicalConfig::AdditionOp;
   using MultiplicationOp = TropicalConfig::MultiplicationOp;
@@ -41,9 +41,9 @@ auto cutlass_srsgemm_nn(
   using EpilogueOutputOp = typename TropicalConfig::EpilogueOutputOp;
   using ThreadblockSwizzle =
       typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>;
-  constexpr int Stages        = TropicalConfig::kStages;
-  constexpr int AlignmentA    = TropicalConfig::kAlignmentA;
-  constexpr int AlignmentB    = TropicalConfig::kAlignmentB;
+  constexpr int Stages     = TropicalConfig::kStages;
+  constexpr int AlignmentA = TropicalConfig::kAlignmentA;
+  constexpr int AlignmentB = TropicalConfig::kAlignmentB;
 
   using cuASR_MinPlus_SGEMM = cuasr::gemm::device::Srgemm<
       AdditionOp,         // Thread level SemiRing operator
@@ -68,14 +68,17 @@ auto cutlass_srsgemm_nn(
       false               // SplitKSerial
   >;
 
+  float alpha = MultiplicationOp::Identity;
+  float beta
+      = do_epilogue_min ? MultiplicationOp::Identity : MultiplicationOp::Annihilator;
   // construct kernel arguments struct
   cuASR_MinPlus_SGEMM::Arguments args(
-      { M, N, K },         // Problem dimensions
-      { A, lda },          // Tensor-ref for source matrix A
-      { B, ldb },          // Tensor-ref for source matrix B
-      { C, ldc },          // Tensor-ref for source matrix C
-      { D, ldc },          // Tensor-ref for destination matrix D
-      { do_epilogue_min }  // True if we perform a final min with source matrix C
+      { M, N, K },    // Problem dimensions
+      { A, lda },     // Tensor-ref for source matrix A
+      { B, ldb },     // Tensor-ref for source matrix B
+      { C, ldc },     // Tensor-ref for source matrix C
+      { D, ldc },     // Tensor-ref for destination matrix D
+      { alpha, beta } // True if we perform a final min with source matrix C
   );
 
   // launch SRGEMM kernel

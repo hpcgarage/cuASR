@@ -1,7 +1,6 @@
 /***************************************************************************************************
  * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
  **************************************************************************************************/
-
 /*! \file
     \brief Template for a pipelined Semiring GEMM kernel. Does not compute batching or support split-K.
 */
@@ -59,7 +58,7 @@ struct Srgemm {
     typename Epilogue::OutputTileIterator::TensorRef ref_C;
     typename Epilogue::OutputTileIterator::Params params_D;
     typename Epilogue::OutputTileIterator::TensorRef ref_D;
-    typename OutputOp::Element additive_identity;
+    typename OutputOp::ElementCompute additive_identity;
     typename OutputOp::Params output_op;
     int *semaphore;
     int gemm_k_iterations;
@@ -80,7 +79,7 @@ struct Srgemm {
       typename Srmma::IteratorB::TensorRef ref_B,
       typename Epilogue::OutputTileIterator::TensorRef ref_C,
       typename Epilogue::OutputTileIterator::TensorRef ref_D,
-      typename OutputOp::Element additive_identity,
+      typename OutputOp::ElementCompute additive_identity,
       typename OutputOp::Params output_op = typename OutputOp::Params(),
       int *semaphore = nullptr
     ):

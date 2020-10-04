@@ -2,8 +2,8 @@
  * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
  **************************************************************************************************/
 /*! \file
-    \brief Define basic numeric operators with specializations for Array<T, N>. SIMD-ize
-   where possible.
+    \brief Defines basic semi-ring reels together with their identity and
+    annihilator constants given type T.
 
     This is inspired by the Standard Library's <functional> header.
 */
