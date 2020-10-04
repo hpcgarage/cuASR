@@ -30,7 +30,7 @@ auto cutlass_srsgemm_nn(
   using SmArch         = cutlass::arch::Sm50;
   using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
       float, float, float, float, OperatorClass,
-      cutlass::minimum<float>, cutlass::plus<float>, SmArch>;
+      cuasr::minimum<float>, cuasr::plus<float>, SmArch>;
 
   using AdditionOp       = TropicalConfig::AdditionOp;
   using MultiplicationOp = TropicalConfig::MultiplicationOp;
@@ -75,8 +75,7 @@ auto cutlass_srsgemm_nn(
       { B, ldb },          // Tensor-ref for source matrix B
       { C, ldc },          // Tensor-ref for source matrix C
       { D, ldc },          // Tensor-ref for destination matrix D
-      { do_epilogue_min }, // True if we perform a final min with source matrix C
-      TropicalConfig::AdditiveIdentity
+      { do_epilogue_min }  // True if we perform a final min with source matrix C
   );
 
   // launch SRGEMM kernel

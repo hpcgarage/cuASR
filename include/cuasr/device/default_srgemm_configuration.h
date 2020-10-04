@@ -52,8 +52,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  cutlass::plus<Element>,
-  cutlass::multiplies<Element>,
+  cuasr::plus<Element>,
+  cuasr::multiplies<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -63,16 +63,11 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cutlass::plus<Element>;
-  static Element constexpr AdditiveIdentity
-      = static_cast<Element>(0);
-
-  using MultiplicationOp = cutlass::multiplies<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = static_cast<Element>(1);
+  using AdditionOp = cuasr::plus<Element>;
+  using MultiplicationOp = cuasr::multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
-    cutlass::plus<cutlass::Array<Element, 1>>, Element, 1>;
+    cuasr::plus<cutlass::Array<Element, 1>>, Element, 1>;
 };
 
 // Min-Plus (tropical) semi-ring GEMM configuration
@@ -87,8 +82,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  cutlass::minimum<Element>,
-  cutlass::plus<Element>,
+  cuasr::minimum<Element>,
+  cuasr::plus<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -98,16 +93,11 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cutlass::minimum<Element>;
-  static Element constexpr AdditiveIdentity
-      = ::std::numeric_limits<Element>::infinity();
-
-  using MultiplicationOp = cutlass::plus<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = static_cast<Element>(0);
+  using AdditionOp = cuasr::minimum<Element>;
+  using MultiplicationOp = cuasr::plus<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
-    cutlass::minimum<cutlass::Array<Element, 1>>, Element, 1>;
+    cuasr::minimum<cutlass::Array<Element, 1>>, Element, 1>;
 };
 
 // Max-Plus semi-ring GEMM configuration
@@ -122,8 +112,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  cutlass::maximum<Element>,
-  cutlass::plus<Element>,
+  cuasr::maximum<Element>,
+  cuasr::plus<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -133,16 +123,11 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cutlass::maximum<Element>;
-  static Element constexpr AdditiveIdentity
-      = -1 * ::std::numeric_limits<Element>::infinity();
-
-  using MultiplicationOp = cutlass::plus<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = static_cast<Element>(0);
+  using AdditionOp = cuasr::maximum<Element>;
+  using MultiplicationOp = cuasr::plus<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
-    cutlass::maximum<cutlass::Array<Element, 1>>, Element, 1>;
+    cuasr::maximum<cutlass::Array<Element, 1>>, Element, 1>;
 };
 
 // Max-Min
@@ -156,8 +141,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  cutlass::maximum<Element>,
-  cutlass::minimum<Element>,
+  cuasr::maximum<Element>,
+  cuasr::minimum<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -167,16 +152,11 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cutlass::maximum<Element>;
-  static Element constexpr AdditiveIdentity
-      = -1 * ::std::numeric_limits<Element>::infinity();
-
-  using MultiplicationOp = cutlass::minimum<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = ::std::numeric_limits<Element>::infinity();
+  using AdditionOp = cuasr::maximum<Element>;
+  using MultiplicationOp = cuasr::minimum<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
-    cutlass::maximum<cutlass::Array<Element, 1>>, Element, 1>;
+    cuasr::maximum<cutlass::Array<Element, 1>>, Element, 1>;
 };
 
 // Min-Max
@@ -190,8 +170,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  cutlass::minimum<Element>,
-  cutlass::maximum<Element>,
+  cuasr::minimum<Element>,
+  cuasr::maximum<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -201,16 +181,11 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cutlass::minimum<Element>;
-  static Element constexpr AdditiveIdentity
-      = ::std::numeric_limits<Element>::infinity();
-
-  using MultiplicationOp = cutlass::maximum<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = -1 * ::std::numeric_limits<Element>::infinity();
+  using AdditionOp = cuasr::minimum<Element>;
+  using MultiplicationOp = cuasr::maximum<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
-    cutlass::minimum<cutlass::Array<Element, 1>>, Element, 1>;
+    cuasr::minimum<cutlass::Array<Element, 1>>, Element, 1>;
 };
 
 // Min-Times
@@ -224,8 +199,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  cutlass::minimum<Element>,
-  cutlass::multiplies<Element>,
+  cuasr::minimum<Element>,
+  cuasr::multiplies<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -235,16 +210,11 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cutlass::minimum<Element>;
-  static Element constexpr AdditiveIdentity
-      = ::std::numeric_limits<Element>::infinity();
-
-  using MultiplicationOp = cutlass::multiplies<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = static_cast<Element>(1);
+  using AdditionOp = cuasr::minimum<Element>;
+  using MultiplicationOp = cuasr::multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
-    cutlass::minimum<cutlass::Array<Element, 1>>, Element, 1>;
+    cuasr::minimum<cutlass::Array<Element, 1>>, Element, 1>;
 };
 
 // Max-Times
@@ -258,8 +228,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  cutlass::maximum<Element>,
-  cutlass::multiplies<Element>,
+  cuasr::maximum<Element>,
+  cuasr::multiplies<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -269,16 +239,11 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cutlass::maximum<Element>;
-  static Element constexpr AdditiveIdentity
-      = -1 * ::std::numeric_limits<Element>::infinity();
-
-  using MultiplicationOp = cutlass::multiplies<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = static_cast<Element>(1);
+  using AdditionOp = cuasr::maximum<Element>;
+  using MultiplicationOp = cuasr::multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
-    cutlass::maximum<cutlass::Array<Element, 1>>, Element, 1>;
+    cuasr::maximum<cutlass::Array<Element, 1>>, Element, 1>;
 };
 
 // Or-And boolean ring
@@ -292,8 +257,8 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   cutlass::arch::OpClassSimt,
-  binary_or<Element>,
-  binary_and<Element>,
+  cuasr::binary_or<Element>,
+  cuasr::binary_and<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -303,13 +268,8 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = binary_or<Element>;
-  static Element constexpr AdditiveIdentity
-      = static_cast<Element>(false);
-
-  using MultiplicationOp = binary_and<Element>;
-  static Element constexpr MultiplicativeIdentity
-      = static_cast<Element>(true);
+  using AdditionOp = cuasr::binary_or<Element>;
+  using MultiplicationOp = cuasr::binary_and<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringAdditionOp<
     binary_or<cutlass::Array<Element, 1>>, Element, 1>;

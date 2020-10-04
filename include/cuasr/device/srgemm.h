@@ -170,7 +170,7 @@ class Srgemm {
       cutlass::TensorRef<ElementC const, LayoutC> ref_C_,
       cutlass::TensorRef<ElementC, LayoutC> ref_D_,
       typename EpilogueOutputOp::Params epilogue_,
-      ElementAccumulator additive_identity,
+      ElementAccumulator additive_identity = AdditionOp::Identity,
       int split_k_slices = 1
     ):
       problem_size(problem_size_),
@@ -494,7 +494,7 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
       cutlass::TensorRef<ElementC const, LayoutC> ref_C_,
       cutlass::TensorRef<ElementC, LayoutC> ref_D_,
       typename EpilogueOutputOp::Params epilogue_,
-      ElementAccumulator additive_identity,
+      ElementAccumulator additive_identity = AdditionOp::Identity,
       int split_k_slices = 1
     ):
       problem_size(problem_size_),
