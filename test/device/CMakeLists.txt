@@ -1,4 +1,4 @@
-file(GLOB SIMT_TEST_SRCS *.cu)
+file(GLOB SIMT_TEST_SRCS CONFIGURE_DEPENDS *.cu)
 add_executable(cuasr_test_srgemm_device
   ${PROJECT_SOURCE_DIR}/test/harness.cpp
   ${SIMT_TEST_SRCS}
