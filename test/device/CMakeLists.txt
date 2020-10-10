@@ -19,11 +19,6 @@ add_test(
   NAME cuasr_test_srgemm_device
   COMMAND cuasr_test_srgemm_device
 )
-target_compile_options(cuasr_test_srgemm_device
-  PRIVATE
-  $<$<COMPILE_LANGUAGE:CUDA>:${cuASR_CUDA_FLAGS}>
-  $<$<AND:$<COMPILE_LANGUAGE:CUDA>,$<CONFIG:DEBUG>>:${cuASR_CUDA_FLAGS_DEBUG}>
-)
 if(NOT DEFINED CUASR_TEST_LEVEL)
   set(CUASR_TEST_LEVEL 0)
 endif()
