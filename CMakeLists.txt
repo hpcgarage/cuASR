@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.13)
 project(cuASR CUDA CXX)
 
-# RELEASE config by default ifnone is provided:
+# RELEASE config by default if none is provided:
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RELEASE")
   set(BUILD_TYPE_INFERRED_RELEASE TRUE)
@@ -18,44 +18,42 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Switches for testing, benchmarks or static lib builds
-option(cuASR_TEST   "cuASR_TEST"   ON)
-option(cuASR_BENCH  "cuASR_BENCH"  ON)
-option(cuASR_STATIC "cuASR_STATIC" ON)
+option(CUASR_TEST   "Build cuASR test suite. Use with CUASR_TEST_LEVEL={0|1|2}." ON)
+option(CUASR_BENCH  "Build cuASR benchmark suite."  ON)
+option(CUASR_STATIC "Build cuASR as a static library." ON)
 
 # static or dynamic lib build targets
-if(cuASR_STATIC)
+if(CUASR_STATIC)
   set(cuASR_LIB_NAME cuasrstatic)
   set(cuASR_LIB_TYPE STATIC)
 else()
-  set(cuASR_LIB_NAME fwgpu)
+  set(cuASR_LIB_NAME cuasr)
   set(cuASR_LIB_TYPE SHARED)
 endif()
 
 # CUDA native compiler (nvcc) only supports upto C++14 for now
+find_package(CUDA REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS_DEBUG   "-O0 -g3 -DDEBUG -Wall -Wextra -Wno-unused-parameter -fno-exceptions")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -Wall -fno-exceptions")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g3 -DNDEBUG -Wall -fno-exceptions")
-# set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks='bugprone-*,cert-*,clang-analyzer-core*,misc-*,performance-*')
 
-# CUDA build flags
-find_package(CUDA REQUIRED)
-if(CUDA_FOUND)
-  if(NOT CMAKE_CUDA_FLAGS)
-    cuda_select_nvcc_arch_flags(CUDA_ARCH_FLAGS Auto)
-  endif()
-  set(CUDA_NVCC_FLAGS_DEBUG "-O0 -g -G -DDEBUG --expt-relaxed-constexpr ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
-  set(CUDA_NVCC_FLAGS_RELEASE "-O3 -DNDEBUG --expt-relaxed-constexpr ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
-  set(CUDA_NVCC_FLAGS_RELWITHDEBINFO "-O3 -g -G -DNDEBUG --expt-relaxed-constexpr ${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS}")
-endif()
+# C++ compiler flags for target compile options
+set(cuASR_CXX_FLAGS -Wall -Wextra -Wno-unused-parameter -Wno-uninitialized -Wno-strict-aliasing)
+set(cuASR_CXX_FLAGS_DEBUG          -O0 -g3 -DDEBUG ${cuASR_CXX_FLAGS})
+set(cuASR_CXX_FLAGS_RELEASE        -O3 -DNDEBUG ${cuASR_CXX_FLAGS})
+set(cuASR_CXX_FLAGS_RELWITHDEBINFO -O3 -g3 -DNDEBUG ${cuASR_CXX_FLAGS})
+
+# CUDA compiler flags for target compile options
+set(cuASR_CUDA_FLAGS --expt-relaxed-constexpr)
+set(cuASR_CUDA_FLAGS_DEBUG          -G ${cuASR_CUDA_FLAGS})
+set(cuASR_CUDA_FLAGS_RELEASE        -O3 ${cuASR_CUDA_FLAGS})
+set(cuASR_CUDA_FLAGS_RELWITHDEBINFO -G ${cuASR_CUDA_FLAGS})
 
 # the sub-modules update themselves with git, so find git
 find_package(Git QUIET)
 
 # make sure we have cutlass checked-out and is up-to-date
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-  message(STATUS "Checking submodule version for thakkarV/cutlass")
+  message(STATUS "Checking submodule version for NVIDIA/cutlass")
   execute_process(
     COMMAND ${GIT_EXECUTABLE} submodule update --init ${PROJECT_SOURCE_DIR}/cutlass
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
@@ -74,33 +72,41 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cutlass/include")
   message(FATAL_ERROR "Cutlass submodule is not present and automatic checkout failed, please checkout cutlass manually.")
 endif()
 
-if(cuASR_TEST)
+if(CUASR_TEST)
   enable_testing()
   add_subdirectory(test)
+  if(NOT DEFINED CUASR_TEST_LEVEL)
+    set(CUASR_TEST_LEVEL 0)
+  endif()
 endif()
 
-if(cuASR_BENCH)
+if(CUASR_BENCH)
   add_subdirectory(bench)
 endif()
 
-# fwgpu library configuration
-set(cuASR_src
+# cuasr library configuration
+add_library(${cuASR_LIB_NAME} ${cuASR_LIB_TYPE}
   ./src/cublas_sgemm.cu
   ./src/cutlass_sgemm.cu
   ./src/cutlass_srgemm.cu
   ./src/utils.cu
 )
-
-cuda_add_library(${cuASR_LIB_NAME} ${cuASR_LIB_TYPE} ${cuASR_src})
-
-target_link_libraries(
-  ${cuASR_LIB_NAME}
+target_link_libraries(${cuASR_LIB_NAME}
   ${CUDA_CUBLAS_LIBRARIES}
 )
-
 target_include_directories(${cuASR_LIB_NAME}
   PUBLIC ${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS}
   PRIVATE ${PROJECT_SOURCE_DIR}/cutlass/include
+)
+target_compile_options(${cuASR_LIB_NAME}
+  PUBLIC
+  # C++ compiler flags
+  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CONFIG:${uppercase_CMAKE_BUILD_TYPE}>>:
+    ${cuASR_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}>
+
+  # CUDA compiler flags
+  $<$<AND:$<COMPILE_LANGUAGE:CUDA>,$<CONFIG:${uppercase_CMAKE_BUILD_TYPE}>>:
+    ${cuASR_CUDA_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}>
 )
 
 install(TARGETS ${cuASR_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
@@ -116,11 +122,12 @@ message(STATUS "  CUDA Compiler        : ${CMAKE_CUDA_COMPILER}")
 message(STATUS "  CUDA Compiler version: ${CMAKE_CUDA_COMPILER_VERSION}")
 message(STATUS "  Library name         : ${cuASR_LIB_NAME}")
 message(STATUS "  Library type         : ${cuASR_LIB_TYPE}")
-message(STATUS "  Build tests          : ${cuASR_TEST}")
-message(STATUS "  Build benchmarks     : ${cuASR_BENCH}")
+message(STATUS "  Build tests          : ${CUASR_TEST}")
+message(STATUS "  Test level           : ${CUASR_TEST_LEVEL}")
+message(STATUS "  Build benchmarks     : ${CUASR_BENCH}")
 message(STATUS "  Found CUDA?          : ${CUDA_FOUND}")
-message(STATUS "  CXX flags            : ${CMAKE_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
-message(STATUS "  CUDA flags           : ${CUDA_NVCC_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
+message(STATUS "  CXX flags            : ${cuASR_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
+message(STATUS "  CUDA flags           : ${cuASR_CUDA_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
 if (BUILD_TYPE_INFERRED_RELEASE)
   message(WARNING "No build type provided, defaulted to RELEASE configuration.")
 endif()

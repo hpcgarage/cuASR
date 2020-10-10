@@ -1,5 +1,5 @@
 ### Matrix tests
-cuda_add_executable(Matrix_tests ${PROJECT_SOURCE_DIR}/test/harness.cpp Matrix_test.cpp)
+add_executable(Matrix_tests ${PROJECT_SOURCE_DIR}/test/harness.cpp Matrix_test.cpp)
 target_include_directories(Matrix_tests PRIVATE gtest/googletest/include)
 target_link_libraries(Matrix_tests gtest ${cuASR_LIB_NAME})
 add_test(

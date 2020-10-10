@@ -33,7 +33,7 @@ target_link_libraries(cpu_bench
 )
 
 # GPU Benchmarks
-cuda_add_executable(gpu_bench gpu_bench.cu)
+add_executable(gpu_bench gpu_bench.cu)
 target_include_directories(gpu_bench PRIVATE benchmark/include)
 target_link_libraries(gpu_bench
   benchmark
