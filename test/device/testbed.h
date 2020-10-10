@@ -186,8 +186,8 @@ struct Testbed {
       file << "problem: " << problem_size << ", alpha: " << alpha << ", beta: " << beta
            << "\n\n";
 
-      file << "Addition operator: " << add_op_name << '\n';
-      file << "Multiplication operator: " << mult_op_name << '\n';
+      file << "Addition operator: " << add_op_name_full << '\n';
+      file << "Multiplication operator: " << mult_op_name_full << '\n';
 
       file << "A =\n"
            << tensor_A.host_view() << "\nB =\n"
