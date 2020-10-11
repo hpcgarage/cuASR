@@ -21,3 +21,4 @@ endif()
 
 add_subdirectory(gtest)
 add_subdirectory(regress)
+add_subdirectory(device)
