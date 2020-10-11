@@ -145,6 +145,13 @@ struct plus<Array<T, N>> {
   static T constexpr Identity    = plus<T>::Identity;
   static T constexpr Annihilator = plus<T>::Annihilator;
 
+  // expose base scalar operator
+  CUTLASS_HOST_DEVICE
+  T operator()(T const &lhs, T const &rhs) const {
+    plus<T> scalar_op;
+    return scalar_op(lhs, rhs);
+  }
+
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
     Array<T, N> result;
@@ -189,6 +196,13 @@ template <typename T, int N>
 struct multiplies<Array<T, N>> {
   static T constexpr Identity    = multiplies<T>::Identity;
   static T constexpr Annihilator = multiplies<T>::Annihilator;
+
+  // expose base scalar operator
+  CUTLASS_HOST_DEVICE
+  T operator()(T const &lhs, T const &rhs) const {
+    multiplies<T> scalar_op;
+    return scalar_op(lhs, rhs);
+  }
 
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
@@ -235,8 +249,12 @@ struct minimum<Array<T, N>> {
   static T constexpr Identity    = minimum<T>::Identity;
   static T constexpr Annihilator = minimum<T>::Annihilator;
 
+  // expose base scalar operator
   CUTLASS_HOST_DEVICE
-  static T scalar_op(T const &lhs, T const &rhs) { return (rhs < lhs ? rhs : lhs); }
+  T operator()(T const &lhs, T const &rhs) const {
+    minimum<T> scalar_op;
+    return scalar_op(lhs, rhs);
+  }
 
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
@@ -283,6 +301,13 @@ struct maximum<Array<T, N>> {
   static T constexpr Identity    = maximum<T>::Identity;
   static T constexpr Annihilator = maximum<T>::Annihilator;
 
+  // expose base scalar operator
+  CUTLASS_HOST_DEVICE
+  T operator()(T const &lhs, T const &rhs) const {
+    maximum<T> scalar_op;
+    return scalar_op(lhs, rhs);
+  }
+
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
     Array<T, N> result;
@@ -328,6 +353,13 @@ struct binary_and<Array<T, N>> {
   static T constexpr Identity    = binary_and<T>::Identity;
   static T constexpr Annihilator = binary_and<T>::Annihilator;
 
+  // expose base scalar operator
+  CUTLASS_HOST_DEVICE
+  T operator()(T const &lhs, T const &rhs) const {
+    binary_and<T> scalar_op;
+    return scalar_op(lhs, rhs);
+  }
+
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
     Array<T, N> result;
@@ -369,6 +401,13 @@ template <typename T, int N>
 struct binary_or<Array<T, N>> {
   static T constexpr Identity    = binary_or<T>::Identity;
   static T constexpr Annihilator = binary_or<T>::Annihilator;
+
+  // expose base scalar operator
+  CUTLASS_HOST_DEVICE
+  T operator()(T const &lhs, T const &rhs) const {
+    binary_or<T> scalar_op;
+    return scalar_op(lhs, rhs);
+  }
 
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
