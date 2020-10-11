@@ -3,7 +3,7 @@
 
 #include <tuple>
 
-#include "../Matrix.hpp"
+#include "fwgpu/Matrix.hpp"
 
 namespace fwgpu {
 namespace internal {
