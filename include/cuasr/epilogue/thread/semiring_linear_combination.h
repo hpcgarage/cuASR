@@ -127,7 +127,8 @@ public:
   /// Returns true if source is needed
   CUTLASS_HOST_DEVICE
   bool is_source_needed() const {
-    return beta_ != ElementCompute(kMultiplicativeAnnihilator);
+    // no source needed if mult_op(beta, C[i,j]) is equal to add_op's identity
+    return (kAdditiveIdentity != mult_op_(beta_, static_cast<ElementCompute>(1)));
   }
 
   /// Functionally required for serial reduction in the epilogue
