@@ -21,6 +21,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 option(CUASR_TEST   "Build cuASR test suite. Use with CUASR_TEST_LEVEL={0|1|2}." ON)
 option(CUASR_BENCH  "Build cuASR benchmark suite."  ON)
 option(CUASR_STATIC "Build cuASR as a static library." ON)
+option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "60 61 70 72 75")
 
 # static or dynamic lib build targets
 if(CUASR_STATIC)
@@ -47,7 +48,7 @@ set(cuASR_CUDA_FLAGS --expt-relaxed-constexpr)
 set(cuASR_CUDA_FLAGS_DEBUG          -G ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELEASE        -O3 ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELWITHDEBINFO -G ${cuASR_CUDA_FLAGS})
-set(CMAKE_CUDA_ARCHITECTURES 60 61 70 72 75)
+set(CMAKE_CUDA_ARCHITECTURES ${CUASR_CUDA_ARCHS})
 
 # the sub-modules update themselves with git, so find git
 find_package(Git QUIET)
