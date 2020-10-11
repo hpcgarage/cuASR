@@ -22,37 +22,18 @@ using cutlass::Array;
 namespace {
 
 // helpers to get the +inf/-inf and min/max for integrals/floats
-template <
-    typename T,
-    typename std::enable_if<std::is_integral<T>::value>::type * = nullptr>
+// NOTE: we only use min/max values even for floats for now to avoid
+// having to use actual +inf/-inf-ies.  In practice, min/max for
+//  floats should behave the same as +inf/-inf
+template <typename T>
 constexpr auto get_inf() noexcept {
   return std::numeric_limits<T>::max();
-  ;
 }
 
-template <
-    typename T,
-    typename std::enable_if<!std::is_integral<T>::value>::type * = nullptr>
-constexpr auto get_inf() noexcept {
-  return std::numeric_limits<T>::infinity();
-}
-
-
-template <
-    typename T,
-    typename std::enable_if<std::is_integral<T>::value>::type * = nullptr>
+template <typename T>
 constexpr auto get_neginf() noexcept {
   return std::numeric_limits<T>::min();
-  ;
 }
-
-template <
-    typename T,
-    typename std::enable_if<!std::is_integral<T>::value>::type * = nullptr>
-constexpr auto get_neginf() noexcept {
-  return -1 * std::numeric_limits<T>::infinity();
-}
-
 }
 
 // PLUS operator
