@@ -84,6 +84,9 @@ endif()
 
 if(CUASR_BENCH)
   add_subdirectory(bench)
+  if(NOT DEFINED CUASR_BENCH_LEVEL)
+    set(CUASR_BENCH_LEVEL 0)
+  endif()
 endif()
 
 # cuasr library configuration
@@ -127,6 +130,7 @@ message(STATUS "  Library type         : ${cuASR_LIB_TYPE}")
 message(STATUS "  Build tests          : ${CUASR_TEST}")
 message(STATUS "  Test level           : ${CUASR_TEST_LEVEL}")
 message(STATUS "  Build benchmarks     : ${CUASR_BENCH}")
+message(STATUS "  Bench level          : ${CUASR_BENCH_LEVEL}")
 message(STATUS "  Found CUDA?          : ${CUDA_FOUND}")
 message(STATUS "  CXX flags            : ${cuASR_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
 message(STATUS "  CUDA flags           : ${cuASR_CUDA_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
