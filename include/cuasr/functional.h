@@ -36,319 +36,227 @@ constexpr auto get_neginf() noexcept {
 }
 }
 
-// PLUS operator
-template <typename T>
+template <typename T, int N = 1>
 struct plus {
   static T constexpr Identity    = static_cast<T>(0);
   static T constexpr Annihilator = get_inf<T>();
 
+  // scalar operator
   CUTLASS_HOST_DEVICE
   T operator()(T lhs, T const &rhs) const {
     lhs += rhs;
     return lhs;
   }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], rhs[i]);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], scalar);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(scalar, rhs[i]);
+    }
+    return result;
+  }
 };
 
-template <typename T>
+template <typename T, int N = 1>
 struct multiplies {
   static T constexpr Identity    = static_cast<T>(1);
   static T constexpr Annihilator = static_cast<T>(0);
 
+  // scalar operator
   CUTLASS_HOST_DEVICE
   T operator()(T lhs, T const &rhs) const {
     lhs *= rhs;
     return lhs;
   }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], rhs[i]);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], scalar);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(scalar, rhs[i]);
+    }
+    return result;
+  }
 };
 
-template <typename T>
+template <typename T, int N = 1>
 struct minimum {
   static T constexpr Identity    = get_inf<T>();
   static T constexpr Annihilator = get_neginf<T>();
 
+  // scalar operator
   CUTLASS_HOST_DEVICE
   T operator()(T const &lhs, T const &rhs) const { return (rhs < lhs ? rhs : lhs); }
-};
-
-template <>
-struct minimum<float> {
-  static float constexpr Identity    = get_inf<float>();
-  static float constexpr Annihilator = get_neginf<float>();
 
   CUTLASS_HOST_DEVICE
-  float operator()(float const &lhs, float const &rhs) const { return fminf(lhs, rhs); }
+  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], rhs[i]);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], scalar);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(scalar, rhs[i]);
+    }
+    return result;
+  }
 };
 
-template <typename T>
+template <typename T, int N = 1>
 struct maximum {
   static T constexpr Identity    = get_neginf<T>();
   static T constexpr Annihilator = get_inf<T>();
 
+  // scalar operator
   CUTLASS_HOST_DEVICE
   T operator()(T const &lhs, T const &rhs) const { return (lhs < rhs ? rhs : lhs); }
-};
-
-template <>
-struct maximum<float> {
-  static float constexpr Identity    = get_neginf<float>();
-  static float constexpr Annihilator = get_inf<float>();
 
   CUTLASS_HOST_DEVICE
-  float operator()(float const &lhs, float const &rhs) const { return fmaxf(lhs, rhs); }
+  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], rhs[i]);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], scalar);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(scalar, rhs[i]);
+    }
+    return result;
+  }
 };
 
-// binary and operator
-template <typename T>
+template <typename T, int N = 1>
 struct binary_and {
   static T constexpr Identity    = static_cast<T>(true);
   static T constexpr Annihilator = static_cast<T>(false);
 
+  // scalar operator
   CUTLASS_HOST_DEVICE
   T operator()(T lhs, T const &rhs) const { return lhs && rhs; }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], rhs[i]);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(lhs[i], scalar);
+    }
+    return result;
+  }
+
+  CUTLASS_HOST_DEVICE
+  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
+    Array<T, N> result;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < N; ++i) {
+      result[i] = this->operator()(scalar, rhs[i]);
+    }
+    return result;
+  }
 };
 
-// binary or operator
-template <typename T>
+template <typename T, int N = 1>
 struct binary_or {
   static T constexpr Identity    = static_cast<T>(false);
   static T constexpr Annihilator = static_cast<T>(true);
 
+  // scalar operator
   CUTLASS_HOST_DEVICE
   T operator()(T lhs, T const &rhs) const { return lhs || rhs; }
-};
-
-//
-// Operators For Packed Arrays
-//
-
-template <typename T, int N>
-struct plus<Array<T, N>> {
-  static T constexpr Identity    = plus<T>::Identity;
-  static T constexpr Annihilator = plus<T>::Annihilator;
-
-  // expose base scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const {
-    plus<T> scalar_op;
-    return scalar_op(lhs, rhs);
-  }
 
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
     Array<T, N> result;
-    plus<T> scalar_op;
-
     CUTLASS_PRAGMA_UNROLL
     for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], rhs[i]);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    plus<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], scalar);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    plus<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(scalar, rhs[i]);
-    }
-
-    return result;
-  }
-};
-
-template <typename T, int N>
-struct multiplies<Array<T, N>> {
-  static T constexpr Identity    = multiplies<T>::Identity;
-  static T constexpr Annihilator = multiplies<T>::Annihilator;
-
-  // expose base scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const {
-    multiplies<T> scalar_op;
-    return scalar_op(lhs, rhs);
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    multiplies<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], rhs[i]);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    multiplies<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], scalar);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    multiplies<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(scalar, rhs[i]);
-    }
-
-    return result;
-  }
-};
-
-template <typename T, int N>
-struct minimum<Array<T, N>> {
-  static T constexpr Identity    = minimum<T>::Identity;
-  static T constexpr Annihilator = minimum<T>::Annihilator;
-
-  // expose base scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const {
-    minimum<T> scalar_op;
-    return scalar_op(lhs, rhs);
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    minimum<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], rhs[i]);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    minimum<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], scalar);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    minimum<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(scalar, rhs[i]);
-    }
-
-    return result;
-  }
-};
-
-template <typename T, int N>
-struct maximum<Array<T, N>> {
-  static T constexpr Identity    = maximum<T>::Identity;
-  static T constexpr Annihilator = maximum<T>::Annihilator;
-
-  // expose base scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const {
-    maximum<T> scalar_op;
-    return scalar_op(lhs, rhs);
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    maximum<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], rhs[i]);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    maximum<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], scalar);
-    }
-
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    maximum<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(scalar, rhs[i]);
-    }
-
-    return result;
-  }
-};
-
-template <typename T, int N>
-struct binary_and<Array<T, N>> {
-  static T constexpr Identity    = binary_and<T>::Identity;
-  static T constexpr Annihilator = binary_and<T>::Annihilator;
-
-  // expose base scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const {
-    binary_and<T> scalar_op;
-    return scalar_op(lhs, rhs);
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    binary_and<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], rhs[i]);
+      result[i] = this->operator()(lhs[i], rhs[i]);
     }
     return result;
   }
@@ -356,11 +264,9 @@ struct binary_and<Array<T, N>> {
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
     Array<T, N> result;
-    binary_and<T> scalar_op;
-
     CUTLASS_PRAGMA_UNROLL
     for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], scalar);
+      result[i] = this->operator()(lhs[i], scalar);
     }
     return result;
   }
@@ -368,60 +274,9 @@ struct binary_and<Array<T, N>> {
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
     Array<T, N> result;
-    binary_and<T> scalar_op;
-
     CUTLASS_PRAGMA_UNROLL
     for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(scalar, rhs[i]);
-    }
-    return result;
-  }
-};
-
-template <typename T, int N>
-struct binary_or<Array<T, N>> {
-  static T constexpr Identity    = binary_or<T>::Identity;
-  static T constexpr Annihilator = binary_or<T>::Annihilator;
-
-  // expose base scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const {
-    binary_or<T> scalar_op;
-    return scalar_op(lhs, rhs);
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    binary_or<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], rhs[i]);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    binary_or<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    binary_or<T> scalar_op;
-
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = scalar_op(scalar, rhs[i]);
+      result[i] = this->operator()(scalar, rhs[i]);
     }
     return result;
   }

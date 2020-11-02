@@ -66,9 +66,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::plus<cutlass::Array<Element, 1>>,
-    cuasr::multiplies<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 // Min-Plus (tropical) semi-ring GEMM configuration
@@ -98,9 +96,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::plus<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::minimum<cutlass::Array<Element, 1>>,
-    cuasr::plus<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 // Max-Plus semi-ring GEMM configuration
@@ -130,9 +126,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::plus<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::maximum<cutlass::Array<Element, 1>>,
-    cuasr::plus<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 // Max-Min
@@ -161,9 +155,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::minimum<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::maximum<cutlass::Array<Element, 1>>,
-    cuasr::minimum<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 // Min-Max
@@ -192,9 +184,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::maximum<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::minimum<cutlass::Array<Element, 1>>,
-    cuasr::maximum<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 // Min-Times
@@ -223,9 +213,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::minimum<cutlass::Array<Element, 1>>,
-    cuasr::multiplies<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 // Max-Times
@@ -254,9 +242,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::maximum<cutlass::Array<Element, 1>>,
-    cuasr::multiplies<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 // Or-And boolean ring
@@ -285,9 +271,7 @@ struct DefaultSemiRingConfiguration<
   using MultiplicationOp = cuasr::binary_and<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    cuasr::binary_or<cutlass::Array<Element, 1>>,
-    cuasr::binary_and<cutlass::Array<Element, 1>>,
-    Element, 1>;
+    AdditionOp, MultiplicationOp, Element, 1>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
