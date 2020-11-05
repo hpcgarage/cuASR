@@ -17,21 +17,13 @@ endif()
 # note that this does not include nvcc invocations >:(
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-# Switches for testing, benchmarks or static lib builds
+# Switches for testing, benchmarks and examples
 option(CUASR_TEST    "Build cuASR test suite. Use with CUASR_TEST_LEVEL={0|1|2}." ON)
 option(CUASR_BENCH   "Build cuASR benchmark suite."  ON)
 option(CUASR_EXAMPLE "Build cuASR examples."  ON)
-option(CUASR_STATIC "Build cuASR as a static library." ON)
-option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "60 61 70 72 75")
 
-# static or dynamic lib build targets
-if(CUASR_STATIC)
-  set(cuASR_LIB_NAME cuasrstatic)
-  set(cuASR_LIB_TYPE STATIC)
-else()
-  set(cuASR_LIB_NAME cuasr)
-  set(cuASR_LIB_TYPE SHARED)
-endif()
+# By default, build fat binaries. TODO add sm_80 here
+option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "60 61 70 72 75")
 
 # CUDA native compiler (nvcc) only supports upto C++14 for now
 find_package(CUDA REQUIRED)
@@ -94,34 +86,6 @@ if(CUASR_EXAMPLE)
   add_subdirectory(examples)
 endif()
 
-# cuasr library configuration
-add_library(${cuASR_LIB_NAME} ${cuASR_LIB_TYPE}
-  ./src/cublas_sgemm.cu
-  ./src/cutlass_sgemm.cu
-  ./src/cutlass_srgemm.cu
-  ./src/utils.cu
-)
-target_link_libraries(${cuASR_LIB_NAME}
-  ${CUDA_CUBLAS_LIBRARIES}
-)
-target_include_directories(${cuASR_LIB_NAME}
-  PUBLIC ${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS}
-  PRIVATE ${PROJECT_SOURCE_DIR}/cutlass/include
-)
-target_compile_options(${cuASR_LIB_NAME}
-  PUBLIC
-  # C++ compiler flags
-  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CONFIG:${uppercase_CMAKE_BUILD_TYPE}>>:
-    ${cuASR_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}>
-
-  # CUDA compiler flags
-  $<$<AND:$<COMPILE_LANGUAGE:CUDA>,$<CONFIG:${uppercase_CMAKE_BUILD_TYPE}>>:
-    ${cuASR_CUDA_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}>
-)
-
-install(TARGETS ${cuASR_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-install(DIRECTORY ${cuASR_LIB_NAME}/include DESTINATION include)
-
 message(STATUS "")
 message(STATUS "BUILD SUMMARY:")
 message(STATUS "  Build type           : ${uppercase_CMAKE_BUILD_TYPE}")
@@ -130,8 +94,6 @@ message(STATUS "  C++ Compiler         : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  C++ Compiler version : ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "  CUDA Compiler        : ${CMAKE_CUDA_COMPILER}")
 message(STATUS "  CUDA Compiler version: ${CMAKE_CUDA_COMPILER_VERSION}")
-message(STATUS "  Library name         : ${cuASR_LIB_NAME}")
-message(STATUS "  Library type         : ${cuASR_LIB_TYPE}")
 message(STATUS "  Build tests          : ${CUASR_TEST}")
 message(STATUS "  Test level           : ${CUASR_TEST_LEVEL}")
 message(STATUS "  Build benchmarks     : ${CUASR_BENCH}")
