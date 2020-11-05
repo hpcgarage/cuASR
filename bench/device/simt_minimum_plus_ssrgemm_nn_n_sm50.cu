@@ -60,7 +60,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_8x32x8_8x32x1_2x4_4x8_1x1(b
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_8x32x8_8x32x1_2x4_4x8_1x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x32x8_16x32x1_4x4_4x8_1x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x32x8_16x32x1_4x4_4x8_1x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x8_16x64x1_4x8_4x8_1x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x8_16x64x1_4x8_4x8_1x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +210,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_32x32x1_8x4_4x8_1x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_32x32x1_8x4_4x8_1x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +260,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_32x64x1_8x8_4x8_1x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_32x64x1_8x8_4x8_1x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -310,7 +310,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_64x32x1_8x8_8x4_1x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_64x32x1_8x8_8x4_1x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -360,7 +360,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_8x32x8_8x16x1_2x2_4x8_1x2(b
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_8x32x8_8x16x1_2x2_4x8_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -410,7 +410,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_8x64x8_8x32x1_2x4_4x8_1x2(b
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_8x64x8_8x32x1_2x4_4x8_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -460,7 +460,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x32x8_16x16x1_4x2_4x8_1x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x32x8_16x16x1_4x2_4x8_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -510,7 +510,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x8_16x32x1_4x4_4x8_1x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x8_16x32x1_4x4_4x8_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -560,7 +560,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x128x8_16x64x1_4x8_4x8_1x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x128x8_16x64x1_4x8_4x8_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -610,7 +610,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_32x16x1_4x4_8x4_1x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_32x16x1_4x4_8x4_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -660,7 +660,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_32x32x1_8x4_4x8_1x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_32x32x1_8x4_4x8_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -710,7 +710,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x8_32x64x1_8x8_4x8_1x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x8_32x64x1_8x8_4x8_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -760,7 +760,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_64x32x1_8x8_8x4_1x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_64x32x1_8x8_8x4_1x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -810,7 +810,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_16x32x1_4x4_4x8_2x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_16x32x1_4x4_4x8_2x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -860,7 +860,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_32x32x1_8x4_4x8_2x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_32x32x1_8x4_4x8_2x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -910,7 +910,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_32x64x1_8x8_4x8_2x1
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_32x64x1_8x8_4x8_2x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -960,7 +960,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x8_64x32x1_8x8_8x4_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x8_64x32x1_8x8_8x4_2x1)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1010,7 +1010,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x32x8_8x16x1_2x2_4x8_2x2(
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x32x8_8x16x1_2x2_4x8_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1060,7 +1060,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x8_8x32x1_2x4_4x8_2x2(
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x8_8x32x1_2x4_4x8_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1110,7 +1110,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_16x16x1_4x2_4x8_2x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_16x16x1_4x2_4x8_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1160,7 +1160,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_16x32x1_4x4_4x8_2x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_16x32x1_4x4_4x8_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1210,7 +1210,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x8_16x64x1_4x8_4x8_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x8_16x64x1_4x8_4x8_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1260,7 +1260,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_32x16x1_4x4_8x4_2x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_32x16x1_4x4_8x4_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1310,7 +1310,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_32x32x1_8x4_4x8_2x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_32x32x1_8x4_4x8_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1360,7 +1360,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x128x8_32x64x1_8x8_4x8_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x128x8_32x64x1_8x8_4x8_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1410,7 +1410,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x8_64x16x1_8x4_8x4_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x8_64x16x1_8x4_8x4_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1460,7 +1460,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x64x8_64x32x1_8x8_8x4_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x64x8_64x32x1_8x8_8x4_2x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1510,7 +1510,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x16_8x16x1_2x2_4x8_2x4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x64x16_8x16x1_2x2_4x8_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1560,7 +1560,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x128x16_8x32x1_2x4_4x8_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_16x128x16_8x32x1_2x4_4x8_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1610,7 +1610,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_16x8x1_2x2_8x4_2x4(
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_16x8x1_2x2_8x4_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1660,7 +1660,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_16x16x1_4x2_4x8_2x4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x8_16x16x1_4x2_4x8_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1710,7 +1710,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x8_16x32x1_4x4_4x8_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x8_16x32x1_4x4_4x8_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1760,7 +1760,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x256x8_16x64x1_4x8_4x8_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x256x8_16x64x1_4x8_4x8_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1810,7 +1810,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_32x16x1_4x4_8x4_2x4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_32x16x1_4x4_8x4_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1860,7 +1860,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x128x8_32x32x1_8x4_4x8_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x128x8_32x32x1_8x4_4x8_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1910,7 +1910,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x256x8_32x64x1_8x8_4x8_2x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x256x8_32x64x1_8x8_4x8_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1960,7 +1960,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x128x8_64x32x1_8x8_8x4_2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x128x8_64x32x1_8x8_8x4_2x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2010,7 +2010,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_8x16x1_2x2_4x8_4x2(
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x32x8_8x16x1_2x2_4x8_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2060,7 +2060,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_16x16x1_4x2_4x8_4x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x8_16x16x1_4x2_4x8_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2110,7 +2110,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_16x32x1_4x4_4x8_4x2
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_16x32x1_4x4_4x8_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2160,7 +2160,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x8_32x16x1_4x4_8x4_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x8_32x16x1_4x4_8x4_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2210,7 +2210,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x64x8_32x32x1_8x4_4x8_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x64x8_32x32x1_8x4_4x8_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2260,7 +2260,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x128x8_32x64x1_8x8_4x8_4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x128x8_32x64x1_8x8_4x8_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2310,7 +2310,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_256x32x8_64x16x1_8x4_8x4_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_256x32x8_64x16x1_8x4_8x4_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2360,7 +2360,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_256x64x8_64x32x1_8x8_8x4_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_256x64x8_64x32x1_8x8_8x4_4x2)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2410,7 +2410,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x16_8x16x1_2x2_4x8_4x4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x64x16_8x16x1_2x2_4x8_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2460,7 +2460,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x16_8x32x1_2x4_4x8_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_32x128x16_8x32x1_2x4_4x8_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2510,7 +2510,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x16_16x8x1_2x2_8x4_4x4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x32x16_16x8x1_2x2_8x4_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2560,7 +2560,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_16x16x1_4x2_4x8_4x4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x64x8_16x16x1_4x2_4x8_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2610,7 +2610,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x128x8_16x32x1_4x4_4x8_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x128x8_16x32x1_4x4_4x8_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2660,7 +2660,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x256x8_16x64x1_4x8_4x8_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_64x256x8_16x64x1_4x8_4x8_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2710,7 +2710,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x16_32x8x1_4x2_8x4_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x32x16_32x8x1_4x2_8x4_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2760,7 +2760,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x64x8_32x16x1_4x4_8x4_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x64x8_32x16x1_4x4_8x4_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2810,7 +2810,7 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x128x8_32x32x1_8x4_4x8_4
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_128x128x8_32x32x1_8x4_4x8_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2860,6 +2860,6 @@ static void BM_SM50_device_minimum_plus_ssrgemm_nn_n_256x64x8_64x16x1_8x4_8x4_4x
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }
 BENCHMARK(BM_SM50_device_minimum_plus_ssrgemm_nn_n_256x64x8_64x16x1_8x4_8x4_4x4)
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 

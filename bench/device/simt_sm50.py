@@ -124,7 +124,7 @@ static void BM_SM50_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }}
 BENCHMARK(BM_SM50_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20})
-    ->RangeMultiplier(2)->Range(64, 4096);
+    ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
 """
