@@ -18,8 +18,9 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Switches for testing, benchmarks or static lib builds
-option(CUASR_TEST   "Build cuASR test suite. Use with CUASR_TEST_LEVEL={0|1|2}." ON)
-option(CUASR_BENCH  "Build cuASR benchmark suite."  ON)
+option(CUASR_TEST    "Build cuASR test suite. Use with CUASR_TEST_LEVEL={0|1|2}." ON)
+option(CUASR_BENCH   "Build cuASR benchmark suite."  ON)
+option(CUASR_EXAMPLE "Build cuASR examples."  ON)
 option(CUASR_STATIC "Build cuASR as a static library." ON)
 option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "60 61 70 72 75")
 
@@ -89,6 +90,10 @@ if(CUASR_BENCH)
   endif()
 endif()
 
+if(CUASR_EXAMPLE)
+  add_subdirectory(examples)
+endif()
+
 # cuasr library configuration
 add_library(${cuASR_LIB_NAME} ${cuASR_LIB_TYPE}
   ./src/cublas_sgemm.cu
@@ -131,6 +136,7 @@ message(STATUS "  Build tests          : ${CUASR_TEST}")
 message(STATUS "  Test level           : ${CUASR_TEST_LEVEL}")
 message(STATUS "  Build benchmarks     : ${CUASR_BENCH}")
 message(STATUS "  Bench level          : ${CUASR_BENCH_LEVEL}")
+message(STATUS "  Build examples       : ${CUASR_EXAMPLE}")
 message(STATUS "  Found CUDA?          : ${CUDA_FOUND}")
 message(STATUS "  CXX flags            : ${cuASR_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
 message(STATUS "  CUDA flags           : ${cuASR_CUDA_FLAGS_${uppercase_CMAKE_BUILD_TYPE}}")
