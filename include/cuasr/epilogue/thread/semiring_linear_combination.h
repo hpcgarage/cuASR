@@ -42,14 +42,6 @@ public:
   using ElementOutput      = ElementOutput_;
   using ElementAccumulator = ElementAccumulator_;
   using ElementCompute     = ElementCompute_;
-
-  static ElementCompute constexpr kAdditiveIdentity = AdditionOp::Identity;
-
-  static ElementCompute constexpr kMultiplicativeAnnihilator
-      = MultiplicationOp::Annihilator;
-
-  static ElementCompute constexpr kMultiplicativeIdentity = MultiplicationOp::Identity;
-
   static int const kCount = Count;
 
   using FragmentOutput      = cutlass::Array<ElementOutput, kCount>;
@@ -73,8 +65,8 @@ public:
 
     CUTLASS_HOST_DEVICE
     Params()
-        : alpha(kMultiplicativeIdentity)
-        , beta(kMultiplicativeAnnihilator)
+        : alpha(MultiplicationOp::Identity)
+        , beta(MultiplicationOp::Annihilator)
         , alpha_ptr(nullptr)
         , beta_ptr(nullptr) { }
 
@@ -88,21 +80,21 @@ public:
     CUTLASS_HOST_DEVICE
     Params(ElementCompute alpha)
         : alpha(alpha)
-        , beta(kMultiplicativeAnnihilator)
+        , beta(MultiplicationOp::Annihilator)
         , alpha_ptr(nullptr)
         , beta_ptr(nullptr) { }
 
     CUTLASS_HOST_DEVICE
     Params(ElementCompute const *alpha_ptr, ElementCompute const *beta_ptr)
-        : alpha(kMultiplicativeIdentity)
-        , beta(kMultiplicativeAnnihilator)
+        : alpha(MultiplicationOp::Identity)
+        , beta(MultiplicationOp::Annihilator)
         , alpha_ptr(alpha_ptr)
         , beta_ptr(beta_ptr) { }
 
     CUTLASS_HOST_DEVICE
     Params(ElementCompute const *alpha_ptr)
-        : alpha(kMultiplicativeIdentity)
-        , beta(kMultiplicativeAnnihilator)
+        : alpha(MultiplicationOp::Identity)
+        , beta(MultiplicationOp::Annihilator)
         , alpha_ptr(alpha_ptr)
         , beta_ptr(nullptr) { }
   };
@@ -111,8 +103,6 @@ private:
   // scalars
   ElementCompute alpha_;
   ElementCompute beta_;
-
-  // ops
   AdditionOp add_op_;
   MultiplicationOp mult_op_;
 
@@ -127,15 +117,19 @@ public:
   /// Returns true if source is needed
   CUTLASS_HOST_DEVICE
   bool is_source_needed() const {
+    ElementCompute kAdditiveIdentity = AdditionOp::Identity;
+    ElementCompute kMultiplicativeIdentity = MultiplicationOp::Identity;
+
     // no source needed if mult_op(beta, C[i,j]) is equal to add_op's identity
-    return (kAdditiveIdentity != mult_op_(beta_, static_cast<ElementCompute>(1)));
+    return (kAdditiveIdentity != mult_op_(beta_, kMultiplicativeIdentity));
   }
 
   /// Functionally required for serial reduction in the epilogue
   CUTLASS_HOST_DEVICE
   void set_k_partition(int k_partition) {
     if (k_partition) {
-      beta_ = ElementCompute(kMultiplicativeIdentity);
+      ElementCompute kMultiplicativeIdentity = MultiplicationOp::Identity;
+      beta_ = kMultiplicativeIdentity;
     }
   }
 
@@ -144,7 +138,7 @@ public:
   CUTLASS_HOST_DEVICE
   FragmentOutput
   operator()(FragmentAccumulator const &accumulator, FragmentOutput const &source) const {
-    // Convert source to interal compute numeric type
+    // Convert source to internal compute numeric type
     cutlass::NumericArrayConverter<ElementCompute, ElementOutput, kCount, Round>
         source_converter;
     cutlass::NumericArrayConverter<ElementCompute, ElementAccumulator, kCount, Round>
@@ -170,7 +164,7 @@ public:
   /// Computes semiring linear scaling: D = mult_op_(alpha, accumulator)
   CUTLASS_HOST_DEVICE
   FragmentOutput operator()(FragmentAccumulator const &accumulator) const {
-    // Convert source to interal compute numeric type
+    // Convert source to internal compute numeric type
     cutlass::NumericArrayConverter<ElementCompute, ElementAccumulator, kCount, Round>
         accumulator_converter;
 
