@@ -1,0 +1,2 @@
+add_subdirectory(00_minplus_srgemm)
+add_subdirectory(01_userdefined_semiring)
