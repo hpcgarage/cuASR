@@ -13,7 +13,7 @@
 
 #include "cuasr/functional.h"
 #include "cuasr/arch/srmma.h"
-#include "cuasr/epilogue/thread/semiring_linear_combination.h"
+#include "cuasr/gemm/epilogue/thread/semiring_linear_combination.h"
 
 #include <limits>
 
@@ -87,8 +87,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<128, 128, 8>;
+  using WarpShape = cutlass::gemm::GemmShape<64, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 

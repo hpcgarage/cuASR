@@ -13,9 +13,9 @@
 #include "cutlass/gemm/threadblock/threadblock_swizzle.h"
 #include "cutlass/numeric_types.h"
 
-#include "cuasr/device/default_srgemm_configuration.h"
-#include "cuasr/kernel/default_srgemm.h"
-#include "cuasr/kernel/srgemm.h"
+#include "cuasr/gemm/device/default_srgemm_configuration.h"
+#include "cuasr/gemm/kernel/default_srgemm.h"
+#include "cuasr/gemm/kernel/srgemm.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -29,8 +29,8 @@
 #include "cutlass/transform/threadblock/predicated_tile_iterator.h"
 
 #include "cuasr/arch/srmma.h"
-#include "cuasr/kernel/srgemm.h"
-#include "cuasr/threadblock/default_srmma.h"
+#include "cuasr/gemm/kernel/srgemm.h"
+#include "cuasr/gemm/threadblock/default_srmma.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
