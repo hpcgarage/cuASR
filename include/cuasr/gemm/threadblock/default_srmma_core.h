@@ -20,7 +20,6 @@
 #include "cutlass/gemm/warp/mma.h"
 
 #include "cuasr/gemm/threadblock/srmma_pipelined.h"
-#include "cuasr/gemm/threadblock/srmma_singlestage.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,9 +60,9 @@ template <
     int Stages = 2,
     /// Store the accumulators in row major or column major.
     /// Row major is usedd when output layout is interleaved.
-    bool AccumulatorsInRowMajor = false
+    bool AccumulatorsInRowMajor = false,
     /// Cache operation of operand A
-    , cutlass::arch::CacheOperation::Kind CacheOpA =
+    cutlass::arch::CacheOperation::Kind CacheOpA =
         cutlass::arch::CacheOperation::Global,
     /// Cache operation of operand B
     cutlass::arch::CacheOperation::Kind CacheOpB =
