@@ -58,7 +58,6 @@ struct Srgemm {
     typename Epilogue::OutputTileIterator::TensorRef ref_C;
     typename Epilogue::OutputTileIterator::Params params_D;
     typename Epilogue::OutputTileIterator::TensorRef ref_D;
-    typename OutputOp::ElementCompute additive_identity;
     typename OutputOp::Params output_op;
     int *semaphore;
     int gemm_k_iterations;
@@ -79,7 +78,6 @@ struct Srgemm {
       typename Srmma::IteratorB::TensorRef ref_B,
       typename Epilogue::OutputTileIterator::TensorRef ref_C,
       typename Epilogue::OutputTileIterator::TensorRef ref_D,
-      typename OutputOp::ElementCompute additive_identity,
       typename OutputOp::Params output_op = typename OutputOp::Params(),
       int *semaphore = nullptr
     ):
@@ -93,7 +91,6 @@ struct Srgemm {
       ref_C(ref_C),
       params_D(ref_D.layout()),
       ref_D(ref_D),
-      additive_identity(additive_identity),
       output_op(output_op),
       semaphore(semaphore) {
 
@@ -158,6 +155,7 @@ struct Srgemm {
   /// Executes one GEMM
   CUTLASS_DEVICE
   void operator()(Params const &params, SharedStorage &shared_storage) {
+    constexpr typename OutputOp::ElementCompute kAdditiveIdentity = AdditionOp::Identity;
 
     // Compute threadblock location
     ThreadblockSwizzle threadblock_swizzle;
@@ -216,12 +214,11 @@ struct Srgemm {
     //
 
     // Construct thread-scoped matrix multiply
-    Srmma srmma_thrblock_op(shared_storage.main_loop, thread_idx, warp_idx, lane_idx, params.additive_identity);
+    Srmma srmma_thrblock_op(shared_storage.main_loop, thread_idx, warp_idx, lane_idx, kAdditiveIdentity);
 
+    // need to clear accumulators to additive identity for SemiRing Gemm
     typename Srmma::FragmentC accumulators;
-
-    // need to clear accumulators to infinity for SemiRing Gemm
-    accumulators.fill(params.additive_identity);
+    accumulators.fill(kAdditiveIdentity);
 
     if (!kSplitKSerial || gemm_k_iterations > 0) {
       // Compute threadblock-scoped matrix multiply-add
