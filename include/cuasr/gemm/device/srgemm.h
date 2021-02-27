@@ -13,9 +13,9 @@
 #include "cutlass/gemm/threadblock/threadblock_swizzle.h"
 #include "cutlass/numeric_types.h"
 
-#include "cuasr/device/default_srgemm_configuration.h"
-#include "cuasr/kernel/default_srgemm.h"
-#include "cuasr/kernel/srgemm.h"
+#include "cuasr/gemm/device/default_srgemm_configuration.h"
+#include "cuasr/gemm/kernel/default_srgemm.h"
+#include "cuasr/gemm/kernel/srgemm.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -148,7 +148,6 @@ class Srgemm {
     cutlass::TensorRef<ElementC const, LayoutC> ref_C;
     cutlass::TensorRef<ElementC, LayoutC> ref_D;
     typename EpilogueOutputOp::Params epilogue;
-    ElementAccumulator additive_identity;
     int split_k_slices;
 
     //
@@ -170,7 +169,6 @@ class Srgemm {
       cutlass::TensorRef<ElementC const, LayoutC> ref_C_,
       cutlass::TensorRef<ElementC, LayoutC> ref_D_,
       typename EpilogueOutputOp::Params epilogue_,
-      ElementAccumulator additive_identity = AdditionOp::Identity,
       int split_k_slices = 1
     ):
       problem_size(problem_size_),
@@ -179,7 +177,6 @@ class Srgemm {
       ref_C(ref_C_),
       ref_D(ref_D_),
       epilogue(epilogue_),
-      additive_identity(additive_identity),
       split_k_slices(split_k_slices) {
 
     }
@@ -277,7 +274,6 @@ public:
       args.ref_B.non_const_ref(),
       args.ref_C.non_const_ref(),
       args.ref_D,
-      args.additive_identity,
       args.epilogue,
       static_cast<int *>(workspace)
     };
@@ -474,7 +470,6 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
     cutlass::TensorRef<ElementC const, LayoutC> ref_C;
     cutlass::TensorRef<ElementC, LayoutC> ref_D;
     typename EpilogueOutputOp::Params epilogue;
-    ElementAccumulator additive_identity;
     int split_k_slices;
 
     //
@@ -494,7 +489,6 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
       cutlass::TensorRef<ElementC const, LayoutC> ref_C_,
       cutlass::TensorRef<ElementC, LayoutC> ref_D_,
       typename EpilogueOutputOp::Params epilogue_,
-      ElementAccumulator additive_identity = AdditionOp::Identity,
       int split_k_slices = 1
     ):
       problem_size(problem_size_),
@@ -503,7 +497,6 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
       ref_C(ref_C_),
       ref_D(ref_D_),
       epilogue(epilogue_),
-      additive_identity(additive_identity),
       split_k_slices(split_k_slices) { }
   };
 
@@ -525,7 +518,6 @@ public:
       {args.ref_C.data(), args.ref_C.stride(0)},
       {args.ref_D.data(), args.ref_D.stride(0)},
       args.epilogue,
-      args.additive_identity,
       args.split_k_slices
     );
   }

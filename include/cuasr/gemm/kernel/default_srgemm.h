@@ -23,14 +23,12 @@
 #include "cutlass/gemm/threadblock/threadblock_swizzle.h"
 
 #include "cutlass/epilogue/threadblock/epilogue.h"
-#include "cutlass/epilogue/threadblock/default_epilogue_tensor_op.h"
-#include "cutlass/epilogue/threadblock/default_epilogue_volta_tensor_op.h"
 #include "cutlass/epilogue/threadblock/default_epilogue_simt.h"
 #include "cutlass/transform/threadblock/predicated_tile_iterator.h"
 
 #include "cuasr/arch/srmma.h"
-#include "cuasr/kernel/srgemm.h"
-#include "cuasr/threadblock/default_srmma.h"
+#include "cuasr/gemm/kernel/srgemm.h"
+#include "cuasr/gemm/threadblock/default_srmma.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

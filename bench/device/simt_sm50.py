@@ -64,8 +64,8 @@ benchfile_header = """\
 
 #include "benchmark/benchmark.h"
 
-#include "cuasr/device/default_srgemm_configuration.h"
-#include "cuasr/device/srgemm.h"
+#include "cuasr/gemm/device/default_srgemm_configuration.h"
+#include "cuasr/gemm/device/srgemm.h"
 #include "cuasr/functional.h"
 
 #include "harness.h"

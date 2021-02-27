@@ -2,8 +2,8 @@
 #include <iostream>
 #include <random>
 
-#include "cuasr/device/default_srgemm_configuration.h"
-#include "cuasr/device/srgemm.h"
+#include "cuasr/gemm/device/default_srgemm_configuration.h"
+#include "cuasr/gemm/device/srgemm.h"
 #include "cuasr/functional.h"
 
 auto cuasr_minplus_srsgemm_nt_n(

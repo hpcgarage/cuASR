@@ -70,8 +70,8 @@ testfile_header = """\
 #include "cutlass/gemm/threadblock/threadblock_swizzle.h"
 
 /// from cuasr lib
-#include "cuasr/device/default_srgemm_configuration.h"
-#include "cuasr/device/srgemm.h"
+#include "cuasr/gemm/device/default_srgemm_configuration.h"
+#include "cuasr/gemm/device/srgemm.h"
 #include "cuasr/functional.h"
 
 /// from cuasr tools
