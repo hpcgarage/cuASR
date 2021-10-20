@@ -75,8 +75,8 @@ The following shows how to use and wrap min-plus tropical semiring GEMM in a BLA
 
 ```cpp
 #include "cuasr/functional.h"
-#include "cuasr/device/default_srgemm_configuration.h"
-#include "cuasr/device/srgemm.h"
+#include "cuasr/gemm/device/default_srgemm_configuration.h"
+#include "cuasr/gemm/device/srgemm.h"
 
 auto cuasr_minplus_srsgemm_nt(
     int M,

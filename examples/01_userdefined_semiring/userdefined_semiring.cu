@@ -14,7 +14,7 @@
  * that is not supported by the provided default SRGEMM configurations in cuASR.
  *
  * Galois Field SRGEMM explained here is an implementation of GEMM over GF(2) field
- * arithmetic. cuasr/functional.h already contians an implementation of binary_and<T>
+ * arithmetic. cuasr/functional.h already contains an implementation of binary_and<T>
  * operation, so we must define a binary_xor<T> here in order to define our own out of
  * library ring.
  *
