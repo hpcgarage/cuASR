@@ -238,7 +238,6 @@ struct Testbed {
       tensor_C.device_ref(),        //
       tensor_D.device_ref(),        //
       { alpha, beta },              //
-      Srgemm::AdditionOp::Identity, //
       split_k_slices                //
     };
 
