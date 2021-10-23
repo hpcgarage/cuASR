@@ -147,8 +147,8 @@ public:
 
     // Determine CTA position
     cutlass::MatrixCoord thread_offset(
-      int(blockIdx.x) * Shape::kRow + threadIdx.y,
-      int(blockIdx.y) * Shape::kColumn + threadIdx.x * kElementsPerAccess
+      cutlass::MatrixCoord::Index(int(blockIdx.x) * Shape::kRow + threadIdx.y),
+      cutlass::MatrixCoord::Index(int(blockIdx.y) * Shape::kColumn + threadIdx.x * kElementsPerAccess)
     );
 
     // One guard conditional
