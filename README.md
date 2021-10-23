@@ -21,7 +21,7 @@ Normally, BLAS libraries are defined as operations over real numbers,`+` and `x`
 cuASR is a template library and therefore header only, but includes an exhaustive list of tests and benchmarks. The build system is based on `CMake`. Basic checkout and build instructions are as follows:
 
 ```sh
-$ git clone --recurse-submodules https://github.com/hpcgarage/semiring-gemm /path/to/repo
+$ git clone --recurse-submodules https://github.com/hpcgarage/cuASR /path/to/repo
 $ cd /path/to/repo
 $ mkdir build && cd build
 $ cmake .. -G Ninja -DCUASR_CUDA_ARCHS="70 75"
