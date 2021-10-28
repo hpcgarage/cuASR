@@ -29,6 +29,11 @@ option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "60 61 70 7
 find_package(CUDA REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_CUDA_STANDARD 14)
+set(CMAKE_CUDA_STANDARD_REQUIRED TRUE)
 
 # C++ compiler flags for target compile options
 set(cuASR_CXX_FLAGS -Wall -Wextra -Wno-unused-parameter -Wno-uninitialized -Wno-strict-aliasing)
