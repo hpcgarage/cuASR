@@ -1,4 +1,6 @@
 import os
+import sys
+import argparse
 
 # this file creates the bench/unit/gemm/device simt benchmarks and the CMake file to go with it
 ################################################################################
@@ -83,11 +85,11 @@ bench_header_template = """\
 
 bench_template = """\
 #if defined(CUASR_BENCH_LEVEL) and (CUASR_BENCH_LEVEL >= {21})
-static void BM_SM50_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20}(benchmark::State &state) {{
+static void BM_SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20}(benchmark::State &state) {{
   const auto N = static_cast<int>(state.range(0));
   using precision = {3};
   using OpClass   = cutlass::arch::OpClassSimt;
-  using SmArch    = cutlass::arch::Sm50;
+  using SmArch    = cutlass::arch::Sm{22};
 
   using ThreadblockShape = cutlass::gemm::GemmShape<{10}, {11}, {12}>;
   using WarpShape        = cutlass::gemm::GemmShape<{13}, {14}, {12}>;
@@ -123,7 +125,7 @@ static void BM_SM50_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}
   state.counters["Flop/s"]
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }}
-BENCHMARK(BM_SM50_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20})
+BENCHMARK(BM_SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20})
     ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
@@ -151,7 +153,8 @@ def write_benchmark_to_file(
         warp_threadsM,
         warp_threadsN,
         warps_per_tb,
-        bench_level):
+        bench_level,
+        sm_arch):
   print("{:.0f}x{:.0f}x{:.0f}__{:.0f}x{:.0f}_{:.0f}x{:.0f}_{:.0f}x{:.0f}".format(
       threadblock_tile[0], threadblock_tile[1], unroll,
       thread_tileM, thread_tileN,
@@ -191,11 +194,12 @@ def write_benchmark_to_file(
       int(warp_threadsN),  # 18
       int(warps_per_tb[0]),  # 19
       int(warps_per_tb[1]),  # 20
-      int(bench_level)  # 21
+      int(bench_level),  # 21
+      int(sm_arch)  # 22
   ))
 
 
-def main(output_dir: str):
+def main(args):
   # warps per threadblock
   warps_per_threadblocks = []
   for warps_per_tb0 in WARPS_PER_TB_EDGE:
@@ -247,12 +251,12 @@ def main(output_dir: str):
         transC = "n" if column_major_C else "t"
 
         # open file
-        benchfile_name = "simt_{}_{}_{}srgemm_{}{}_{}_sm50.cu".format(
-            add_op, mult_op, precision_char,
+        benchfile_name = "sm{}_simt_{}_{}_{}srgemm_{}{}_{}.cu".format(
+            args.sm_arch, add_op, mult_op, precision_char,
             transA, transB, transC)
         print("\n", benchfile_name)
 
-        filePath = os.path.join(output_dir, benchfile_name)
+        filePath = os.path.join(args.output_dir, benchfile_name)
         with open(filePath, "w") as benchfile:
           write_benchmark_file_header(benchfile)
 
@@ -367,12 +371,18 @@ def main(output_dir: str):
                   warp_threadsM,
                   warp_threadsN,
                   warps_per_tb,
-                  bench_level)
+                  bench_level,
+                  args.sm_arch)
               num_benches += 1
   print("Benchmarks per level = {}, {}, {}".format(benchcount_L0, benchcount_L1, benchcount_L2))
   print("Total bench count per semi-ring = {}".format(num_benches //
                                                       len(semiring_operators)))
 
-
 if __name__ == "__main__":
-  main(".")
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-o", "--output-dir", type=str, required=False, default=".",
+                      help="Path to the output dir.")
+  parser.add_argument("-sm", "--sm-arch", type=int, required=False, default=50, choices=[50, 80],
+                      help="SM architecture version number,")
+  args = parser.parse_args(sys.argv[1:])
+  main(args)
