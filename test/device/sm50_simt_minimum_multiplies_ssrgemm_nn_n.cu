@@ -38,9 +38,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 8x32x8_8x32x1_2x4_4x8_1x1) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -74,9 +74,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x32x8_16x32x1_4x4_4x8_1x1) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -110,9 +110,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x64x8_16x64x1_4x8_4x8_1x1) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -146,9 +146,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x32x8_32x32x1_8x4_4x8_1x1) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -182,9 +182,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x64x8_32x64x1_8x8_4x8_1x1) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -218,9 +218,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x32x8_64x32x1_8x8_8x4_1x1) {
   using WarpShape        = cutlass::gemm::GemmShape<64, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -254,9 +254,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 8x32x8_8x16x1_2x2_4x8_1x2) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -290,9 +290,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 8x64x8_8x32x1_2x4_4x8_1x2) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -326,9 +326,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x32x8_16x16x1_4x2_4x8_1x2) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -362,9 +362,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x64x8_16x32x1_4x4_4x8_1x2) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -398,9 +398,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x128x8_16x64x1_4x8_4x8_1x2) 
   using WarpShape        = cutlass::gemm::GemmShape<16, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -434,9 +434,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x32x8_32x16x1_4x4_8x4_1x2) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -470,9 +470,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x64x8_32x32x1_8x4_4x8_1x2) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -506,9 +506,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x128x8_32x64x1_8x8_4x8_1x2) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -542,9 +542,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x64x8_64x32x1_8x8_8x4_1x2) {
   using WarpShape        = cutlass::gemm::GemmShape<64, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -578,9 +578,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x32x8_16x32x1_4x4_4x8_2x1) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -614,9 +614,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x32x8_32x32x1_8x4_4x8_2x1) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -650,9 +650,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x64x8_32x64x1_8x8_4x8_2x1) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -686,9 +686,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x32x8_64x32x1_8x8_8x4_2x1) 
   using WarpShape        = cutlass::gemm::GemmShape<64, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -722,9 +722,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x32x8_8x16x1_2x2_4x8_2x2) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -758,9 +758,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x64x8_8x32x1_2x4_4x8_2x2) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -794,9 +794,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x32x8_16x16x1_4x2_4x8_2x2) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -830,9 +830,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x64x8_16x32x1_4x4_4x8_2x2) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -866,9 +866,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x128x8_16x64x1_4x8_4x8_2x2) 
   using WarpShape        = cutlass::gemm::GemmShape<16, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -902,9 +902,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x32x8_32x16x1_4x4_8x4_2x2) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -938,9 +938,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x64x8_32x32x1_8x4_4x8_2x2) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -974,9 +974,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x128x8_32x64x1_8x8_4x8_2x2) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1010,9 +1010,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x32x8_64x16x1_8x4_8x4_2x2) 
   using WarpShape        = cutlass::gemm::GemmShape<64, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1046,9 +1046,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x64x8_64x32x1_8x8_8x4_2x2) 
   using WarpShape        = cutlass::gemm::GemmShape<64, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1082,9 +1082,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x64x16_8x16x1_2x2_4x8_2x4) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 16, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1118,9 +1118,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 16x128x16_8x32x1_2x4_4x8_2x4) 
   using WarpShape        = cutlass::gemm::GemmShape<8, 32, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1154,9 +1154,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x32x8_16x8x1_2x2_8x4_2x4) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 8, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1190,9 +1190,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x64x8_16x16x1_4x2_4x8_2x4) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1226,9 +1226,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x128x8_16x32x1_4x4_4x8_2x4) 
   using WarpShape        = cutlass::gemm::GemmShape<16, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1262,9 +1262,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x256x8_16x64x1_4x8_4x8_2x4) 
   using WarpShape        = cutlass::gemm::GemmShape<16, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1298,9 +1298,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x64x8_32x16x1_4x4_8x4_2x4) {
   using WarpShape        = cutlass::gemm::GemmShape<32, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1334,9 +1334,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x128x8_32x32x1_8x4_4x8_2x4) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1370,9 +1370,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x256x8_32x64x1_8x8_4x8_2x4) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1406,9 +1406,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x128x8_64x32x1_8x8_8x4_2x4)
   using WarpShape        = cutlass::gemm::GemmShape<64, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1442,9 +1442,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x32x8_8x16x1_2x2_4x8_4x2) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1478,9 +1478,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x32x8_16x16x1_4x2_4x8_4x2) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1514,9 +1514,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x64x8_16x32x1_4x4_4x8_4x2) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1550,9 +1550,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x32x8_32x16x1_4x4_8x4_4x2) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1586,9 +1586,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x64x8_32x32x1_8x4_4x8_4x2) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1622,9 +1622,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x128x8_32x64x1_8x8_4x8_4x2)
   using WarpShape        = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1658,9 +1658,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 256x32x8_64x16x1_8x4_8x4_4x2) 
   using WarpShape        = cutlass::gemm::GemmShape<64, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1694,9 +1694,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 256x64x8_64x32x1_8x8_8x4_4x2) 
   using WarpShape        = cutlass::gemm::GemmShape<64, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1730,9 +1730,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x64x16_8x16x1_2x2_4x8_4x4) {
   using WarpShape        = cutlass::gemm::GemmShape<8, 16, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1766,9 +1766,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 32x128x16_8x32x1_2x4_4x8_4x4) 
   using WarpShape        = cutlass::gemm::GemmShape<8, 32, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1802,9 +1802,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x32x16_16x8x1_2x2_8x4_4x4) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 8, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1838,9 +1838,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x64x8_16x16x1_4x2_4x8_4x4) {
   using WarpShape        = cutlass::gemm::GemmShape<16, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1874,9 +1874,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x128x8_16x32x1_4x4_4x8_4x4) 
   using WarpShape        = cutlass::gemm::GemmShape<16, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1910,9 +1910,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 64x256x8_16x64x1_4x8_4x8_4x4) 
   using WarpShape        = cutlass::gemm::GemmShape<16, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1946,9 +1946,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x32x16_32x8x1_4x2_8x4_4x4) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 8, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -1982,9 +1982,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x64x8_32x16x1_4x4_8x4_4x4) 
   using WarpShape        = cutlass::gemm::GemmShape<32, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -2018,9 +2018,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 128x128x8_32x32x1_8x4_4x8_4x4)
   using WarpShape        = cutlass::gemm::GemmShape<32, 32, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;
@@ -2054,9 +2054,9 @@ TEST(SM50_device_minimum_multiplies_ssrgemm_nn_n, 256x64x8_64x16x1_8x4_8x4_4x4) 
   using WarpShape        = cutlass::gemm::GemmShape<64, 16, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::minimum<precision>, cuasr::multiplies<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::minimum<precision>, cuasr::multiplies<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;

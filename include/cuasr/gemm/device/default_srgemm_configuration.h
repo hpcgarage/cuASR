@@ -30,13 +30,15 @@ template <
   typename ElementB,
   typename ElementC,
   typename ElementAccumulator,
-  typename OperatorClass,
   typename AdditionOp,
   typename MultiplicationOp,
+  typename OperatorClass,
   typename ArchTag
 >
 struct DefaultSemiRingConfiguration;
 
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// SM 50 //////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 // Plus-Times semi-ring GEMM configuration
@@ -50,9 +52,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::plus<Element>,
   cuasr::multiplies<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -80,9 +82,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::minimum<Element>,
   cuasr::plus<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -110,9 +112,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::maximum<Element>,
   cuasr::plus<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -139,9 +141,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::maximum<Element>,
   cuasr::minimum<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -168,9 +170,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::minimum<Element>,
   cuasr::maximum<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -197,9 +199,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::minimum<Element>,
   cuasr::multiplies<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -226,9 +228,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::maximum<Element>,
   cuasr::multiplies<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -255,9 +257,9 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cutlass::arch::OpClassSimt,
   cuasr::binary_or<Element>,
   cuasr::binary_and<Element>,
+  cutlass::arch::OpClassSimt,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
@@ -275,6 +277,9 @@ struct DefaultSemiRingConfiguration<
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// SM 80 //////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 
 } // namespace device
 } // namespace gemm

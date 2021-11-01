@@ -103,9 +103,9 @@ TEST(SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}, {10}x{11}x{12}_{13}x{14}x1_{15}
   using WarpShape        = cutlass::gemm::GemmShape<{13}, {14}, {12}>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration< //
-      precision, precision, precision, precision, OpClass,                   //
-      cuasr::{0}<precision>, cuasr::{1}<precision>, SmArch>;
+  using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
+      precision, precision, precision, precision,
+      cuasr::{0}<precision>, cuasr::{1}<precision>, OpClass, SmArch>;
 
   using AddOp            = Config::AdditionOp;
   using MultOp           = Config::MultiplicationOp;

@@ -29,8 +29,8 @@ auto cutlass_srsgemm_nn(
   using OperatorClass  = cutlass::arch::OpClassSimt;
   using SmArch         = cutlass::arch::Sm50;
   using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
-      float, float, float, float, OperatorClass, cuasr::minimum<float>,
-      cuasr::plus<float>, SmArch>;
+      float, float, float, float,
+      cuasr::minimum<float>, cuasr::plus<float>, OperatorClass, SmArch>;
 
   using AdditionOp       = TropicalConfig::AdditionOp;
   using MultiplicationOp = TropicalConfig::MultiplicationOp;
