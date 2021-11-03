@@ -1,16 +1,34 @@
-# Just the default configurations
-add_executable(cuasr_bench_srgemm_device_defaults
+# SM50 defualt configurations
+add_executable(cuasr_bench_srgemm_device_sm50_defaults
   sm50_defaults.cu
 )
 target_include_directories(
-  cuasr_bench_srgemm_device_defaults
+  cuasr_bench_srgemm_device_sm50_defaults
   PRIVATE
   ${PROJECT_SOURCE_DIR}/include/
   ${PROJECT_SOURCE_DIR}/tools/include/
   ${PROJECT_SOURCE_DIR}/cutlass/include/
   ${PROJECT_SOURCE_DIR}/cutlass/tools/util/include/
 )
-target_link_libraries(cuasr_bench_srgemm_device_defaults
+target_link_libraries(cuasr_bench_srgemm_device_sm50_defaults
+  benchmark
+  benchmark_main
+  ${cuASR_LIB_NAME}
+)
+
+# SM80 defualt configurations
+add_executable(cuasr_bench_srgemm_device_sm80_defaults
+  sm80_defaults.cu
+)
+target_include_directories(
+  cuasr_bench_srgemm_device_sm80_defaults
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/include/
+  ${PROJECT_SOURCE_DIR}/tools/include/
+  ${PROJECT_SOURCE_DIR}/cutlass/include/
+  ${PROJECT_SOURCE_DIR}/cutlass/tools/util/include/
+)
+target_link_libraries(cuasr_bench_srgemm_device_sm80_defaults
   benchmark
   benchmark_main
   ${cuASR_LIB_NAME}
