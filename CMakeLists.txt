@@ -23,7 +23,7 @@ option(CUASR_BENCH   "Build cuASR benchmark suite."  ON)
 option(CUASR_EXAMPLE "Build cuASR examples."  ON)
 
 # By default, build fat binaries. TODO add sm_80 here
-option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "60 61 70 72 75")
+option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "80")
 
 # CUDA native compiler (nvcc) only supports upto C++14 for now
 find_package(CUDA REQUIRED)
