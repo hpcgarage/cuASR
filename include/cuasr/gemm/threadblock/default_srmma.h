@@ -83,8 +83,6 @@ template <
     int kAlignmentB,
     /// Element type for internal accumulation
     typename ElementAccumulator,
-    /// Tag indicating architecture to tune for
-    typename ArchTag,
     /// Threadblock-level tile size (concept: GemmShape)
     typename ThreadblockShape,
     /// Warp-level tile size (concept: GemmShape)
@@ -97,7 +95,7 @@ template <
     typename MultiplicationOp>
 struct DefaultSrmma<ElementA, LayoutA, kAlignmentA, ElementB, LayoutB,
                   kAlignmentB, ElementAccumulator, cutlass::layout::RowMajor,
-                  cutlass::arch::OpClassSimt, ArchTag, ThreadblockShape, WarpShape,
+                  cutlass::arch::OpClassSimt, cutlass::arch::Sm50, ThreadblockShape, WarpShape,
                   InstructionShape, AdditionOp, MultiplicationOp, 2, false> {
   // Define the SrmmaCore components
   using SrmmaCore = typename cuasr::gemm::threadblock::DefaultSrmmaCore<
@@ -142,8 +140,6 @@ template <
     int kAlignmentB,
     /// Element type for internal accumulation
     typename ElementAccumulator,
-    /// Tag indicating architecture to tune for
-    typename ArchTag,
     /// Threadblock-level tile size (concept: GemmShape)
     typename ThreadblockShape,
     /// Warp-level tile size (concept: GemmShape)
@@ -159,7 +155,7 @@ template <
 struct DefaultSrmma<ElementA, LayoutA, kAlignmentA,
                     ElementB, LayoutB, kAlignmentB,
                     ElementAccumulator, cutlass::layout::RowMajor,
-                    cutlass::arch::OpClassSimt, ArchTag,
+                    cutlass::arch::OpClassSimt, cutlass::arch::Sm80,
                     ThreadblockShape, WarpShape, InstructionShape,
                     AdditionOp, MultiplicationOp, Stages, false> {
 

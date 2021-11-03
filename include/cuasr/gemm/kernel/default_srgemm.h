@@ -105,8 +105,6 @@ template <
     typename ElementC,
     /// Element type for internal accumulation
     typename ElementAccumulator,
-    /// Tag indicating architecture to tune for
-    typename ArchTag,
     /// Threadblock-level tile size (concept: GemmShape)
     typename ThreadblockShape,
     /// Warp-level tile size (concept: GemmShape)
@@ -133,7 +131,7 @@ struct DefaultSrgemm<
     cutlass::layout::RowMajor,
     ElementAccumulator,
     cutlass::arch::OpClassSimt,
-    ArchTag,
+    cutlass::arch::Sm50,
     ThreadblockShape,
     WarpShape,
     cutlass::gemm::GemmShape<1, 1, 1>,

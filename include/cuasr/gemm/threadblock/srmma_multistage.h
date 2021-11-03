@@ -444,14 +444,14 @@ public:
     warp_loaded_frag_B[0].fill(additive_identity_);
     warp_loaded_frag_B[1].fill(additive_identity_);
 
-    WarpTransformedFragmentA warp_transformed_frag_A[2];
-    WarpTransformedFragmentB warp_transformed_frag_B[2];
+    // WarpTransformedFragmentA warp_transformed_frag_A[2];
+    // WarpTransformedFragmentB warp_transformed_frag_B[2];
 
     // TODO: see if we can get away without this, should be possible
-    warp_transformed_frag_A[0].fill(additive_identity_);
-    warp_transformed_frag_A[1].fill(additive_identity_);
-    warp_transformed_frag_B[0].fill(additive_identity_);
-    warp_transformed_frag_B[1].fill(additive_identity_);
+    // warp_transformed_frag_A[0].fill(additive_identity_);
+    // warp_transformed_frag_A[1].fill(additive_identity_);
+    // warp_transformed_frag_B[0].fill(additive_identity_);
+    // warp_transformed_frag_B[1].fill(additive_identity_);
 
     Operator warp_mma;
 
@@ -470,8 +470,8 @@ public:
     int smem_write_stage_idx = Base::kStages - 1;
     int smem_read_stage_idx = 0;
 
-    warp_mma.transform(warp_transformed_frag_A[0], warp_transformed_frag_B[0],
-                       warp_loaded_frag_A[0], warp_loaded_frag_B[0]);
+    // warp_mma.transform(warp_transformed_frag_A[0], warp_transformed_frag_B[0],
+    //                    warp_loaded_frag_A[0], warp_loaded_frag_B[0]);
 
     //
     // Mainloop
@@ -502,15 +502,15 @@ public:
         ++this->warp_tile_iterator_B_;
 
         if (warp_mma_k > 0)
-          warp_mma.transform(warp_transformed_frag_A[warp_mma_k % 2],
-                             warp_transformed_frag_B[warp_mma_k % 2],
-                             warp_loaded_frag_A[warp_mma_k % 2],
-                             warp_loaded_frag_B[warp_mma_k % 2]);
+          // warp_mma.transform(warp_transformed_frag_A[warp_mma_k % 2],
+          //                    warp_transformed_frag_B[warp_mma_k % 2],
+          //                    warp_loaded_frag_A[warp_mma_k % 2],
+          //                    warp_loaded_frag_B[warp_mma_k % 2]);
 
         warp_mma(
           accum, 
-          warp_transformed_frag_A[warp_mma_k % 2],
-          warp_transformed_frag_B[warp_mma_k % 2], 
+          warp_loaded_frag_A[warp_mma_k % 2],
+          warp_loaded_frag_B[warp_mma_k % 2], 
           accum
         );
 
@@ -579,11 +579,11 @@ public:
 
         // Do any conversions feeding the first stage at the end of the loop so
         // we can start right away on mma instructions
-        if (warp_mma_k + 1 == Base::kWarpGemmIterations)
-          warp_mma.transform(warp_transformed_frag_A[(warp_mma_k + 1) % 2],
-                             warp_transformed_frag_B[(warp_mma_k + 1) % 2],
-                             warp_loaded_frag_A[(warp_mma_k + 1) % 2],
-                             warp_loaded_frag_B[(warp_mma_k + 1) % 2]);
+        // if (warp_mma_k + 1 == Base::kWarpGemmIterations)
+        //   warp_mma.transform(warp_transformed_frag_A[(warp_mma_k + 1) % 2],
+        //                      warp_transformed_frag_B[(warp_mma_k + 1) % 2],
+        //                      warp_loaded_frag_A[(warp_mma_k + 1) % 2],
+        //                      warp_loaded_frag_B[(warp_mma_k + 1) % 2]);
       }
 
     }

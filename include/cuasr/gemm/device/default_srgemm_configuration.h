@@ -295,8 +295,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<32, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
@@ -322,8 +322,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<128, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<64, 32, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
@@ -349,8 +349,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
@@ -375,8 +375,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
@@ -401,8 +401,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
@@ -427,8 +427,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
@@ -453,8 +453,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
@@ -479,8 +479,8 @@ struct DefaultSemiRingConfiguration<
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
+  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 16>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 16>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
