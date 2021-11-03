@@ -148,6 +148,8 @@ public:
 
   /// Storage for A tile
   using FragmentA = typename IteratorA::Fragment;
+  /// Storage for transformed A tile
+  using TransformedFragmentA = FragmentA;
 
   /// Iterates over the B operand in memory
   using IteratorB = cutlass::gemm::warp::MmaSimtTileIterator<
@@ -162,6 +164,8 @@ public:
 
   /// Storage for B tile
   using FragmentB = typename IteratorB::Fragment;
+  /// Storage for transformed B tile
+  using TransformedFragmentB = FragmentB;
 
   /// Iterates over the C operand in memory
   using IteratorC = cutlass::gemm::warp::MmaSimtTileIterator<
@@ -196,6 +200,15 @@ public:
     ThreadMma srmma;
 
     srmma(d, a, b, c);
+  }
+
+  /// Transform the mma operands to the required types
+  CUTLASS_DEVICE
+  void transform(TransformedFragmentA &dst_A, TransformedFragmentB &dst_B,
+                 FragmentA const &A, FragmentB const &B) const {
+    //TODO: Implement this
+    dst_A = A;
+    dst_B = B;
   }
 };
 
