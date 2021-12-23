@@ -24,7 +24,7 @@ cuASR is a template library and therefore header only, but includes an exhaustiv
 $ git clone --recurse-submodules https://github.com/hpcgarage/cuASR /path/to/repo
 $ cd /path/to/repo
 $ mkdir build && cd build
-$ cmake .. -G Ninja -DCUASR_CUDA_ARCHS="70 75"
+$ cmake .. -G Ninja -DCMAKE_CUDA_ARCHITECTURES="70 75 80"
 $ ninja
 ```
 
@@ -34,7 +34,7 @@ Notable build flags:
 
 | Build Flag | Usage Description |
 |-|-|
-| `CUASR_CUDA_ARCHS` | lists the CUDA SM architectures the fat binaries should be built to target. `CUASR_CUDA_ARCHS="60 61 70 72 75"` (all Pascal and Volta GPUs) will be used if no value is specified, but this can really hurt compile times for tests and benchmarks; Limit CUDA architectures to the smallest subset you forsee running the tests and benchmarks on.
+| `CMAKE_CUDA_ARCHITECTURES` | lists the CUDA SM architectures the fat binaries should be built to target. `CMAKE_CUDA_ARCHITECTURES="80"` (Ampere) will be used if no value is specified, but this can really hurt compile times for tests and benchmarks; Limit CUDA architectures to the smallest subset you forsee running the tests and benchmarks on.
 | `CUASR_TEST` | Set to `ON` by default and controls whether tests will be built or not. Set to `OFF` to disable building all tests. |
 | `CUASR_BENCH` | Set to `ON` by default and controls whether benchmarks will be built or not. Set to `OFF` to disable building all benchmarks. |
 | `CUASR_EXAMPLES` | Set to `ON` by default and controls whether examples will be built or not. Set to `OFF` to disable building all examples. |

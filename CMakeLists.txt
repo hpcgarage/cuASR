@@ -22,9 +22,6 @@ option(CUASR_TEST    "Build cuASR test suite. Use with CUASR_TEST_LEVEL={0|1|2}.
 option(CUASR_BENCH   "Build cuASR benchmark suite."  ON)
 option(CUASR_EXAMPLE "Build cuASR examples."  ON)
 
-# By default, build fat binaries. TODO add sm_80 here
-option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "80")
-
 # CUDA native compiler (nvcc) only supports upto C++14 for now
 find_package(CUDA REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -46,7 +43,7 @@ set(cuASR_CUDA_FLAGS --expt-relaxed-constexpr)
 set(cuASR_CUDA_FLAGS_DEBUG          -G ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELEASE        -O3 ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELWITHDEBINFO -G ${cuASR_CUDA_FLAGS})
-set(CMAKE_CUDA_ARCHITECTURES ${CUASR_CUDA_ARCHS})
+set(CMAKE_CUDA_ARCHITECTURES "80")
 
 # the sub-modules update themselves with git, so find git
 find_package(Git QUIET)
@@ -99,6 +96,7 @@ message(STATUS "  C++ Compiler         : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  C++ Compiler version : ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "  CUDA Compiler        : ${CMAKE_CUDA_COMPILER}")
 message(STATUS "  CUDA Compiler version: ${CMAKE_CUDA_COMPILER_VERSION}")
+message(STATUS "  CUDA Arch support    : ${CMAKE_CUDA_ARCHITECTURES}")
 message(STATUS "  Build tests          : ${CUASR_TEST}")
 message(STATUS "  Test level           : ${CUASR_TEST_LEVEL}")
 message(STATUS "  Build benchmarks     : ${CUASR_BENCH}")
