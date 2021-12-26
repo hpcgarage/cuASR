@@ -20,6 +20,7 @@
 #include "cutlass/gemm/warp/mma.h"
 
 #include "cuasr/gemm/threadblock/srmma_pipelined.h"
+#include "cuasr/gemm/threadblock/srmma_multistage.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -82,3 +83,4 @@ struct DefaultSrmmaCore;
 } // namespace cuasr
 
 #include "cuasr/gemm/threadblock/default_srmma_core_simt.h"
+#include "cuasr/gemm/threadblock/default_srmma_core_sm80.h"

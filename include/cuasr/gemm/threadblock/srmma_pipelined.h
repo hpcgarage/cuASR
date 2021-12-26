@@ -53,8 +53,7 @@ template <
     typename SmemIteratorA_::Element,
     typename IteratorA_::Element,
     IteratorA_::Fragment::kElements>,
-  ///
-  /// Transformation applied to A operand
+  /// Transformation applied to B operand
   typename TransformB_ = cutlass::NumericArrayConverter<
     typename SmemIteratorB_::Element,
     typename IteratorB_::Element,
@@ -124,7 +123,7 @@ public:
     int thread_idx,                                     ///< ID within the threadblock
     int warp_idx,                                       ///< ID of warp
     int lane_idx,                                       ///< ID of each thread within a warp
-    ElementC additive_identity                             ///< Identity value of multiply op
+    ElementC additive_identity                          ///< Identity value of multiply op
   ):
     Base(shared_storage, thread_idx, warp_idx, lane_idx),
     smem_iterator_A_(shared_storage.operand_A_ref(), thread_idx),
@@ -205,10 +204,8 @@ public:
     int smem_write_stage_idx = 1;
 
     // Avoid reading out of bounds
-    if (gemm_k_iterations <= 1) {
-      iterator_A.clear_mask();
-      iterator_B.clear_mask();
-    }
+    iterator_A.clear_mask(gemm_k_iterations <= 1);
+    iterator_B.clear_mask(gemm_k_iterations <= 1);
 
     // Issue loads during the first warp-level matrix multiply-add *AFTER* issuing
     // shared memory loads (which have the tighest latency requirement).
@@ -275,10 +272,8 @@ public:
           ++iterator_B;
 
           // Avoid reading out of bounds if this was the last loop iteration
-          if (gemm_k_iterations <= 2) {
-            iterator_A.clear_mask();
-            iterator_B.clear_mask();
-          }
+          iterator_A.clear_mask(gemm_k_iterations <= 2);
+          iterator_B.clear_mask(gemm_k_iterations <= 2);
         }
 
         warp_mma(accum, warp_frag_A[warp_mma_k % 2], warp_frag_B[warp_mma_k % 2], accum);

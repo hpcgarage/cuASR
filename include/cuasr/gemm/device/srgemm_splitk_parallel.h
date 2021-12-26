@@ -59,24 +59,24 @@ template <
   /// Threadblock-level tile size (concept: GemmShape)
   typename ThreadblockShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::ThreadblockShape,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::ThreadblockShape,
   /// Warp-level tile size (concept: GemmShape)
   typename WarpShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::WarpShape,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::WarpShape,
   /// Instruction-level tile size (concept: GemmShape)
   typename InstructionShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::InstructionShape,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::InstructionShape,
   /// Epilogue output operator
   typename EpilogueOutputOp_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::EpilogueOutputOp,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp,
   /// Epilogue conversion operator
   typename ConvertScaledOp_ = cutlass::epilogue::thread::Convert<
       ElementAccumulator_, DefaultSemiRingConfiguration<
         ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-        OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::EpilogueOutputOp::kCount,
+        AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp::kCount,
       ElementAccumulator_>,
   /// Reduction operator
   typename ReductionOp_ = cuasr::reduction::thread::SemiringReduce<
@@ -88,15 +88,15 @@ template <
   /// Number of stages used in the pipelined mainloop
   int Stages = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kStages,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kStages,
   /// Access granularity of A matrix in units of elements
   int kAlignmentA = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentA,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kAlignmentA,
   /// Access granularity of B matrix in units of elements
   int kAlignmentB = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentB
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kAlignmentB
 >
 class SrgemmSplitKParallel {
  public:

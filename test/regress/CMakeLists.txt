@@ -6,6 +6,7 @@ add_library(deprecated_libfwgpu ${cuASR_LIB_TYPE}
 target_include_directories(deprecated_libfwgpu
   PUBLIC ${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS}
   PRIVATE ${PROJECT_SOURCE_DIR}/cutlass/include
+  PRIVATE ${PROJECT_SOURCE_DIR}/cutlass/tools/util/include
   PRIVATE ${PROJECT_SOURCE_DIR}/test/regress/include
 )
 target_compile_options(deprecated_libfwgpu

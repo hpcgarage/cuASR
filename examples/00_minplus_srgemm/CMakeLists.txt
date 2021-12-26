@@ -5,6 +5,7 @@ target_include_directories(minplus_srgemm
   PRIVATE
   ${PROJECT_SOURCE_DIR}/include
   ${PROJECT_SOURCE_DIR}/cutlass/include
+  ${PROJECT_SOURCE_DIR}/cutlass/tools/util/include
   ${CUDA_INCLUDE_DIRS}
 )
 target_compile_options(minplus_srgemm

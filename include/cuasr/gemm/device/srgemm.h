@@ -51,34 +51,34 @@ template <
   /// Threadblock-level tile size (concept: GemmShape)
   typename ThreadblockShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::ThreadblockShape,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::ThreadblockShape,
   /// Warp-level tile size (concept: GemmShape)
   typename WarpShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::WarpShape,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::WarpShape,
   /// Instruction-level tile size (concept: GemmShape)
   typename InstructionShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::InstructionShape,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::InstructionShape,
   /// Epilogue output operator
   typename EpilogueOutputOp_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::EpilogueOutputOp,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp,
   /// Threadblock-level swizzling operator
   typename ThreadblockSwizzle_ =
       typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>,
   /// Number of stages used in the pipelined mainloop
   int Stages = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kStages,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kStages,
   /// Access granularity of A matrix in units of elements
   int AlignmentA = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentA,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kAlignmentA,
   /// Access granularity of B matrix in units of elements
   int AlignmentB = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentB,
+      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kAlignmentB,
   /// If true, kernel supports split-K with serial reduction
   bool SplitKSerial = false
 >
