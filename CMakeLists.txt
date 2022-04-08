@@ -43,7 +43,9 @@ set(cuASR_CUDA_FLAGS --expt-relaxed-constexpr)
 set(cuASR_CUDA_FLAGS_DEBUG          -G ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELEASE        -O3 ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELWITHDEBINFO -G ${cuASR_CUDA_FLAGS})
-set(CMAKE_CUDA_ARCHITECTURES "80")
+if (NOT CMAKE_CUDA_ARCHITECTURES)
+  set(CMAKE_CUDA_ARCHITECTURES "80")
+endif()
 
 # the sub-modules update themselves with git, so find git
 find_package(Git QUIET)
