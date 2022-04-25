@@ -82,7 +82,7 @@ template <
     cutlass::gemm::SharedMemoryClearOption SharedMemoryClear = cutlass::gemm::SharedMemoryClearOption::kNone,
     /// Used for partial specialization
     typename Enable = bool>
-class SrmmaMultistage : 
+class SrmmaMultistage :
   public cutlass::gemm::threadblock::MmaBase<Shape_, Policy_, Stages> {
 public:
   ///< Base class
@@ -118,7 +118,7 @@ public:
 
   /// Minimum architecture is Sm80 to support cp.async
   using ArchTag = cutlass::arch::Sm80;
-  
+
   /// Complex transform on A operand
   static cutlass::ComplexTransform const kTransformA = Operator::kTransformA;
 
@@ -494,7 +494,7 @@ public:
 
         this->warp_tile_iterator_A_.set_kgroup_index((warp_mma_k + 1) % Base::kWarpGemmIterations);
         this->warp_tile_iterator_B_.set_kgroup_index((warp_mma_k + 1) % Base::kWarpGemmIterations);
-        
+
         this->warp_tile_iterator_A_.load(warp_loaded_frag_A[(warp_mma_k + 1) % 2]);
         this->warp_tile_iterator_B_.load(warp_loaded_frag_B[(warp_mma_k + 1) % 2]);
 
@@ -508,9 +508,9 @@ public:
           //                    warp_loaded_frag_B[warp_mma_k % 2]);
 
         warp_mma(
-          accum, 
+          accum,
           warp_loaded_frag_A[warp_mma_k % 2],
-          warp_loaded_frag_B[warp_mma_k % 2], 
+          warp_loaded_frag_B[warp_mma_k % 2],
           accum
         );
 
@@ -521,7 +521,7 @@ public:
           group_start_iteration_A = warp_mma_k * Detail::kAccessesPerGroupA;
           group_start_iteration_B = warp_mma_k * Detail::kAccessesPerGroupB;
 
-          copy_tiles_and_advance(iterator_A, iterator_B, group_start_iteration_A, 
+          copy_tiles_and_advance(iterator_A, iterator_B, group_start_iteration_A,
                                group_start_iteration_B);
         }
 
@@ -532,7 +532,7 @@ public:
           group_start_iteration_B =
               (warp_mma_k + 1) * Detail::kAccessesPerGroupB;
 
-          copy_tiles_and_advance(iterator_A, iterator_B, group_start_iteration_A, 
+          copy_tiles_and_advance(iterator_A, iterator_B, group_start_iteration_A,
                                group_start_iteration_B);
 
           // Inserts a memory fence between stages of cp.async instructions.
@@ -587,7 +587,7 @@ public:
       }
 
     }
-    
+
     if (SharedMemoryClear == cutlass::gemm::SharedMemoryClearOption::kZfill) {
       // commit and drain all pending and predicated LDGSTS pnz from the GEMM mainloop
       cutlass::arch::cp_async_fence();

@@ -44,10 +44,8 @@ template <
   typename LayoutC_,
   /// Shape of the warp in units of thread (concept: MmaSimtPolicy)
   typename Policy_,
-  /// Addition of the semi-ring
-  typename AdditionOp_,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp_,
+  /// Ring operation that performs FMA
+  typename RingOp_,
   /// Number of partitions along K dimension
   int PartitionsK = 1,
   /// Used for partial specialization
@@ -82,9 +80,8 @@ public:
   /// Indicates class of matrix operator
   using OperatorClass = cutlass::arch::OpClassSimt;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Ring operation that performs FMA
+  using RingOp = RingOp;
 
   using ThreadLayoutA = typename cutlass::platform::conditional<
       cutlass::platform::is_same<cutlass::layout::ColumnMajorInterleaved<4>, LayoutA>::
@@ -128,8 +125,7 @@ public:
     ThreadLayoutB,
     ElementC,
     LayoutC,
-    AdditionOp,
-    MultiplicationOp,
+    RingOp,
     dp4a_type
   >;
 

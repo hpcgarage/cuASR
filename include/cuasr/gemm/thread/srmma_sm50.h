@@ -38,10 +38,8 @@ template <
   typename ElementC_,
   /// Layout of C matrix (concept: layout::MapFunc)
   typename LayoutC_,
-  /// Addition operator of the semi-ring
-  typename AdditionOp_,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp_
+  /// Ring operation that performs FMA
+  typename RingOp_
 >
 struct SrmmaGeneric {
 
@@ -66,9 +64,8 @@ struct SrmmaGeneric {
   /// Layout of C matrix (concept: layout::MapFunc)
   using LayoutC = LayoutC_;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// A operand storage
   using FragmentA = cutlass::Array<ElementA, Shape::kMK>;
@@ -86,7 +83,7 @@ struct SrmmaGeneric {
     ElementA, LayoutA,
     ElementB, LayoutB,
     ElementC, LayoutC,
-    AdditionOp, MultiplicationOp>;
+    RingOp>;
 
   //
   // Methods
@@ -147,7 +144,6 @@ struct SrmmaGeneric {
   }
 };
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// Gemplate that handles conventional layouts for FFMA and DFMA GEMM
@@ -166,10 +162,8 @@ template <
   typename ElementC_,
   /// Layout of C matrix (concept: layout::MapFunc)
   typename LayoutC_,
-  /// Addition operator of the semi-ring
-  typename AdditionOp_,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp_
+  /// Ring operation that performs FMA
+  typename RingOp
 >
 struct Srmma<
   Shape_,
@@ -179,8 +173,7 @@ struct Srmma<
   LayoutB_,
   ElementC_,
   LayoutC_,
-  AdditionOp_,
-  MultiplicationOp_,
+  RingOp,
   bool
 > {
 
@@ -205,9 +198,8 @@ struct Srmma<
   /// Layout of C matrix (concept: layout::MapFunc)
   using LayoutC = LayoutC_;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Ring operation that performs FMA
+  using RingOp = RingOp_;
 
   /// A operand storage
   using FragmentA = Array<ElementA, Shape::kMK>;
@@ -238,8 +230,7 @@ struct Srmma<
       LayoutB,
       ElementC,
       LayoutC,
-      AdditionOp,
-      MultiplicationOp> srmma;
+      RingOp> srmma;
 
     srmma(D, A, B, C);
   }

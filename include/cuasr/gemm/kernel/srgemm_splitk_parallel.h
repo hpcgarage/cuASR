@@ -22,16 +22,14 @@ namespace kernel {
 
 template <
   typename Srmma_,                ///! Threadblock-scoped matrix multiply-accumulate
-  typename AdditionOp_,           ///! Addition operator of the semi-ring
-  typename MultiplicationOp_,     ///! Multiplication operator of the semi-ring
+  typename RingOp_,               ///! Ring operation that performs FMA
   typename Epilogue_,             ///! Epilogue
   typename ThreadblockSwizzle_    ///! Threadblock swizzling function
 >
 struct SrgemmSplitKParallel {
 
   using Srmma = Srmma_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp_;
   using Epilogue = Epilogue_;
   using OutputOp = typename Epilogue::OutputOp;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
@@ -106,7 +104,7 @@ struct SrgemmSplitKParallel {
   /// Executes one GEMM
   CUTLASS_DEVICE
   void operator()(Params const &params, SharedStorage &shared_storage) {
-    constexpr typename OutputOp::ElementCompute kAdditiveIdentity = AdditionOp::Identity;
+    constexpr typename OutputOp::ElementCompute kAdditiveIdentity = RingOp::AddIdentity;
 
     // Compute threadblock location
     ThreadblockSwizzle threadblock_swizzle;

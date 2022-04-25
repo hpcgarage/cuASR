@@ -39,10 +39,8 @@ template <
   typename ElementC,
   /// Layout of C matrix (concept: MatrixLayout)
   typename LayoutC,
-  /// Addition operator of the semi-ring
-  typename AdditionOp,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp,
+  /// Ring operation that performs FMA
+  typename RingOp,
   /// Used for partial specialization
   typename Enable = bool
 >

@@ -59,17 +59,9 @@ struct SemiringReduce {
   using FragmentAccumulator = cutlass::Array<ElementAccumulator, kCount>;
   using FragmentElement = cutlass::Array<Element, kCount>;
 
-  // Types nested
-  struct Params { };
-
-  // Data members
-  Params params;
-
-  // Methods
-
   /// Constructor
   CUTLASS_HOST_DEVICE
-  SemiringReduce(Params params_ = Params()): params(params_) { }
+  SemiringReduce() = default;
 
   /// Operator
   CUTLASS_HOST_DEVICE

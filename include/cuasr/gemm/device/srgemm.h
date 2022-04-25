@@ -26,10 +26,8 @@ namespace device {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <
-  /// Addition operator of the semi-ring
-  typename AdditionOp_,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp_,
+  /// Ring operation that performs FMA
+  typename RingOp_,
   /// Element type for A matrix operand
   typename ElementA_,
   /// Layout type for A matrix operand
@@ -51,34 +49,34 @@ template <
   /// Threadblock-level tile size (concept: GemmShape)
   typename ThreadblockShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::ThreadblockShape,
+      RingOp_, OperatorClass_, ArchTag_>::ThreadblockShape,
   /// Warp-level tile size (concept: GemmShape)
   typename WarpShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::WarpShape,
+      RingOp_, OperatorClass_, ArchTag_>::WarpShape,
   /// Instruction-level tile size (concept: GemmShape)
   typename InstructionShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::InstructionShape,
+      RingOp_, OperatorClass_, ArchTag_>::InstructionShape,
   /// Epilogue output operator
   typename EpilogueOutputOp_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp,
+      RingOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp,
   /// Threadblock-level swizzling operator
   typename ThreadblockSwizzle_ =
       typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>,
   /// Number of stages used in the pipelined mainloop
   int Stages = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kStages,
+      RingOp_, OperatorClass_, ArchTag_>::kStages,
   /// Access granularity of A matrix in units of elements
   int AlignmentA = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kAlignmentA,
+      RingOp_, OperatorClass_, ArchTag_>::kAlignmentA,
   /// Access granularity of B matrix in units of elements
   int AlignmentB = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      AdditionOp_, MultiplicationOp_, OperatorClass_, ArchTag_>::kAlignmentB,
+      RingOp_, OperatorClass_, ArchTag_>::kAlignmentB,
   /// If true, kernel supports split-K with serial reduction
   bool SplitKSerial = false
 >
@@ -103,8 +101,7 @@ class Srgemm {
   using InstructionShape = InstructionShape_;
   using EpilogueOutputOp = EpilogueOutputOp_;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static int const kAlignmentA = AlignmentA;
   static int const kAlignmentB = AlignmentB;
@@ -113,6 +110,7 @@ class Srgemm {
 
   /// Define the kernel
   using SrgemmKernel = typename cuasr::gemm::kernel::DefaultSrgemm<
+    RingOp,
     ElementA,
     LayoutA,
     kAlignmentA,
@@ -127,8 +125,6 @@ class Srgemm {
     ThreadblockShape,
     WarpShape,
     InstructionShape,
-    AdditionOp,
-    MultiplicationOp,
     EpilogueOutputOp,
     ThreadblockSwizzle,
     kStages,
@@ -357,10 +353,8 @@ public:
 };
 
 template <
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_,
+    /// Ring operation that performs FMA
+    typename RingOp_,
     /// Element type for A matrix operand
     typename ElementA_,
     /// Layout type for A matrix operand
@@ -395,12 +389,12 @@ template <
     int AlignmentB,
     /// If true, kernel supports split-K as a serial reduction
     bool SplitKSerial>
-class Srgemm<AdditionOp_, MultiplicationOp_,
-            ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
-            cutlass::layout::ColumnMajor,  // partially specialized on LayoutC
-            ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
-            WarpShape_, InstructionShape_, EpilogueOutputOp_,
-            ThreadblockSwizzle_, Stages, AlignmentA, AlignmentB, SplitKSerial
+class Srgemm<RingOp_,
+             ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
+             cutlass::layout::ColumnMajor,  // partially specialized on LayoutC
+             ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
+             WarpShape_, InstructionShape_, EpilogueOutputOp_,
+             ThreadblockSwizzle_, Stages, AlignmentA, AlignmentB, SplitKSerial
             > {
  public:
 
@@ -422,16 +416,14 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
   using InstructionShape = InstructionShape_;
   using EpilogueOutputOp = EpilogueOutputOp_;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static int const kAlignmentA = AlignmentA;
   static int const kAlignmentB = AlignmentB;
   static bool const kSplitKSerial = SplitKSerial;
 
   using UnderlyingOperator = Srgemm<
-    AdditionOp,
-    MultiplicationOp,
+    RingOp,
     ElementB,
     typename cutlass::layout::LayoutTranspose<LayoutB>::type,
     ElementA,

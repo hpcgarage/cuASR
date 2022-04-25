@@ -74,14 +74,12 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, ElementA_,
                       cutlass::layout::ColumnMajor, ElementB_, cutlass::layout::RowMajor,
                       ElementC_, LayoutC_, cutlass::arch::OpClassSimt,
-                      AdditionOp_, MultiplicationOp_, 2
+                      RingOp_, 2
                        > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -95,9 +93,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -200,8 +197,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp  /// Multiplication operator of the semi-ring
+      RingOp
   >;
 
   /// Policy used to define MmaPipelined
@@ -236,14 +232,12 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, ElementA_,
                       cutlass::layout::RowMajor, ElementB_, cutlass::layout::ColumnMajor,
                       ElementC_, LayoutC_, cutlass::arch::OpClassSimt,
-                      AdditionOp_, MultiplicationOp_, 2
+                      RingOp_, 2
                      > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -257,9 +251,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -372,8 +365,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp  /// Multiplication operator of the semi-ring
+      RingOp
   >;
 
 
@@ -409,13 +401,11 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, ElementA_,
                       cutlass::layout::RowMajor, ElementB_, cutlass::layout::RowMajor, ElementC_,
-                      LayoutC_, cutlass::arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                      LayoutC_, cutlass::arch::OpClassSimt, RingOp_, 2
                        > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -429,9 +419,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -540,8 +529,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp  /// Multiplication operator of the semi-ring
+      RingOp
   >;
 
   /// Policy used to define MmaPipelined
@@ -576,14 +564,12 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, ElementA_,
                       cutlass::layout::ColumnMajor, ElementB_, cutlass::layout::ColumnMajor,
                       ElementC_, LayoutC_, cutlass::arch::OpClassSimt,
-                      AdditionOp_, MultiplicationOp_, 2
+                      RingOp_, 2
                        > {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -597,9 +583,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -708,8 +693,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 1>, E
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp  /// Multiplication operator of the semi-ring
+      RingOp
   >;
 
   /// Policy used to define MmaPipelined
@@ -740,13 +724,11 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, int8_t,
                       cutlass::layout::ColumnMajor, int8_t, cutlass::layout::RowMajor, ElementC_,
-                      LayoutC_, cutlass::arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                      LayoutC_, cutlass::arch::OpClassSimt, RingOp_, 2
                        > {
 
   using Shape = Shape_;
@@ -761,9 +743,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -866,8 +847,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp, /// Multiplication operator of the semi-ring
+      RingOp,
       PartitionsK       /// Number of partitions along K dimension
   >;
 
@@ -899,13 +879,11 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, int8_t,
                       cutlass::layout::RowMajor, int8_t, cutlass::layout::ColumnMajor, ElementC_,
-                      LayoutC_, cutlass::arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                      LayoutC_, cutlass::arch::OpClassSimt, RingOp_, 2
                        > {
 
   using Shape = Shape_;
@@ -920,10 +898,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -1032,8 +1008,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp, /// Multiplication operator of the semi-ring
+      RingOp,
       PartitionsK       /// Number of partitions along K dimension
   >;
 
@@ -1068,13 +1043,11 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, int8_t,
                       cutlass::layout::RowMajor, int8_t, cutlass::layout::RowMajor, ElementC_,
-                      LayoutC_, cutlass::arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                      LayoutC_, cutlass::arch::OpClassSimt, RingOp_, 2
                        > {
 
   using Shape = Shape_;
@@ -1089,10 +1062,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -1197,8 +1168,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp, /// Multiplication operator of the semi-ring
+      RingOp,
       PartitionsK       /// Number of partitions along K dimension
   >;
 
@@ -1233,13 +1203,11 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_>
+    /// Ring operation that performs FMA
+    typename RingOp_>
 struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, int8_t,
                       cutlass::layout::ColumnMajor, int8_t, cutlass::layout::ColumnMajor, ElementC_,
-                      LayoutC_, cutlass::arch::OpClassSimt, AdditionOp_, MultiplicationOp_, 2
+                      LayoutC_, cutlass::arch::OpClassSimt, RingOp_, 2
                        > {
 
   using Shape = Shape_;
@@ -1254,9 +1222,8 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
   using OperatorClass = cutlass::arch::OpClassSimt;
   static int const PartitionsK = Shape::kK / WarpShape::kK;
 
-  /// Underlying semi-ring operators
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  /// Underlying semi-ring operator
+  using RingOp = RingOp_;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<
@@ -1305,7 +1272,6 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
     IteratorThreadMapA
   >;
 
-
   /// Policy of iterator B
   using IteratorThreadMapB = cutlass::transform::PitchLinear2DThreadTileStripminedThreadMap<
     cutlass::layout::PitchLinearShape<Shape::kK, Shape::kN>,
@@ -1353,7 +1319,6 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
       LaneMmaShape
   >;
 
-
   using MmaWarpSimt = cuasr::gemm::warp::SrmmaSimt<
       WarpShape,        /// Size of the Gemm problem - concept: gemm::GemmShape<> 128, 128, 8
       ElementA,         /// Data type of A elements
@@ -1363,8 +1328,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, cutlass::gemm::GemmShape<1, 1, 4>, i
       ElementC,         /// Element type of C matrix
       LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
       Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-      AdditionOp,       /// Addition operator of the semi-ring
-      MultiplicationOp, /// Multiplication operator of the semi-ring
+      RingOp,
       PartitionsK       /// Number of partitions along K dimension
   >;
 

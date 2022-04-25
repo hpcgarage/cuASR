@@ -34,10 +34,8 @@ template <
   typename ElementC,
   /// Layout of C matrix (concept: MatrixLayout)
   typename LayoutC,
-  /// addition operator of the semi-ring
-  typename AdditionOp,
-  /// multiplication operator of the semi-ring
-  typename MultiplicationOp
+  /// Ring operator that performa FMA
+  typename RingOp
 >
 struct Srmma;
 
@@ -58,10 +56,8 @@ template <
     typename ElementC,
     /// Layout of C matrix (concept: MatrixLayout)
     typename LayoutC,
-    /// Addition operator of the semi-ring
-    typename AdditionOp,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp>
+    /// Ring operator that performa FMA
+    typename RingOp>
 struct Srmma<
     cutlass::gemm::GemmShape<1, 1, 1>,
     1,
@@ -71,14 +67,12 @@ struct Srmma<
     LayoutB,
     ElementC,
     LayoutC,
-    AdditionOp,
-    MultiplicationOp> {
+    RingOp> {
   using Shape = cutlass::gemm::GemmShape<1, 1, 1>;
 
   // semi-ring operators must be default contructible and
   // have a binary invocation () operator
-  AdditionOp add;
-  MultiplicationOp mult;
+  RingOp ring_op;
 
   CUTLASS_HOST_DEVICE
   void operator()(
@@ -87,7 +81,7 @@ struct Srmma<
     cutlass::Array<ElementB, 1> const &b,
     cutlass::Array<ElementC, 1> const &c
   ) {
-    d[0] = add(c[0], mult(a[0], b[0]));
+    ring_op(d[0], a[0], b[0], c[0]);
   }
 };
 

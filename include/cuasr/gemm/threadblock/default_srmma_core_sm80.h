@@ -79,10 +79,8 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_,
+    /// Ring operation that performs FMA
+    typename RingOp_,
     /// Number of stages
     int Stages,
     /// Cache operation of operand A
@@ -93,7 +91,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
                         ElementA_, cutlass::layout::ColumnMajor,
                         ElementB_, cutlass::layout::ColumnMajor,
                         ElementC_, LayoutC_, cutlass::arch::OpClassSimt,
-                        AdditionOp_, MultiplicationOp_, Stages,
+                        RingOp_, Stages,
                         false, CacheOpA, CacheOpB> {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -104,15 +102,14 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::ColumnMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<Shape::kM / WarpShape::kM,
-                                             Shape::kN / WarpShape::kN, 
+                                             Shape::kN / WarpShape::kN,
                                              Shape::kK / WarpShape::kK>;
 
   // Divisility requirements
@@ -162,7 +159,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
     kElementsPerAccess
   >;
 
-  /// Transpose the ThreadMap of iterator B 
+  /// Transpose the ThreadMap of iterator B
   using SmemThreadMapB = cutlass::transform::TransposePitchLinearThreadMapSimt<IteratorThreadMapB>;
 
   /// Shared memory iterator to B operand
@@ -211,8 +208,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
     ElementC,         /// Element type of C matrix
     LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
     Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-    AdditionOp,       /// Addition operator of the semi-ring
-    MultiplicationOp  /// Multiplication operator of the semi-ring
+    RingOp
   >;
 
   /// Policy used to define MmaPipelined
@@ -244,10 +240,8 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_,
+    /// Ring operation that performs FMA
+    typename RingOp_,
     /// Number of stages
     int Stages,
     /// Cache operation of operand A
@@ -258,7 +252,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
                       ElementA_, cutlass::layout::ColumnMajor,
                       ElementB_, cutlass::layout::RowMajor,
                       ElementC_, LayoutC_, cutlass::arch::OpClassSimt,
-                      AdditionOp_, MultiplicationOp_, Stages, false, CacheOpA, CacheOpB> {
+                      RingOp_, Stages, false, CacheOpA, CacheOpB> {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
   using InstructionShape = InstructionShape_;
@@ -268,15 +262,14 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::RowMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<Shape::kM / WarpShape::kM,
-                                             Shape::kN / WarpShape::kN, 
+                                             Shape::kN / WarpShape::kN,
                                              Shape::kK / WarpShape::kK>;
 
   // Divisility requirements
@@ -369,8 +362,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
     ElementC,         /// Element type of C matrix
     LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
     Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-    AdditionOp,       /// Addition operator of the semi-ring
-    MultiplicationOp  /// Multiplication operator of the semi-ring
+    RingOp
   >;
 
   /// Policy used to define MmaPipelined
@@ -402,10 +394,8 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_,
+    /// Ring operation that performs FMA
+    typename RingOp_,
     /// Number of stages
     int Stages,
     /// Cache operation of operand A
@@ -416,7 +406,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
                       ElementA_, cutlass::layout::RowMajor,
                       ElementB_, cutlass::layout::ColumnMajor,
                       ElementC_, LayoutC_, cutlass::arch::OpClassSimt,
-                      AdditionOp_, MultiplicationOp_, Stages,
+                      RingOp_, Stages,
                       false, CacheOpA, CacheOpB> {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -427,15 +417,14 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::ColumnMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<Shape::kM / WarpShape::kM,
-                                             Shape::kN / WarpShape::kN, 
+                                             Shape::kN / WarpShape::kN,
                                              Shape::kK / WarpShape::kK>;
 
   // Divisility requirements
@@ -488,7 +477,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
     kElementsPerAccess
   >;
 
-  /// Transpose the ThreadMap of iterator B 
+  /// Transpose the ThreadMap of iterator B
   using SmemThreadMapB = cutlass::transform::TransposePitchLinearThreadMapSimt<IteratorThreadMapB>;
 
   /// Shared memory iterator to B operand
@@ -537,8 +526,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
     ElementC,         /// Element type of C matrix
     LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
     Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-    AdditionOp,       /// Addition operator of the semi-ring
-    MultiplicationOp  /// Multiplication operator of the semi-ring
+    RingOp
   >;
 
   /// Policy used to define MmaPipelined
@@ -570,10 +558,8 @@ template <
     typename ElementC_,
     /// Layout of accumulator
     typename LayoutC_,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_,
+    /// Ring operation that performs FMA
+    typename RingOp_,
     /// Number of stages
     int Stages,
     /// Cache operation of operand A
@@ -584,7 +570,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
                         ElementA_, cutlass::layout::RowMajor,
                         ElementB_, cutlass::layout::RowMajor,
                         ElementC_, LayoutC_, cutlass::arch::OpClassSimt,
-                        AdditionOp_, MultiplicationOp_, Stages,
+                        RingOp_, Stages,
                         false, CacheOpA, CacheOpB> {
   using Shape = Shape_;
   using WarpShape = WarpShape_;
@@ -595,15 +581,14 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::RowMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;
 
   /// Number of warps present
   using WarpCount = cutlass::gemm::GemmShape<Shape::kM / WarpShape::kM,
-                                             Shape::kN / WarpShape::kN, 
+                                             Shape::kN / WarpShape::kN,
                                              Shape::kK / WarpShape::kK>;
 
   // Divisility requirements
@@ -701,8 +686,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
     ElementC,         /// Element type of C matrix
     LayoutC,          /// Layout of C matrix (concept: MatrixLayout)
     Policy,           /// Policy describing warp-level MmaSimtOp (concept: MmaSimtOp policy)
-    AdditionOp,       /// Addition operator of the semi-ring
-    MultiplicationOp  /// Multiplication operator of the semi-ring
+    RingOp
   >;
 
   /// Policy used to define MmaPipelined

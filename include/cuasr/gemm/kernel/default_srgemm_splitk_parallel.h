@@ -28,6 +28,8 @@ namespace kernel {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <
+  /// Ring operation that performs FMA
+  typename RingOp_,
   /// Element type for A matrix operand
   typename ElementA_,
   /// Layout type for A matrix operand
@@ -56,10 +58,6 @@ template <
   typename WarpShape,
   /// Warp-level tile size (concept: GemmShape)
   typename InstructionShape,
-  /// Addition operator of the semi-ring
-  typename AdditionOp,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp,
   /// Epilogue output operator
   typename EpilogueOutputOp,
   /// Threadblock-level swizzling operator
@@ -68,10 +66,10 @@ template <
   int Stages
 >
 struct DefaultSrgemmSplitKParallel {
-
   // Define threadblock-scoped split-K matrix multiply using
   // the basic SRGEMM's kernel level main loop
   using Default = DefaultSrgemm<
+    RingOp_,
     ElementA_,
     LayoutA_,
     kAlignmentA,
@@ -86,8 +84,6 @@ struct DefaultSrgemmSplitKParallel {
     ThreadblockShape,
     WarpShape,
     InstructionShape,
-    AdditionOp,
-    MultiplicationOp,
     EpilogueOutputOp,
     ThreadblockSwizzle,
     Stages,
@@ -100,11 +96,13 @@ struct DefaultSrgemmSplitKParallel {
   /// Define the epilogue
   using Epilogue = typename Default::Epilogue;
 
+  /// Ring operation that performs FMA
+  using RingOp = RingOp_;
+
   /// Define the kernel-level GEMM operator.
   using SrgemmKernel = kernel::SrgemmSplitKParallel<
       Srmma,
-      AdditionOp,
-      MultiplicationOp,
+      RingOp,
       Epilogue,
       ThreadblockSwizzle
   >;

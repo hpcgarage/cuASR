@@ -39,6 +39,8 @@ namespace kernel {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <
+    /// Ring operation that performs FMA
+    typename RingOp_,
     /// Element type for A matrix operand
     typename ElementA_,
     /// Layout type for A matrix operand
@@ -67,10 +69,6 @@ template <
     typename WarpShape,
     /// Instruction-level tile size (concept: GemmShape)
     typename InstructionShape,
-    /// Addition operator of the semi-ring
-    typename AdditionOp,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp,
     /// Epilogue output operator
     typename EpilogueOutputOp,
     /// Threadblock-level swizzling operator
@@ -89,6 +87,8 @@ struct DefaultSrgemm;
 
 // SM50 SIMT Two Stage
 template <
+    /// Ring operation that performs FMA
+    typename RingOp,
     /// Element type for A matrix operand
     typename ElementA,
     /// Layout type for A matrix operand
@@ -109,10 +109,6 @@ template <
     typename ThreadblockShape,
     /// Warp-level tile size (concept: GemmShape)
     typename WarpShape,
-    /// Addition operator of the semi-ring
-    typename AdditionOp,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp,
     /// Epilogue output operator
     typename EpilogueOutputOp,
     /// Threadblock-level swizzling operator
@@ -121,6 +117,7 @@ template <
     bool SplitKSerial
 >
 struct DefaultSrgemm<
+    RingOp,
     ElementA,
     LayoutA,
     kAlignmentA,
@@ -135,14 +132,13 @@ struct DefaultSrgemm<
     ThreadblockShape,
     WarpShape,
     cutlass::gemm::GemmShape<1, 1, 1>,
-    AdditionOp,
-    MultiplicationOp,
     EpilogueOutputOp,
     ThreadblockSwizzle,
     2,
     SplitKSerial> {
   /// Define the threadblock-scoped matrix multiply-accumulate
   using Srmma = typename cuasr::gemm::threadblock::DefaultSrmma<
+      RingOp,
       ElementA,
       LayoutA,
       kAlignmentA,
@@ -156,8 +152,6 @@ struct DefaultSrgemm<
       ThreadblockShape,
       WarpShape,
       cutlass::gemm::GemmShape<1, 1, 1>,
-      AdditionOp,
-      MultiplicationOp,
       2>::ThreadblockSrmma;
 
   static int const kEpilogueElementsPerAccess = EpilogueOutputOp::kCount;
@@ -174,8 +168,7 @@ struct DefaultSrgemm<
   /// Define the kernel-level GEMM operator.
   using SrgemmKernel = cuasr::gemm::kernel::Srgemm<
       Srmma,
-      AdditionOp,
-      MultiplicationOp,
+      RingOp,
       Epilogue,
       ThreadblockSwizzle,
       SplitKSerial
@@ -186,6 +179,8 @@ struct DefaultSrgemm<
 
 // SM80 SIMT Multi Stage
 template <
+    /// Ring operation that performs FMA
+    typename RingOp,
     /// Element type for A matrix operand
     typename ElementA,
     /// Layout type for A matrix operand
@@ -206,10 +201,6 @@ template <
     typename ThreadblockShape,
     /// Warp-level tile size (concept: GemmShape)
     typename WarpShape,
-    /// Addition operator of the semi-ring
-    typename AdditionOp,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp,
     /// Epilogue output operator
     typename EpilogueOutputOp,
     /// Threadblock-level swizzling operator
@@ -220,6 +211,7 @@ template <
     bool SplitKSerial
 >
 struct DefaultSrgemm<
+    RingOp,
     ElementA,
     LayoutA,
     kAlignmentA,
@@ -234,14 +226,13 @@ struct DefaultSrgemm<
     ThreadblockShape,
     WarpShape,
     cutlass::gemm::GemmShape<1, 1, 1>,
-    AdditionOp,
-    MultiplicationOp,
     EpilogueOutputOp,
     ThreadblockSwizzle,
     Stages,
     SplitKSerial> {
   /// Define the threadblock-scoped matrix multiply-accumulate
   using Srmma = typename cuasr::gemm::threadblock::DefaultSrmma<
+      RingOp,
       ElementA,
       LayoutA,
       kAlignmentA,
@@ -255,8 +246,6 @@ struct DefaultSrgemm<
       ThreadblockShape,
       WarpShape,
       cutlass::gemm::GemmShape<1, 1, 1>,
-      AdditionOp,
-      MultiplicationOp,
       Stages>::ThreadblockSrmma;
 
   static int const kEpilogueElementsPerAccess = EpilogueOutputOp::kCount;
@@ -273,8 +262,7 @@ struct DefaultSrgemm<
   /// Define the kernel-level GEMM operator.
   using SrgemmKernel = cuasr::gemm::kernel::Srgemm<
       Srmma,
-      AdditionOp,
-      MultiplicationOp,
+      RingOp,
       Epilogue,
       ThreadblockSwizzle,
       SplitKSerial

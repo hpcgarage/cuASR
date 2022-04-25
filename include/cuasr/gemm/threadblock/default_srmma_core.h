@@ -53,10 +53,8 @@ template <
     typename LayoutC,
     /// Indicates type of math operator (arch::OpClassSimt or arch::OpClassTensorOp)
     typename OperatorClass,
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_,
+    /// Ring operation that performs FMA
+    typename RingOp,
     /// Number of stages
     int Stages = 2,
     /// Store the accumulators in row major or column major.
