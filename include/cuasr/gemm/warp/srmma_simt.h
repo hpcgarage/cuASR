@@ -47,9 +47,7 @@ template <
   /// Ring operation that performs FMA
   typename RingOp_,
   /// Number of partitions along K dimension
-  int PartitionsK = 1,
-  /// Used for partial specialization
-  typename Enable = bool
+  int PartitionsK = 1
 >
 class SrmmaSimt {
 public:
@@ -81,7 +79,7 @@ public:
   using OperatorClass = cutlass::arch::OpClassSimt;
 
   /// Ring operation that performs FMA
-  using RingOp = RingOp;
+  using RingOp = RingOp_;
 
   using ThreadLayoutA = typename cutlass::platform::conditional<
       cutlass::platform::is_same<cutlass::layout::ColumnMajorInterleaved<4>, LayoutA>::
@@ -125,8 +123,7 @@ public:
     ThreadLayoutB,
     ElementC,
     LayoutC,
-    RingOp,
-    dp4a_type
+    RingOp
   >;
 
 public:

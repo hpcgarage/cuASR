@@ -63,8 +63,8 @@ public:
 
     CUTLASS_HOST_DEVICE
     Params()
-        : alpha(MultiplicationOp::Identity)
-        , beta(MultiplicationOp::Annihilator)
+        : alpha(RingOp::MultIdentity)
+        , beta(RingOp::MultAnnihilator)
         , alpha_ptr(nullptr)
         , beta_ptr(nullptr) { }
 
@@ -78,21 +78,21 @@ public:
     CUTLASS_HOST_DEVICE
     Params(ElementCompute alpha)
         : alpha(alpha)
-        , beta(MultiplicationOp::Annihilator)
+        , beta(RingOp::MultAnnihilator)
         , alpha_ptr(nullptr)
         , beta_ptr(nullptr) { }
 
     CUTLASS_HOST_DEVICE
     Params(ElementCompute const *alpha_ptr, ElementCompute const *beta_ptr)
-        : alpha(MultiplicationOp::Identity)
-        , beta(MultiplicationOp::Annihilator)
+        : alpha(RingOp::MultIdentity)
+        , beta(RingOp::MultAnnihilator)
         , alpha_ptr(alpha_ptr)
         , beta_ptr(beta_ptr) { }
 
     CUTLASS_HOST_DEVICE
     Params(ElementCompute const *alpha_ptr)
-        : alpha(MultiplicationOp::Identity)
-        , beta(MultiplicationOp::Annihilator)
+        : alpha(RingOp::MultIdentity)
+        , beta(RingOp::MultAnnihilator)
         , alpha_ptr(alpha_ptr)
         , beta_ptr(nullptr) { }
   };
@@ -146,10 +146,17 @@ public:
 
     // Perform binary operations
     // X = beta * C
-    ComputeFragment intermediate = ring_op_.mult(beta_, converted_source);
+    ComputeFragment intermediate;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < kCount; ++i) {
+      intermediate[i] = ring_op_.mult(beta_, converted_source[i]);
+    }
 
     // D = (alpha * Accum) + X
-    intermediate = ring_op_.add(ring_op_.mult(alpha_, converted_accumulator), intermediate);
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < kCount; ++i) {
+      intermediate[i] = ring_op_.add(ring_op_.mult(alpha_, converted_accumulator[i]), intermediate[i]);
+    }
 
     // Convert to destination numeric type
     cutlass::NumericArrayConverter<ElementOutput, ElementCompute, kCount, Round>
@@ -170,7 +177,10 @@ public:
     // Perform binary operations
     ComputeFragment intermediate;
 
-    intermediate = ring_op_.mult(alpha_, converted_accumulator); // D = alpha * Accum
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < kCount; ++i) {
+      intermediate[i] = ring_op_.mult(alpha_, converted_accumulator[i]); // D = alpha * Accum
+    }
 
     // Convert to destination numeric type
     cutlass::NumericArrayConverter<ElementOutput, ElementCompute, kCount, Round>

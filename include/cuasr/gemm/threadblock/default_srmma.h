@@ -27,6 +27,8 @@ namespace threadblock {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <
+    /// Ring operation that performs FMA
+    typename RingOp,
     /// Element type for A matrix operand
     typename ElementA_,
     /// Layout type for A matrix operand
@@ -53,8 +55,6 @@ template <
     typename WarpShape_,
     /// Instruction-level tile size (concept: GemmShape)
     typename InstructionShape_,
-    /// Ring operation that performs FMA
-    typename RingOp,
     /// Number of stages used in the pipelined mainloop
     int Stages,
     /// Store the accumulators in row major or column major.

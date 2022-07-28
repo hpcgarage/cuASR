@@ -51,8 +51,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cuasr::plus<Element>,
-  cuasr::multiplies<Element>,
+  plus_multiplies<Element>,
   cutlass::arch::OpClassSimt,
   ArchTag> {
 
@@ -63,8 +62,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cuasr::plus<Element>;
-  using MultiplicationOp = cuasr::multiplies<Element>;
+  using RingOp = cuasr::plus_multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;
@@ -81,7 +79,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  cuasr::min_plus<Element>,
+  min_plus<Element>,
   cutlass::arch::OpClassSimt,
   ArchTag> {
 
@@ -109,7 +107,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  max_plus<Element>
+  max_plus<Element>,
   cutlass::arch::OpClassSimt,
   ArchTag> {
 
@@ -136,7 +134,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  max_min<Element>
+  max_min<Element>,
   cutlass::arch::OpClassSimt,
   ArchTag> {
 
@@ -147,7 +145,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = max_min<Element>;
+  using RingOp = max_min<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;
@@ -163,7 +161,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  min_max<Element>
+  min_max<Element>,
   cutlass::arch::OpClassSimt,
   ArchTag> {
 
@@ -190,7 +188,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  min_mult<Element>,
+  min_multiplies<Element>,
   cutlass::arch::OpClassSimt,
   ArchTag> {
 
@@ -201,7 +199,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using RingOp = min_mult<Element>;
+  using RingOp = min_multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;
@@ -217,7 +215,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  max_mult<Element>,
+  max_multiplies<Element>,
   cutlass::arch::OpClassSimt,
   ArchTag> {
 
@@ -228,7 +226,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using RingOp = max_mult<Element>;
+  using RingOp = max_multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;
@@ -273,7 +271,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  plus_mult<Element>,
+  plus_multiplies<Element>,
   cutlass::arch::OpClassSimt,
   cutlass::arch::Sm80> {
 
@@ -284,7 +282,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
-  using RingOp = plus_mult<Element>;
+  using RingOp = plus_multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;
@@ -334,7 +332,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
-  using RigOp = max_plus<Element>;
+  using RingOp = max_plus<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;
@@ -395,7 +393,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  min_mult<Element>,
+  min_multiplies<Element>,
   cutlass::arch::OpClassSimt,
   cutlass::arch::Sm80> {
 
@@ -406,7 +404,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
-  using RingOp = min_mult<Element>;
+  using RingOp = min_multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;
@@ -419,7 +417,7 @@ struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
-  max_mult<Element>,
+  max_multiplies<Element>,
   cutlass::arch::OpClassSimt,
   cutlass::arch::Sm80> {
 
@@ -430,7 +428,7 @@ struct DefaultSemiRingConfiguration<
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 3;
 
-  using RingOp = max_mult<Element>;
+  using RingOp = max_multiplies<Element>;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
     RingOp, Element, 1>;

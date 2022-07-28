@@ -24,7 +24,7 @@ namespace thread {
 
 /// Gemplate that handles all packed matrix layouts
 template <
-  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: gemm::GemmShape<>
   typename Shape_,
   /// Data type of A elements
   typename ElementA_,
@@ -43,7 +43,7 @@ template <
 >
 struct SrmmaGeneric {
 
-  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: gemm::GemmShape<>
   using Shape = Shape_;
 
   /// Data type of operand A
@@ -77,19 +77,15 @@ struct SrmmaGeneric {
   using FragmentC = cutlass::Array<ElementC, Shape::kMN>;
 
   /// Instruction
-  using SrmmaOp = arch::Srmma<
-    cutlass::gemm::GemmShape<1,1,1>,
-    1,
-    ElementA, LayoutA,
-    ElementB, LayoutB,
-    ElementC, LayoutC,
-    RingOp>;
+  using SrmmaOp = RingOp;
+
+  static bool const kMultipleOf2 = ((Shape::kM % 2 == 0) && (Shape::kN % 2 == 0));
 
   //
   // Methods
   //
 
-  /// Computes a generalized matrix product on any semi-ring
+  /// Computes a matrix product D = A * B + C
   CUTLASS_HOST_DEVICE
   void operator()(
     FragmentC & D,
@@ -104,7 +100,7 @@ struct SrmmaGeneric {
       reinterpret_cast<ElementB const *>(&B), LayoutB::packed({Shape::kK, Shape::kN}));
 
     cutlass::TensorRef<ElementC, LayoutC> d_ref(
-      reinterpret_cast<ElementC *>(&D), LayoutC::packed({ Shape::kM, Shape::kN }));
+      reinterpret_cast<ElementC *>(&D), LayoutC::packed(cutlass::make_Coord(Shape::kM, Shape::kN)));
 
     SrmmaOp srmma_op;
 
@@ -114,30 +110,69 @@ struct SrmmaGeneric {
     // Compute matrix product
     CUTLASS_PRAGMA_UNROLL
     for (int k = 0; k < Shape::kK; ++k) {
+      #if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 860)
+      if (kMultipleOf2 && cutlass::platform::is_same<ElementA, float>::value
+                       && cutlass::platform::is_same<ElementB, float>::value
+                       && cutlass::platform::is_same<ElementC, float>::value) {
 
-      CUTLASS_PRAGMA_UNROLL
-      for (int n = 0; n < Shape::kN; ++n) {
-
+        //2x2 zigzag - m and n loops to increment by 2. Inner loop to process 4 multiply-adds in a 2x2 tile.
         CUTLASS_PRAGMA_UNROLL
-        for (int m = 0; m < Shape::kM; ++m) {
+        for (int n = 0; n < Shape::kN; n+=2) {
 
-          int m_serpentine = (n % 2) ? (Shape::kM - 1 - m) : m;
+          CUTLASS_PRAGMA_UNROLL
+          for (int m = 0; m < Shape::kM; m+=2) {
 
-          cutlass::MatrixCoord mn(m_serpentine, n);
-          cutlass::MatrixCoord mk(m_serpentine, k);
-          cutlass::MatrixCoord kn(k, n);
+            int m_serpentine = (n % 4) ? (Shape::kM - 2 - m) : m;
 
-          cutlass::Array<ElementC, 1> d;
-          cutlass::Array<ElementA, 1> a;
-          cutlass::Array<ElementB, 1> b;
+            //top-left element in 2x2 tile
+            {
+              cutlass::MatrixCoord mn(m_serpentine, n);
+              cutlass::MatrixCoord mk(m_serpentine, k);
+              cutlass::MatrixCoord kn(k, n);
+              srmma_op.fma(d_ref.at(mn), a_ref.at(mk), b_ref.at(kn), d_ref.at(mn));
+            }
 
-          d[0] = d_ref.at(mn);
-          a[0] = a_ref.at(mk);
-          b[0] = b_ref.at(kn);
+            //bottom-left element in 2x2 tile
+            {
+              cutlass::MatrixCoord mn(m_serpentine+1, n);
+              cutlass::MatrixCoord mk(m_serpentine+1, k);
+              cutlass::MatrixCoord kn(k, n);
+              srmma_op.fma(d_ref.at(mn), a_ref.at(mk), b_ref.at(kn), d_ref.at(mn));
+            }
 
-          srmma_op(d, a, b, d);
+            //bottom-right element in 2x2 tile
+            {
+              cutlass::MatrixCoord mn(m_serpentine+1, n+1);
+              cutlass::MatrixCoord mk(m_serpentine+1, k);
+              cutlass::MatrixCoord kn(k, n+1);
+              srmma_op.fma(d_ref.at(mn), a_ref.at(mk), b_ref.at(kn), d_ref.at(mn));
+            }
 
-          d_ref.at(mn) = d[0];
+            //top-right element in 2x2 tile
+            {
+              cutlass::MatrixCoord mn(m_serpentine, n+1);
+              cutlass::MatrixCoord mk(m_serpentine, k);
+              cutlass::MatrixCoord kn(k, n+1);
+              srmma_op.fma(d_ref.at(mn), a_ref.at(mk), b_ref.at(kn), d_ref.at(mn));
+            }
+          }
+        }
+      } else
+      #endif
+      {
+        CUTLASS_PRAGMA_UNROLL
+        for (int n = 0; n < Shape::kN; ++n) {
+
+          CUTLASS_PRAGMA_UNROLL
+          for (int m = 0; m < Shape::kM; ++m) {
+
+            int m_serpentine = (n % 2) ? (Shape::kM - 1 - m) : m;
+
+            cutlass::MatrixCoord mn(m_serpentine, n);
+            cutlass::MatrixCoord mk(m_serpentine, k);
+            cutlass::MatrixCoord kn(k, n);
+            srmma_op.fma(d_ref.at(mn), a_ref.at(mk), b_ref.at(kn), d_ref.at(mn));
+          }
         }
       }
     }
@@ -148,7 +183,7 @@ struct SrmmaGeneric {
 
 /// Gemplate that handles conventional layouts for FFMA and DFMA GEMM
 template <
-  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: gemm::GemmShape<>
   typename Shape_,
   /// Data type of A elements
   typename ElementA_,
@@ -163,21 +198,11 @@ template <
   /// Layout of C matrix (concept: layout::MapFunc)
   typename LayoutC_,
   /// Ring operation that performs FMA
-  typename RingOp
+  typename RingOp_
 >
-struct Srmma<
-  Shape_,
-  ElementA_,
-  LayoutA_,
-  ElementB_,
-  LayoutB_,
-  ElementC_,
-  LayoutC_,
-  RingOp,
-  bool
-> {
+struct Srmma {
 
-  /// Size of the Gemm problem - concept: cutlass::gemm::GemmShape<>
+  /// Size of the Gemm problem - concept: gemm::GemmShape<>
   using Shape = Shape_;
 
   /// Data type of operand A
@@ -214,7 +239,7 @@ struct Srmma<
   // Methods
   //
 
-  /// Computes a matrix product for any semi-ring
+  /// Computes a matrix product D = A * B + C
   CUTLASS_HOST_DEVICE
   void operator()(
     FragmentC & D,

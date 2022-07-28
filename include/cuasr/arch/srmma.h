@@ -81,7 +81,61 @@ struct Srmma<
     cutlass::Array<ElementB, 1> const &b,
     cutlass::Array<ElementC, 1> const &c
   ) {
-    ring_op(d[0], a[0], b[0], c[0]);
+    ring_op.fma(d[0], a[0], b[0], c[0]);
+  }
+};
+
+template <
+    /// Data type of A elements
+    typename ElementA,
+    /// Layout of A matrix (concept: MatrixLayout)
+    typename LayoutA,
+    /// Data type of B elements
+    typename ElementB,
+    /// Layout of B matrix (concept: MatrixLayout)
+    typename LayoutB,
+    /// Element type of C matrix
+    typename ElementC,
+    /// Layout of C matrix (concept: MatrixLayout)
+    typename LayoutC>
+struct Srmma<
+    cutlass::gemm::GemmShape<1, 1, 1>,
+    1,
+    ElementA,
+    LayoutA,
+    ElementB,
+    LayoutB,
+    ElementC,
+    LayoutC,
+    min_plus<ElementA, 1>> {
+  using Shape = cutlass::gemm::GemmShape<1, 1, 1>;
+
+  // semi-ring operators must be default contructible and
+  // have a binary invocation () operator
+  min_plus<ElementA, 1> ring_op;
+
+  CUTLASS_HOST_DEVICE
+  void operator()(
+    cutlass::Array<ElementC, 1> &d,
+    cutlass::Array<ElementA, 1> const &a,
+    cutlass::Array<ElementB, 1> const &b,
+    cutlass::Array<ElementC, 1> const &c
+  ) {
+    asm volatile (
+    "\n{"
+    "\n\t .reg .f32 r0;"
+    "\n\t .reg .f32 r1;"
+    "\n\t .reg .f32 r2;"
+    "\n\t .reg .f32 r3;"
+    "\n\t mov.f32 r1, %1;"
+    "\n\t mov.f32 r2, %2;"
+    "\n\t mov.f32 r3, %3;"
+    "\n\t min.f32 r3, r1, r2;"
+    "\n\t mov.f32 %0, r0;"
+    "\n}"
+    : "=f"(d[0])
+    :  "f"(a[0]), "f"(b[0]), "f"(c[0])
+    );
   }
 };
 

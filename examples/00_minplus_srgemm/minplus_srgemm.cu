@@ -44,7 +44,7 @@ auto cuasr_minplus_srsgemm_nt_n(
 
   float alpha = RingOp::AddIdentity;
   float beta
-      = do_epilogue_min ? RingOp::MultIdentity : RingOp::MultAnnihilator;
+      = do_epilogue_min ? RingOp::MultIdentity : 0;
 
   // construct kernel arguments struct
   cuASR_MinPlus_SGEMM::Arguments args(

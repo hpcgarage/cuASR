@@ -102,7 +102,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::ColumnMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using RingOp = RingOp;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;
@@ -262,7 +262,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::RowMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using RingOp = RingOp;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;
@@ -417,7 +417,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::ColumnMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using RingOp = RingOp;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;
@@ -581,7 +581,7 @@ struct DefaultSrmmaCore<Shape_, WarpShape_, InstructionShape_,
   using LayoutB = cutlass::layout::RowMajor;
   using ElementC = ElementC_;
   using LayoutC = LayoutC_;
-  using RingOp = RingOp;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static cutlass::arch::CacheOperation::Kind const kCacheOpA = cutlass::arch::CacheOperation::Always;
   static cutlass::arch::CacheOperation::Kind const kCacheOpB = cutlass::arch::CacheOperation::Always;

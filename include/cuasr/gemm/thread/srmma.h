@@ -40,9 +40,7 @@ template <
   /// Layout of C matrix (concept: MatrixLayout)
   typename LayoutC,
   /// Ring operation that performs FMA
-  typename RingOp,
-  /// Used for partial specialization
-  typename Enable = bool
+  typename RingOp
 >
 struct Srmma;
 

@@ -4,11 +4,11 @@
 /*! \file
     \brief Defines basic semi-ring reels together with their identity and
     annihilator constants given type T.
-
-    This is inspired by the Standard Library's <functional> header.
 */
 
 #pragma once
+
+#include "cuasr/arch/functional.h"
 
 #include "cutlass/array.h"
 #include "cutlass/cutlass.h"
@@ -47,169 +47,6 @@ struct plus {
     lhs += rhs;
     return lhs;
   }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
-  }
-};
-
-template <typename T, int N = 1>
-struct multiplies {
-  static T constexpr Identity    = static_cast<T>(1);
-  static T constexpr Annihilator = static_cast<T>(0);
-
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const {
-    lhs *= rhs;
-    return lhs;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
-  }
-};
-
-template <typename T, int N = 1>
-struct minimum {
-  static T constexpr Identity    = get_inf<T>();
-  static T constexpr Annihilator = get_neginf<T>();
-
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const { return (rhs < lhs ? rhs : lhs); }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
-  }
-};
-
-template <typename T, int N = 1>
-struct maximum {
-  static T constexpr Identity    = get_neginf<T>();
-  static T constexpr Annihilator = get_inf<T>();
-
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const { return (lhs < rhs ? rhs : lhs); }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
-  }
-};
-
-template <typename T, int N = 1>
-struct binary_and {
-  static T constexpr Identity    = static_cast<T>(true);
-  static T constexpr Annihilator = static_cast<T>(false);
-
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const { return lhs && rhs; }
 
   CUTLASS_HOST_DEVICE
   Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
@@ -288,7 +125,45 @@ struct binary_or {
 
 template <typename T, int N = 1>
 struct min_plus {
+  static T constexpr AddIdentity     = static_cast<T>(0);
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
 
+  __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
+  }
+
+  __device__
+  T mult(T const lhs, T const rhs) const {
+    return cuasr::arch::plus(lhs, rhs);
+  }
 };
+
+template <typename T, int N = 1>
+struct max_plus;
+
+template <typename T, int N = 1>
+struct min_multiplies;
+
+template <typename T, int N = 1>
+struct max_multiplies;
+
+template <typename T, int N = 1>
+struct min_max;
+
+template <typename T, int N = 1>
+struct max_min;
+
+template <typename T, int N = 1>
+struct or_and;
+
+template <typename T, int N = 1>
+struct plus_multiplies;
 
 } // namespace cuasr
