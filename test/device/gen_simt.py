@@ -46,14 +46,14 @@ transposes = [
 ]
 
 semiring_operators = [
-    ["plus", "multiplies"],      # regular GEMM
-    ["minimum", "plus"],         # min-plus (tropical)
-    ["maximum", "plus"],         # max-plus
-    ["minimum", "maximum"],      # min-max
-    ["maximum", "minimum"],      # max-min
-    ["minimum", "multiplies"],   # min-multiplies
-    ["maximum", "multiplies"],   # max-multiplies
-    ["binary_or", "binary_and"]  # or-and
+    ["plus", "mult"],  # regular GEMM
+    ["min",  "plus"],  # min-plus (tropical)
+    ["max",  "plus"],  # max-plus
+    ["min",  "max"],   # min-max
+    ["max",  "min"],   # max-min
+    ["min",  "mult"],  # min-multiplies
+    ["max",  "mult"],  # max-multiplies
+    ["or",   "and"]    # or-and
 ]
 
 testfile_header = """\
@@ -99,20 +99,19 @@ TEST(SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}, {10}x{11}x{12}_{13}x{14}x1_{15}
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm{22};
 
+  using RingOp           = cuasr::{0}_{1}<precision>;
   using ThreadblockShape = cutlass::gemm::GemmShape<{10}, {11}, {12}>;
   using WarpShape        = cutlass::gemm::GemmShape<{13}, {14}, {12}>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
 
   using Config = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
       precision, precision, precision, precision,
-      cuasr::{0}<precision>, cuasr::{1}<precision>, OpClass, SmArch>;
+      RingOp, OpClass, SmArch>;
 
-  using AddOp            = Config::AdditionOp;
-  using MultOp           = Config::MultiplicationOp;
   using EpilogueOutputOp = Config::EpilogueOutputOp;
 
   using Srgemm = cuasr::gemm::device::Srgemm<                           //
-      AddOp, MultOp,                                                    //
+      RingOp,                                                           //
       precision, cutlass::layout::{7}Major,                             //
       precision, cutlass::layout::{8}Major,                             //
       precision, cutlass::layout::{9}Major,                             //

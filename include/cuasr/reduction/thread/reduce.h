@@ -41,18 +41,18 @@ namespace reduction {
 namespace thread {
 
 // Structure to compute the thread level reduction with semiring addition operator
-template <typename AdditionOp, typename T, int N = 1>
+template <typename RingOp, typename T, int N = 1>
 struct Reduce {
   CUTLASS_HOST_DEVICE
   T operator()(T lhs, T const &rhs) const {
-    AdditionOp add;
-    return add(lhs, rhs);
+    RingOp ring_op;
+    return ring_op.add(lhs, rhs);
   }
 
   CUTLASS_HOST_DEVICE
   cutlass::Array<T, 1> operator()(cutlass::Array<T, N> const &in) const {
     cutlass::Array<T, 1> result;
-    result.fill(AdditionOp::Identity);
+    result.fill(RingOp::AddIdentity);
 
     CUTLASS_PRAGMA_UNROLL
     for (auto i = 0; i < N; ++i) {

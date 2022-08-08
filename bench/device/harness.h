@@ -156,8 +156,8 @@ public:
   // Runs one loop of the benchmark on initialized tensors
   auto
   run(int split_k_slices   = 1,
-      ElementCompute alpha = ElementCompute(Srgemm::MultiplicationOp::Identity),
-      ElementCompute beta  = ElementCompute(Srgemm::MultiplicationOp::Identity))
+      ElementCompute alpha = ElementCompute(Srgemm::RingOp::MultIdentity),
+      ElementCompute beta  = ElementCompute(Srgemm::RingOp::MultIdentity))
       -> cutlass::Status {
     // Initialize the GEMM operator
     typename Srgemm::Arguments arguments {

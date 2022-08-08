@@ -78,7 +78,7 @@ template <
       ElementAccumulator_>,
   /// Reduction operator
   typename ReductionOp_ = cuasr::reduction::thread::SemiringReduce<
-      typename RingOp_::AdditionOp, ElementAccumulator_,
+      RingOp_, ElementAccumulator_,
       typename EpilogueOutputOp_::ElementAccumulator, EpilogueOutputOp_::kCount>,
   /// Threadblock-level swizzling operator
   typename ThreadblockSwizzle_ =
@@ -99,7 +99,7 @@ template <
 class SrgemmSplitKParallel {
  public:
 
-  using RingOp = RingOP_;
+  using RingOp = RingOp_;
   using ElementA = ElementA_;
   using LayoutA = LayoutA_;
   using ElementB = ElementB_;

@@ -29,21 +29,19 @@ auto cuasr_splitk_minplus_srsgemm_tn_t(
     int split_k_slices,
     cudaStream_t stream = nullptr) -> int {
   // compile time configuration of this srgemm kernel using OperatorClass
-  using OperatorClass    = cutlass::arch::OpClassSimt;
-  using SmArch           = cutlass::arch::Sm50;
-  using AdditionOp       = cuasr::minimum<float>;
-  using MultiplicationOp = cuasr::plus<float>;
+  using OperatorClass = cutlass::arch::OpClassSimt;
+  using SmArch        = cutlass::arch::Sm50;
+  using RingOp        = cuasr::min_plus<float>;
 
   using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
       float, float, float, float, OperatorClass, //
-      AdditionOp, MultiplicationOp, SmArch>;
+      RingOp, SmArch>;
 
   using ColumnMajor = cutlass::layout::ColumnMajor;
   using RowMajor    = cutlass::layout::RowMajor;
 
   using cuASR_SplitK_SRGEMM = cuasr::gemm::device::SrgemmSplitKParallel<
-      AdditionOp,       // Thread level SemiRing operator
-      MultiplicationOp, // Thread level SemiRing operator
+      RingOp,
       float,            // element type of A
       RowMajor,         // layout of A
       float,            // element type of B
@@ -54,9 +52,9 @@ auto cuasr_splitk_minplus_srsgemm_tn_t(
       >;
 
   // setup runtime configuration
-  float alpha = MultiplicationOp::Identity;
+  float alpha = RingOp::MultIdentity;
   float beta
-      = do_epilogue_min ? MultiplicationOp::Identity : MultiplicationOp::Annihilator;
+      = do_epilogue_min ? RingOp::MultIdentity : RingOp::MultAnnihilator;
 
   // construct kernel arguments struct
   cuASR_SplitK_SRGEMM::Arguments args(
@@ -116,21 +114,19 @@ auto cuasr_minplus_srsgemm_tn_t(
     bool do_epilogue_min,
     cudaStream_t stream = nullptr) -> int {
   // compile time configuration of this srgemm kernel using OperatorClass
-  using OperatorClass    = cutlass::arch::OpClassSimt;
-  using SmArch           = cutlass::arch::Sm50;
-  using AdditionOp       = cuasr::minimum<float>;
-  using MultiplicationOp = cuasr::plus<float>;
+  using OperatorClass = cutlass::arch::OpClassSimt;
+  using SmArch        = cutlass::arch::Sm50;
+  using RingOp        = cuasr::min_plus<float>;
 
   using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
       float, float, float, float, OperatorClass, //
-      AdditionOp, MultiplicationOp, SmArch>;
+      RingOp, SmArch>;
 
   using ColumnMajor = cutlass::layout::ColumnMajor;
   using RowMajor    = cutlass::layout::RowMajor;
 
   using cuASR_MinPlus_SGEMM = cuasr::gemm::device::Srgemm<
-      AdditionOp,       // Thread level SemiRing operator
-      MultiplicationOp, // Thread level SemiRing operator
+      RingOp,
       float,            // element type of A
       RowMajor,         // layout of A
       float,            // element type of B
@@ -140,9 +136,9 @@ auto cuasr_minplus_srsgemm_tn_t(
       float             // element type of D
       >;
 
-  float alpha = MultiplicationOp::Identity;
+  float alpha = RingOp::MultIdentity;
   float beta
-      = do_epilogue_min ? MultiplicationOp::Identity : MultiplicationOp::Annihilator;
+      = do_epilogue_min ? RingOp::MultIdentity : RingOp::MultAnnihilator;
 
   // construct kernel arguments struct
   cuASR_MinPlus_SGEMM::Arguments args(

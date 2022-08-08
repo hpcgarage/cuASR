@@ -20,5 +20,4 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/test/gtest/googletest/include")
 endif()
 
 add_subdirectory(gtest)
-add_subdirectory(regress)
 add_subdirectory(device)

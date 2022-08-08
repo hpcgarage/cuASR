@@ -89,6 +89,7 @@ public:
     OutputTensorRef destination;
     OutputTensorRef source;
     typename OutputOp::Params output;
+    typename ReductionOp::Params reduction;
 
     //
     // Methods
@@ -105,7 +106,8 @@ public:
       WorkspaceTensorRef workspace_,
       OutputTensorRef destination_,
       OutputTensorRef source_,
-      typename OutputOp::Params output_ = typename OutputOp::Params()
+      typename OutputOp::Params output_ = typename OutputOp::Params(),
+      typename ReductionOp::Params reduction_ = typename ReductionOp::Params()
     ):
       problem_size(problem_size_),
       partitions(partitions_),
@@ -113,7 +115,8 @@ public:
       workspace(workspace_),
       destination(destination_),
       source(source_),
-      output(output_) { }
+      output(output_),
+      reduction(reduction_) { }
   };
 
   struct SharedStorage { };

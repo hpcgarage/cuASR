@@ -23,14 +23,14 @@ transposes = [
 ]
 
 semiring_operators = [
-    ["plus", "multiplies"],      # regular GEMM
-    ["minimum", "plus"],         # min-plus (tropical)
-    ["maximum", "plus"],         # max-plus
-    ["minimum", "maximum"],      # min-max
-    ["maximum", "minimum"],      # max-min
-    ["minimum", "multiplies"],   # min-multiplies
-    ["maximum", "multiplies"],   # max-multiplies
-    ["binary_or", "binary_and"]  # or-and
+    ["plus", "mult"],  # regular GEMM
+    ["min",  "plus"],  # min-plus (tropical)
+    ["max",  "plus"],  # max-plus
+    ["min",  "max"],   # min-max
+    ["max",  "min"],   # max-min
+    ["min",  "mult"],  # min-multiplies
+    ["max",  "mult"],  # max-multiplies
+    ["or",   "and"]    # or-and
 ]
 
 
@@ -64,19 +64,16 @@ testfile_header = """\
 
 
 test_template = """\
-
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM{sm_arch}_device_{add_op}_{mult_op}_{precision_char}srgemm_{transA}{transB}_{transC}, default) {{
+TEST(SM{sm_arch}_device_{add_op}_{mult_op}_{precision_char}srgemm_{transA}{transB}_{transC}, default_configs) {{
   using precision = {precision_type};
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm{sm_arch};
-
-  using AddOp            = cuasr::{add_op}<precision>;
-  using MultOp           = cuasr::{mult_op}<precision>;
+  using RingOp = cuasr::{add_op}_{mult_op}<precision>;
 
   using Srgemm = cuasr::gemm::device::Srgemm<                           //
-      AddOp, MultOp,                                                    //
+      RingOp,                                                           //
       precision, cutlass::layout::{trans_typeA}Major,                   //
       precision, cutlass::layout::{trans_typeB}Major,                   //
       precision, cutlass::layout::{trans_typeC}Major,

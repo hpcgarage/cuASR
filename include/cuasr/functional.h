@@ -34,136 +34,202 @@ template <typename T>
 constexpr auto get_neginf() noexcept {
   return std::numeric_limits<T>::min();
 }
-}
 
-template <typename T, int N = 1>
-struct plus {
-  static T constexpr Identity    = static_cast<T>(0);
-  static T constexpr Annihilator = get_inf<T>();
-
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const {
-    lhs += rhs;
-    return lhs;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
-  }
-};
-
-template <typename T, int N = 1>
-struct binary_or {
-  static T constexpr Identity    = static_cast<T>(false);
-  static T constexpr Annihilator = static_cast<T>(true);
-
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const { return lhs || rhs; }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
-  }
-};
+} // namespace
 
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
-template <typename T, int N = 1>
-struct min_plus {
+// Regular FMA
+template <typename T>
+struct plus_mult {
   static T constexpr AddIdentity     = static_cast<T>(0);
   static T constexpr MultIdentity    = static_cast<T>(1);
   static T constexpr MultAnnihilator = static_cast<T>(0);
 
-  __device__
+  __host__ __device__
   void fma(T& dst, T const lhs, T const rhs, T const src) const {
     dst = add(src, mult(lhs, rhs));
   }
 
-  __device__
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return lhs + rhs;
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs * rhs;
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+struct min_plus {
+  static T constexpr AddIdentity     = get_inf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(0);
+  static T constexpr MultAnnihilator = get_inf<T>();
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
   T add(T const lhs, T const rhs) const {
     return cuasr::arch::min(lhs, rhs);
   }
 
-  __device__
+  __host__ __device__
   T mult(T const lhs, T const rhs) const {
-    return cuasr::arch::plus(lhs, rhs);
+    return lhs * rhs;
   }
 };
 
-template <typename T, int N = 1>
-struct max_plus;
+///////////////////////////////////////////////////////////////////////////////
 
-template <typename T, int N = 1>
-struct min_multiplies;
+template <typename T>
+struct max_plus {
+  static T constexpr AddIdentity     = get_neginf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(0);
+  static T constexpr MultAnnihilator = get_inf<T>();
 
-template <typename T, int N = 1>
-struct max_multiplies;
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
 
-template <typename T, int N = 1>
-struct min_max;
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
+  }
 
-template <typename T, int N = 1>
-struct max_min;
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs + rhs;
+  }
+};
 
-template <typename T, int N = 1>
-struct or_and;
+///////////////////////////////////////////////////////////////////////////////
 
-template <typename T, int N = 1>
-struct plus_multiplies;
+template <typename T>
+struct min_mult {
+  static T constexpr AddIdentity     = get_inf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs * rhs;
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+struct max_mult {
+  static T constexpr AddIdentity     = get_neginf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs * rhs;
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+struct min_max {
+  static T constexpr AddIdentity     = get_inf<T>();
+  static T constexpr MultIdentity    = get_neginf<T>();
+  static T constexpr MultAnnihilator = get_inf<T>();
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+struct max_min {
+  static T constexpr AddIdentity     = get_neginf<T>();
+  static T constexpr MultIdentity    = get_inf<T>();
+  static T constexpr MultAnnihilator = get_neginf<T>();
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+struct or_and {
+  static T constexpr AddIdentity     = static_cast<T>(0);
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return lhs || rhs;
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs && rhs;
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
 
 } // namespace cuasr

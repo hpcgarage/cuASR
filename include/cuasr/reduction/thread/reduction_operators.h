@@ -41,27 +41,33 @@ namespace thread {
 
 /// Mixed-precision reduction with a functional reduction operator
 template <
-  typename AdditionOp_,
+  typename RingOp_,
   typename ElementAccumulator_,
   typename Element_,
   int Count = 1
 >
 struct SemiringReduce {
   // Type aliases
-  using AdditionOp = AdditionOp_;
+  using RingOp = RingOp_;
   using ElementAccumulator = ElementAccumulator_;
   using Element = Element_;
 
   // Static members
   static int const kCount = Count;
-  static Element constexpr Identity = AdditionOp::Identity;
+  static Element constexpr Identity = RingOp::AddIdentity;
 
   using FragmentAccumulator = cutlass::Array<ElementAccumulator, kCount>;
   using FragmentElement = cutlass::Array<Element, kCount>;
 
+  // Types nested
+  struct Params { };
+
+  // Data members
+  Params params;
+
   /// Constructor
   CUTLASS_HOST_DEVICE
-  SemiringReduce() = default;
+  SemiringReduce(Params params) : params(params) { };
 
   /// Operator
   CUTLASS_HOST_DEVICE
@@ -69,14 +75,19 @@ struct SemiringReduce {
     FragmentAccumulator accumulator,
     FragmentElement element) const {
 
-    AdditionOp op;
+    RingOp ring_op;
     cutlass::NumericArrayConverter<
       ElementAccumulator,
       Element,
       kCount,
       cutlass::PreferredRoundingMode<ElementAccumulator, Element>::kRound> converter;
 
-    return op(accumulator, converter(element));
+    FragmentAccumulator retval;
+    CUTLASS_PRAGMA_UNROLL
+    for (int i = 0; i < kCount; ++i) {
+      retval[i] = ring_op.add(accumulator[i], converter(element)[i]);
+    }
+    return retval;
   }
 };
 

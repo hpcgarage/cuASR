@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.18)
 project(cuASR CUDA CXX)
 
 # RELEASE config by default if none is provided:
@@ -43,7 +43,7 @@ set(cuASR_CUDA_FLAGS --expt-relaxed-constexpr)
 set(cuASR_CUDA_FLAGS_DEBUG          -G ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELEASE        -O3 ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELWITHDEBINFO -G ${cuASR_CUDA_FLAGS})
-set(CMAKE_CUDA_ARCHITECTURES "80")
+set(CMAKE_CUDA_ARCHITECTURES "86")
 
 # the sub-modules update themselves with git, so find git
 find_package(Git QUIET)
