@@ -92,21 +92,19 @@ auto cuasr_minplus_srsgemm_nt(
     bool do_epilogue_min,
     cudaStream_t stream = nullptr) -> int {
   // compile time configuration of this srgemm kernel
-  using OperatorClass    = cutlass::arch::OpClassSimt;
-  using SmArch           = cutlass::arch::Sm50;
-  using AdditionOp       = cuasr::minimum<float>;
-  using MultiplicationOp = cuasr::plus<float>;
+  using OperatorClass = cutlass::arch::OpClassSimt;
+  using SmArch        = cutlass::arch::Sm50;
+  using RingOp        = cuasr::min_plus<float>;
 
   using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
       float, float, float, float, OperatorClass, //
-      AdditionOp, MultiplicationOp, SmArch>;
+      RingOp, SmArch>;
 
   using ColumnMajor = cutlass::layout::ColumnMajor;
   using RowMajor    = cutlass::layout::RowMajor;
 
   using cuASR_MinPlus_SGEMM = cuasr::gemm::device::Srgemm<
-      AdditionOp,       // Thread level semiring add operator
-      MultiplicationOp, // Thread level semiRing multiply operator
+      RingOp,           // Thread level SemiRing operator
       float,            // element type of A
       ColumnMajor,      // layout of A
       float,            // element type of B
@@ -114,11 +112,10 @@ auto cuasr_minplus_srsgemm_nt(
       float,            // element type of C
       RowMajor,         // layout of C
       float             // element type of D
-      >;
+  >;
 
-  float alpha = MultiplicationOp::Identity;
-  float beta
-      = do_epilogue_min ? MultiplicationOp::Identity : MultiplicationOp::Annihilator;
+  int alpha = RingOp::MultIdentity;
+  int beta = do_epilogue_min ? RingOp::MultIdentity : RingOp::MultAnnihilator;
 
   // construct kernel arguments struct
   cuASR_MinPlus_SGEMM::Arguments args(
@@ -161,28 +158,26 @@ After the operator struct is defined, the rest is some simple boilerplate for in
 The code excerpt below is taken from [`examples/01_userdefined_semiring`](examples/01_userdefined_semiring/userdefined_semiring.cu).
 
 ```cpp
-template <typename T, int N = 1>
-struct binary_xor {
-  static T constexpr Identity = static_cast<T>(false);
-  // scalar operator
+template <class T>
+struct xor_and {
+  static T constexpr AddIdentity     = static_cast<T>(false);
+  static T constexpr MultIdentity    = static_cast<T>(true);
+  static T constexpr MultAnnihilator = static_cast<T>(false);
+
   __host__ __device__
-  T operator()(T lhs, T const &rhs) const {
-    lhs ^= rhs;
-    return lhs;
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
   __host__ __device__
-  cutlass::Array<T, N>
-  operator()(cutlass::Array<T, N> const &lhs, cutlass::Array<T, N> const &rhs) const {
-    cutlass::Array<T, N> result;
-    #pragma unroll
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  T add(T const lhs, T const rhs) const {
+    return lhs ^ rhs;
   }
 
-  // ... other overloads for cutlass::Array<T, N> here ...
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs && rhs;
+  }
 };
 
 // GF(2) xor-and SRGEMM
@@ -203,10 +198,9 @@ auto cuasr_gf_srgemm_nnn(
   using OperatorClass = cutlass::arch::OpClassSimt;
   using SmArch        = cutlass::arch::Sm50;
 
-  using AdditionOp       = binary_xor<int>;
-  using MultiplicationOp = cuasr::binary_and<int>;
+  using RingOp = xor_and<int>;
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-      AdditionOp, MultiplicationOp, int, 1>;
+      RingOp, int, 1>;
 
   static int constexpr AlignmentA = 1;
   static int constexpr AlignmentB = 1;
@@ -220,8 +214,7 @@ auto cuasr_gf_srgemm_nnn(
   using RowMajor = cutlass::layout::RowMajor;
 
   using cuASRGaloisFieldSrgemm = cuasr::gemm::device::Srgemm<
-      AdditionOp,         // Thread level SemiRing operator
-      MultiplicationOp,   // Thread level SemiRing operator
+      RingOp,             // Thread level SemiRing operator
       int,                // element type of A
       RowMajor,           // layout of A
       int,                // element type of B
@@ -242,8 +235,8 @@ auto cuasr_gf_srgemm_nnn(
       false               // SplitKSerial
       >;
 
-  int alpha = MultiplicationOp::Identity;
-  int beta = do_epilogue_and ? MultiplicationOp::Identity : MultiplicationOp::Annihilator;
+  int alpha = RingOp::MultIdentity;
+  int beta = do_epilogue_and ? RingOp::MultIdentity : RingOp::MultAnnihilator;
 
   // construct kernel arguments struct
   cuASRGaloisFieldSrgemm::Arguments args(
@@ -291,24 +284,30 @@ When a device level SRGEMM template, `cuasr::gemm::device::Srgemm`, is instantia
 namespace cuasr::arch {
 template <
   // ... datatype and GEMM shape template params
-  typename AdditionOp,
-  typename MultiplicationOp
+  typename RingOp
 >
-struct Srmma {
+struct Srmma<
+    cutlass::gemm::GemmShape<1, 1, 1>,
+    1,
+    ElementA,
+    LayoutA,
+    ElementB,
+    LayoutB,
+    ElementC,
+    LayoutC,
+    RingOp> {
   using Shape = cutlass::gemm::GemmShape<1, 1, 1>;
 
-  // operators must be default contructible and contain a binary operator()
-  AdditionOp add;
-  MultiplicationOp mult;
+  RingOp ring_op;
 
-  __host__ __device__
+  CUTLASS_HOST_DEVICE
   void operator()(
     cutlass::Array<ElementC, 1> &d,
     cutlass::Array<ElementA, 1> const &a,
     cutlass::Array<ElementB, 1> const &b,
     cutlass::Array<ElementC, 1> const &c
   ) {
-    d[0] = add(c[0], mult(a[0], b[0]));
+    ring_op.fma(d[0], a[0], b[0], c[0]);
   }
 };
 }
