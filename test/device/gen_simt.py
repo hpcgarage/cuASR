@@ -58,7 +58,7 @@ semiring_operators = [
 
 testfile_header = """\
 /***************************************************************************************************
-* Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).
+* Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
 **************************************************************************************************/
 /////////////////////////////////////////////////////////////////
 //  THIS TEST FILE IS GENERATED AUTOMATICALLY : DO NOT MODIFY  //

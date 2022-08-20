@@ -1,5 +1,5 @@
 /***************************************************************************************************
- * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
+ * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
  **************************************************************************************************/
 
 #include <chrono>
