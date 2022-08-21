@@ -313,6 +313,150 @@ TEST(SM50_default_plus_mult_srgemm, f32_nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+TEST(SM50_default_plus_mult_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_plus_mult_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_plus_mult_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_plus_mult_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_plus_mult_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_plus_mult_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_plus_mult_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_plus_mult_srgemm, s32_nn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::plus_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 TEST(SM50_default_min_plus_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -585,6 +729,150 @@ TEST(SM50_default_min_plus_srgemm, f32_nn_n) {
 
 TEST(SM50_default_min_plus_srgemm, f32_nn_t) {
   using precision = float;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_plus_srgemm, s32_nn_t) {
+  using precision = int;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm50;
   using RingOp = cuasr::min_plus<precision>;
@@ -889,6 +1177,150 @@ TEST(SM50_default_max_plus_srgemm, f32_nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+TEST(SM50_default_max_plus_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_plus_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_plus_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_plus_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_plus_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_plus_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_plus_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_plus_srgemm, s32_nn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_plus<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 TEST(SM50_default_min_max_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1161,6 +1593,150 @@ TEST(SM50_default_min_max_srgemm, f32_nn_n) {
 
 TEST(SM50_default_min_max_srgemm, f32_nn_t) {
   using precision = float;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_max<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_max_srgemm, s32_nn_t) {
+  using precision = int;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm50;
   using RingOp = cuasr::min_max<precision>;
@@ -1465,6 +2041,150 @@ TEST(SM50_default_max_min_srgemm, f32_nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+TEST(SM50_default_max_min_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_min_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_min_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_min_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_min_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_min_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_min_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_min_srgemm, s32_nn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_min<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 TEST(SM50_default_min_mult_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1737,6 +2457,150 @@ TEST(SM50_default_min_mult_srgemm, f32_nn_n) {
 
 TEST(SM50_default_min_mult_srgemm, f32_nn_t) {
   using precision = float;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::min_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_min_mult_srgemm, s32_nn_t) {
+  using precision = int;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm50;
   using RingOp = cuasr::min_mult<precision>;
@@ -2041,6 +2905,150 @@ TEST(SM50_default_max_mult_srgemm, f32_nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+TEST(SM50_default_max_mult_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_mult_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_mult_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_mult_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_mult_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_mult_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_mult_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_max_mult_srgemm, s32_nn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::max_mult<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 TEST(SM50_default_or_and_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2313,6 +3321,150 @@ TEST(SM50_default_or_and_srgemm, f32_nn_n) {
 
 TEST(SM50_default_or_and_srgemm, f32_nn_t) {
   using precision = float;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_tt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_tt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_tn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_tn_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_nt_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_nt_t) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::RowMajor,                   //
+      precision, cutlass::layout::RowMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_nn_n) {
+  using precision = int;
+  using OpClass   = cutlass::arch::OpClassSimt;
+  using SmArch    = cutlass::arch::Sm50;
+  using RingOp = cuasr::or_and<precision>;
+
+  using Srgemm = cuasr::gemm::device::Srgemm<                           //
+      RingOp,                                                           //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,                   //
+      precision, cutlass::layout::ColumnMajor,
+      precision, OpClass, SmArch>;
+
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+TEST(SM50_default_or_and_srgemm, s32_nn_t) {
+  using precision = int;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm50;
   using RingOp = cuasr::or_and<precision>;

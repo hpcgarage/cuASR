@@ -82,7 +82,7 @@ public:
                   ComputeType compute_a(static_cast<ComputeType>(a));
                   ComputeType compute_b(static_cast<ComputeType>(b));
 
-                  accum[i][j] = ring_op.add(ring_op.mult(compute_a, compute_b), accum[i][j]);
+                  ring_op.fma(accum[i][j], compute_a, compute_b, accum[i][j]);
                 }
               }
             }
@@ -95,7 +95,7 @@ public:
               int col = col_block + j;
               cutlass::MatrixCoord coord(row, col);
               if (row < M && col < N) {
-                auto c             = tensor_c.at(coord);
+                auto c = tensor_c.at(coord);
                 // clang-format off
                 tensor_d.at(coord) = convert_op(
                     ring_op.add(

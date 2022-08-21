@@ -10,6 +10,7 @@ import argparse
 precisions = [
     ["f64", "double"],
     ["f32", "float"],
+    ["s32", "int"]
 ]
 
 tnspposes = [
