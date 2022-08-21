@@ -25,7 +25,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, tt_n) {
+TEST(SM80_default_plus_mult_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -43,7 +43,7 @@ TEST(SM80_default_plus_mult_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, tt_t) {
+TEST(SM80_default_plus_mult_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -61,7 +61,7 @@ TEST(SM80_default_plus_mult_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, tn_n) {
+TEST(SM80_default_plus_mult_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -79,7 +79,7 @@ TEST(SM80_default_plus_mult_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, tn_t) {
+TEST(SM80_default_plus_mult_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -97,7 +97,7 @@ TEST(SM80_default_plus_mult_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, nt_n) {
+TEST(SM80_default_plus_mult_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -115,7 +115,7 @@ TEST(SM80_default_plus_mult_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, nt_t) {
+TEST(SM80_default_plus_mult_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -133,7 +133,7 @@ TEST(SM80_default_plus_mult_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, nn_n) {
+TEST(SM80_default_plus_mult_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -151,7 +151,7 @@ TEST(SM80_default_plus_mult_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_d_srgemm, nn_t) {
+TEST(SM80_default_plus_mult_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -169,7 +169,7 @@ TEST(SM80_default_plus_mult_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, tt_n) {
+TEST(SM80_default_plus_mult_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -187,7 +187,7 @@ TEST(SM80_default_plus_mult_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, tt_t) {
+TEST(SM80_default_plus_mult_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -205,7 +205,7 @@ TEST(SM80_default_plus_mult_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, tn_n) {
+TEST(SM80_default_plus_mult_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -223,7 +223,7 @@ TEST(SM80_default_plus_mult_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, tn_t) {
+TEST(SM80_default_plus_mult_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -241,7 +241,7 @@ TEST(SM80_default_plus_mult_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, nt_n) {
+TEST(SM80_default_plus_mult_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -259,7 +259,7 @@ TEST(SM80_default_plus_mult_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, nt_t) {
+TEST(SM80_default_plus_mult_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -277,7 +277,7 @@ TEST(SM80_default_plus_mult_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, nn_n) {
+TEST(SM80_default_plus_mult_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -295,7 +295,7 @@ TEST(SM80_default_plus_mult_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_plus_mult_s_srgemm, nn_t) {
+TEST(SM80_default_plus_mult_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -313,7 +313,7 @@ TEST(SM80_default_plus_mult_s_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, tt_n) {
+TEST(SM80_default_min_plus_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -331,7 +331,7 @@ TEST(SM80_default_min_plus_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, tt_t) {
+TEST(SM80_default_min_plus_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -349,7 +349,7 @@ TEST(SM80_default_min_plus_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, tn_n) {
+TEST(SM80_default_min_plus_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -367,7 +367,7 @@ TEST(SM80_default_min_plus_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, tn_t) {
+TEST(SM80_default_min_plus_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -385,7 +385,7 @@ TEST(SM80_default_min_plus_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, nt_n) {
+TEST(SM80_default_min_plus_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -403,7 +403,7 @@ TEST(SM80_default_min_plus_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, nt_t) {
+TEST(SM80_default_min_plus_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -421,7 +421,7 @@ TEST(SM80_default_min_plus_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, nn_n) {
+TEST(SM80_default_min_plus_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -439,7 +439,7 @@ TEST(SM80_default_min_plus_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_d_srgemm, nn_t) {
+TEST(SM80_default_min_plus_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -457,7 +457,7 @@ TEST(SM80_default_min_plus_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, tt_n) {
+TEST(SM80_default_min_plus_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -475,7 +475,7 @@ TEST(SM80_default_min_plus_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, tt_t) {
+TEST(SM80_default_min_plus_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -493,7 +493,7 @@ TEST(SM80_default_min_plus_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, tn_n) {
+TEST(SM80_default_min_plus_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -511,7 +511,7 @@ TEST(SM80_default_min_plus_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, tn_t) {
+TEST(SM80_default_min_plus_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -529,7 +529,7 @@ TEST(SM80_default_min_plus_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, nt_n) {
+TEST(SM80_default_min_plus_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -547,7 +547,7 @@ TEST(SM80_default_min_plus_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, nt_t) {
+TEST(SM80_default_min_plus_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -565,7 +565,7 @@ TEST(SM80_default_min_plus_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, nn_n) {
+TEST(SM80_default_min_plus_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -583,7 +583,7 @@ TEST(SM80_default_min_plus_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_plus_s_srgemm, nn_t) {
+TEST(SM80_default_min_plus_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -601,7 +601,7 @@ TEST(SM80_default_min_plus_s_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, tt_n) {
+TEST(SM80_default_max_plus_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -619,7 +619,7 @@ TEST(SM80_default_max_plus_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, tt_t) {
+TEST(SM80_default_max_plus_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -637,7 +637,7 @@ TEST(SM80_default_max_plus_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, tn_n) {
+TEST(SM80_default_max_plus_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -655,7 +655,7 @@ TEST(SM80_default_max_plus_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, tn_t) {
+TEST(SM80_default_max_plus_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -673,7 +673,7 @@ TEST(SM80_default_max_plus_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, nt_n) {
+TEST(SM80_default_max_plus_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -691,7 +691,7 @@ TEST(SM80_default_max_plus_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, nt_t) {
+TEST(SM80_default_max_plus_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -709,7 +709,7 @@ TEST(SM80_default_max_plus_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, nn_n) {
+TEST(SM80_default_max_plus_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -727,7 +727,7 @@ TEST(SM80_default_max_plus_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_d_srgemm, nn_t) {
+TEST(SM80_default_max_plus_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -745,7 +745,7 @@ TEST(SM80_default_max_plus_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, tt_n) {
+TEST(SM80_default_max_plus_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -763,7 +763,7 @@ TEST(SM80_default_max_plus_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, tt_t) {
+TEST(SM80_default_max_plus_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -781,7 +781,7 @@ TEST(SM80_default_max_plus_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, tn_n) {
+TEST(SM80_default_max_plus_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -799,7 +799,7 @@ TEST(SM80_default_max_plus_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, tn_t) {
+TEST(SM80_default_max_plus_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -817,7 +817,7 @@ TEST(SM80_default_max_plus_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, nt_n) {
+TEST(SM80_default_max_plus_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -835,7 +835,7 @@ TEST(SM80_default_max_plus_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, nt_t) {
+TEST(SM80_default_max_plus_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -853,7 +853,7 @@ TEST(SM80_default_max_plus_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, nn_n) {
+TEST(SM80_default_max_plus_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -871,7 +871,7 @@ TEST(SM80_default_max_plus_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_plus_s_srgemm, nn_t) {
+TEST(SM80_default_max_plus_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -889,7 +889,7 @@ TEST(SM80_default_max_plus_s_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, tt_n) {
+TEST(SM80_default_min_max_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -907,7 +907,7 @@ TEST(SM80_default_min_max_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, tt_t) {
+TEST(SM80_default_min_max_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -925,7 +925,7 @@ TEST(SM80_default_min_max_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, tn_n) {
+TEST(SM80_default_min_max_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -943,7 +943,7 @@ TEST(SM80_default_min_max_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, tn_t) {
+TEST(SM80_default_min_max_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -961,7 +961,7 @@ TEST(SM80_default_min_max_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, nt_n) {
+TEST(SM80_default_min_max_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -979,7 +979,7 @@ TEST(SM80_default_min_max_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, nt_t) {
+TEST(SM80_default_min_max_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -997,7 +997,7 @@ TEST(SM80_default_min_max_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, nn_n) {
+TEST(SM80_default_min_max_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1015,7 +1015,7 @@ TEST(SM80_default_min_max_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_d_srgemm, nn_t) {
+TEST(SM80_default_min_max_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1033,7 +1033,7 @@ TEST(SM80_default_min_max_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, tt_n) {
+TEST(SM80_default_min_max_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1051,7 +1051,7 @@ TEST(SM80_default_min_max_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, tt_t) {
+TEST(SM80_default_min_max_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1069,7 +1069,7 @@ TEST(SM80_default_min_max_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, tn_n) {
+TEST(SM80_default_min_max_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1087,7 +1087,7 @@ TEST(SM80_default_min_max_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, tn_t) {
+TEST(SM80_default_min_max_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1105,7 +1105,7 @@ TEST(SM80_default_min_max_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, nt_n) {
+TEST(SM80_default_min_max_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1123,7 +1123,7 @@ TEST(SM80_default_min_max_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, nt_t) {
+TEST(SM80_default_min_max_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1141,7 +1141,7 @@ TEST(SM80_default_min_max_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, nn_n) {
+TEST(SM80_default_min_max_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1159,7 +1159,7 @@ TEST(SM80_default_min_max_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_max_s_srgemm, nn_t) {
+TEST(SM80_default_min_max_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1177,7 +1177,7 @@ TEST(SM80_default_min_max_s_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, tt_n) {
+TEST(SM80_default_max_min_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1195,7 +1195,7 @@ TEST(SM80_default_max_min_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, tt_t) {
+TEST(SM80_default_max_min_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1213,7 +1213,7 @@ TEST(SM80_default_max_min_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, tn_n) {
+TEST(SM80_default_max_min_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1231,7 +1231,7 @@ TEST(SM80_default_max_min_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, tn_t) {
+TEST(SM80_default_max_min_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1249,7 +1249,7 @@ TEST(SM80_default_max_min_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, nt_n) {
+TEST(SM80_default_max_min_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1267,7 +1267,7 @@ TEST(SM80_default_max_min_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, nt_t) {
+TEST(SM80_default_max_min_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1285,7 +1285,7 @@ TEST(SM80_default_max_min_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, nn_n) {
+TEST(SM80_default_max_min_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1303,7 +1303,7 @@ TEST(SM80_default_max_min_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_d_srgemm, nn_t) {
+TEST(SM80_default_max_min_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1321,7 +1321,7 @@ TEST(SM80_default_max_min_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, tt_n) {
+TEST(SM80_default_max_min_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1339,7 +1339,7 @@ TEST(SM80_default_max_min_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, tt_t) {
+TEST(SM80_default_max_min_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1357,7 +1357,7 @@ TEST(SM80_default_max_min_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, tn_n) {
+TEST(SM80_default_max_min_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1375,7 +1375,7 @@ TEST(SM80_default_max_min_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, tn_t) {
+TEST(SM80_default_max_min_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1393,7 +1393,7 @@ TEST(SM80_default_max_min_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, nt_n) {
+TEST(SM80_default_max_min_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1411,7 +1411,7 @@ TEST(SM80_default_max_min_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, nt_t) {
+TEST(SM80_default_max_min_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1429,7 +1429,7 @@ TEST(SM80_default_max_min_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, nn_n) {
+TEST(SM80_default_max_min_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1447,7 +1447,7 @@ TEST(SM80_default_max_min_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_min_s_srgemm, nn_t) {
+TEST(SM80_default_max_min_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1465,7 +1465,7 @@ TEST(SM80_default_max_min_s_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, tt_n) {
+TEST(SM80_default_min_mult_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1483,7 +1483,7 @@ TEST(SM80_default_min_mult_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, tt_t) {
+TEST(SM80_default_min_mult_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1501,7 +1501,7 @@ TEST(SM80_default_min_mult_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, tn_n) {
+TEST(SM80_default_min_mult_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1519,7 +1519,7 @@ TEST(SM80_default_min_mult_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, tn_t) {
+TEST(SM80_default_min_mult_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1537,7 +1537,7 @@ TEST(SM80_default_min_mult_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, nt_n) {
+TEST(SM80_default_min_mult_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1555,7 +1555,7 @@ TEST(SM80_default_min_mult_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, nt_t) {
+TEST(SM80_default_min_mult_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1573,7 +1573,7 @@ TEST(SM80_default_min_mult_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, nn_n) {
+TEST(SM80_default_min_mult_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1591,7 +1591,7 @@ TEST(SM80_default_min_mult_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_d_srgemm, nn_t) {
+TEST(SM80_default_min_mult_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1609,7 +1609,7 @@ TEST(SM80_default_min_mult_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, tt_n) {
+TEST(SM80_default_min_mult_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1627,7 +1627,7 @@ TEST(SM80_default_min_mult_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, tt_t) {
+TEST(SM80_default_min_mult_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1645,7 +1645,7 @@ TEST(SM80_default_min_mult_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, tn_n) {
+TEST(SM80_default_min_mult_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1663,7 +1663,7 @@ TEST(SM80_default_min_mult_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, tn_t) {
+TEST(SM80_default_min_mult_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1681,7 +1681,7 @@ TEST(SM80_default_min_mult_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, nt_n) {
+TEST(SM80_default_min_mult_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1699,7 +1699,7 @@ TEST(SM80_default_min_mult_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, nt_t) {
+TEST(SM80_default_min_mult_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1717,7 +1717,7 @@ TEST(SM80_default_min_mult_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, nn_n) {
+TEST(SM80_default_min_mult_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1735,7 +1735,7 @@ TEST(SM80_default_min_mult_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_min_mult_s_srgemm, nn_t) {
+TEST(SM80_default_min_mult_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1753,7 +1753,7 @@ TEST(SM80_default_min_mult_s_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, tt_n) {
+TEST(SM80_default_max_mult_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1771,7 +1771,7 @@ TEST(SM80_default_max_mult_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, tt_t) {
+TEST(SM80_default_max_mult_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1789,7 +1789,7 @@ TEST(SM80_default_max_mult_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, tn_n) {
+TEST(SM80_default_max_mult_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1807,7 +1807,7 @@ TEST(SM80_default_max_mult_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, tn_t) {
+TEST(SM80_default_max_mult_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1825,7 +1825,7 @@ TEST(SM80_default_max_mult_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, nt_n) {
+TEST(SM80_default_max_mult_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1843,7 +1843,7 @@ TEST(SM80_default_max_mult_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, nt_t) {
+TEST(SM80_default_max_mult_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1861,7 +1861,7 @@ TEST(SM80_default_max_mult_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, nn_n) {
+TEST(SM80_default_max_mult_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1879,7 +1879,7 @@ TEST(SM80_default_max_mult_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_d_srgemm, nn_t) {
+TEST(SM80_default_max_mult_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1897,7 +1897,7 @@ TEST(SM80_default_max_mult_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, tt_n) {
+TEST(SM80_default_max_mult_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1915,7 +1915,7 @@ TEST(SM80_default_max_mult_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, tt_t) {
+TEST(SM80_default_max_mult_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1933,7 +1933,7 @@ TEST(SM80_default_max_mult_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, tn_n) {
+TEST(SM80_default_max_mult_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1951,7 +1951,7 @@ TEST(SM80_default_max_mult_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, tn_t) {
+TEST(SM80_default_max_mult_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1969,7 +1969,7 @@ TEST(SM80_default_max_mult_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, nt_n) {
+TEST(SM80_default_max_mult_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1987,7 +1987,7 @@ TEST(SM80_default_max_mult_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, nt_t) {
+TEST(SM80_default_max_mult_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2005,7 +2005,7 @@ TEST(SM80_default_max_mult_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, nn_n) {
+TEST(SM80_default_max_mult_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2023,7 +2023,7 @@ TEST(SM80_default_max_mult_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_max_mult_s_srgemm, nn_t) {
+TEST(SM80_default_max_mult_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2041,7 +2041,7 @@ TEST(SM80_default_max_mult_s_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, tt_n) {
+TEST(SM80_default_or_and_srgemm, f64_tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2059,7 +2059,7 @@ TEST(SM80_default_or_and_d_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, tt_t) {
+TEST(SM80_default_or_and_srgemm, f64_tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2077,7 +2077,7 @@ TEST(SM80_default_or_and_d_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, tn_n) {
+TEST(SM80_default_or_and_srgemm, f64_tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2095,7 +2095,7 @@ TEST(SM80_default_or_and_d_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, tn_t) {
+TEST(SM80_default_or_and_srgemm, f64_tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2113,7 +2113,7 @@ TEST(SM80_default_or_and_d_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, nt_n) {
+TEST(SM80_default_or_and_srgemm, f64_nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2131,7 +2131,7 @@ TEST(SM80_default_or_and_d_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, nt_t) {
+TEST(SM80_default_or_and_srgemm, f64_nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2149,7 +2149,7 @@ TEST(SM80_default_or_and_d_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, nn_n) {
+TEST(SM80_default_or_and_srgemm, f64_nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2167,7 +2167,7 @@ TEST(SM80_default_or_and_d_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_d_srgemm, nn_t) {
+TEST(SM80_default_or_and_srgemm, f64_nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2185,7 +2185,7 @@ TEST(SM80_default_or_and_d_srgemm, nn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, tt_n) {
+TEST(SM80_default_or_and_srgemm, f32_tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2203,7 +2203,7 @@ TEST(SM80_default_or_and_s_srgemm, tt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, tt_t) {
+TEST(SM80_default_or_and_srgemm, f32_tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2221,7 +2221,7 @@ TEST(SM80_default_or_and_s_srgemm, tt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, tn_n) {
+TEST(SM80_default_or_and_srgemm, f32_tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2239,7 +2239,7 @@ TEST(SM80_default_or_and_s_srgemm, tn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, tn_t) {
+TEST(SM80_default_or_and_srgemm, f32_tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2257,7 +2257,7 @@ TEST(SM80_default_or_and_s_srgemm, tn_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, nt_n) {
+TEST(SM80_default_or_and_srgemm, f32_nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2275,7 +2275,7 @@ TEST(SM80_default_or_and_s_srgemm, nt_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, nt_t) {
+TEST(SM80_default_or_and_srgemm, f32_nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2293,7 +2293,7 @@ TEST(SM80_default_or_and_s_srgemm, nt_t) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, nn_n) {
+TEST(SM80_default_or_and_srgemm, f32_nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2311,7 +2311,7 @@ TEST(SM80_default_or_and_s_srgemm, nn_n) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM80_default_or_and_s_srgemm, nn_t) {
+TEST(SM80_default_or_and_srgemm, f32_nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;

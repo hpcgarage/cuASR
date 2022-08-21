@@ -8,8 +8,8 @@ import argparse
 ################################################################################
 
 precisions = [
-    ["d", "double"],
-    ["s", "float"],
+    ["f64", "double"],
+    ["f32", "float"],
 ]
 
 tnspposes = [
@@ -55,7 +55,7 @@ bench_template = """\
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}srgemm_{tnspA}{tnspB}_{tnspC}(benchmark::State &state) {{
+static void BM_SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}_srgemm_{tnspA}{tnspB}_{tnspC}(benchmark::State &state) {{
   const auto N = static_cast<int>(state.range(0));
   using precision = {precision_type};
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -82,7 +82,7 @@ static void BM_SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}srgemm_{tn
   state.counters["Flop/s"]
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }}
-BENCHMARK(BM_SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}srgemm_{tnspA}{tnspB}_{tnspC})
+BENCHMARK(BM_SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}_srgemm_{tnspA}{tnspB}_{tnspC})
     ->RangeMultiplier(2)->Range(256, 4096);
 """
 

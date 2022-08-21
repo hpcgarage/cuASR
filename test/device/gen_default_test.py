@@ -7,8 +7,9 @@ import argparse
 ################################################################################
 
 precisions = [
-    ["d", "double"],
-    ["s", "float"],
+    ["f64", "double"],
+    ["f32", "float"]
+    # ["s32", "int"],
 ]
 
 tnspposes = [
@@ -66,7 +67,7 @@ testfile_header = """\
 test_template = """\
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}_srgemm, {tnspA}{tnspB}_{tnspC}) {{
+TEST(SM{sm_arch}_default_{add_op}_{mult_op}_srgemm, {precision_char}_{tnspA}{tnspB}_{tnspC}) {{
   using precision = {precision_type};
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm{sm_arch};

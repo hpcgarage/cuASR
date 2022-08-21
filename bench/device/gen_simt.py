@@ -27,10 +27,9 @@ UNROLL_MIN = 8
 
 #      char,      type             bits/elem, max tile,    L0 threadblock tiles
 precisions = [
-    ["d", "double",                    64,   64*64, [[64,  64], [32,  32]]],
-    ["s", "float",                     32, 128 *
-     128, [[128, 256], [128, 128], [64,  64]]],
-    # ["h", "cutlass::half_t",           16, 128*256, [ [256, 128], [ 64, 128], [ 64,  32] ] ],
+    ["f64", "double",                    64, 128 *  64, [[128,  64], [ 64,  64], [ 32,  32]]],
+    ["f32", "float",                     32, 256 * 128, [[256, 128], [128, 128], [128,  64], [64,  64]]],
+    # ["h", "cutlass::half_t",           16, 128*256, [[256, 128], [ 64, 128], [ 64,  32] ] ],
     # ["i", "int",                       32, 128*128, [[128,  64], [16, 32]]],
 ]
 
@@ -85,7 +84,7 @@ bench_header_template = """\
 
 bench_template = """\
 #if defined(CUASR_BENCH_LEVEL) and (CUASR_BENCH_LEVEL >= {21})
-static void BM_SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20}(benchmark::State &state) {{
+static void BM_SM{22}_device_{0}_{1}_{2}_srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20}(benchmark::State &state) {{
   const auto N = static_cast<int>(state.range(0));
   using precision = {3};
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -124,7 +123,7 @@ static void BM_SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{1
   state.counters["Flop/s"]
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }}
-BENCHMARK(BM_SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20})
+BENCHMARK(BM_SM{22}_device_{0}_{1}_{2}_srgemm_{4}{5}_{6}_{10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20})
     ->RangeMultiplier(2)->Range(256, 4096);
 #endif
 
@@ -250,7 +249,7 @@ def main(args):
         tnspC = "n" if column_major_C else "t"
 
         # open file
-        benchfile_name = "sm{}_simt_{}_{}_{}srgemm_{}{}_{}.cu".format(
+        benchfile_name = "sm{}_simt_{}_{}_{}_srgemm_{}{}_{}.cu".format(
             args.sm_arch, add_op, mult_op, precision_char,
             tnspA, tnspB, tnspC)
         print("\n", benchfile_name)

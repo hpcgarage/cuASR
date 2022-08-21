@@ -27,10 +27,9 @@ UNROLL_MIN = 8
 
 #      char,      type             bits/elem, max tile,    L0 threadblock tiles
 precisions = [
-    ["d", "double",                    64,   64*64, [[64,  64], [32,  32]]],
-    ["s", "float",                     32, 128 *
-     128, [[128, 256], [128, 128], [64,  64]]],
-    # ["h", "cutlass::half_t",           16, 128*256, [ [256, 128], [ 64, 128], [ 64,  32] ] ],
+    ["f64", "double",                    64, 128 *  64, [[128,  64], [ 64,  64], [ 32,  32]]],
+    ["f32", "float",                     32, 256 * 128, [[256, 128], [128, 128], [128,  64], [64,  64]]],
+    # ["h", "cutlass::half_t",           16, 128*256, [[256, 128], [ 64, 128], [ 64,  32] ] ],
     # ["i", "int",                       32, 128*128, [[128,  64], [16, 32]]],
 ]
 
@@ -94,7 +93,7 @@ test_header_template = """\
 
 test_template = """\
 #if defined(CUASR_TEST_LEVEL) and (CUASR_TEST_LEVEL >= {21})
-TEST(SM{22}_device_{0}_{1}_{2}srgemm_{4}{5}_{6}, {10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20}) {{
+TEST(SM{22}_device_{0}_{1}_{2}_srgemm_{4}{5}_{6}, {10}x{11}x{12}_{13}x{14}x1_{15}x{16}_{17}x{18}_{19}x{20}) {{
   using precision = {3};
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm{22};
@@ -245,7 +244,7 @@ def main(args):
         tnspC = "n" if column_major_C else "t"
 
         # open file
-        testfile_name = "sm{}_simt_{}_{}_{}srgemm_{}{}_{}.cu".format(
+        testfile_name = "sm{}_simt_{}_{}_{}_srgemm_{}{}_{}.cu".format(
             args.sm_arch, add_op, mult_op, precision_char,
             tnspA, tnspB, tnspC)
         print("\n", testfile_name)
