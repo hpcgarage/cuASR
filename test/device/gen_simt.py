@@ -136,9 +136,9 @@ def write_test_to_file(
         mult_op,
         precision_char,
         precision_type,
-        transA,
-        transB,
-        transC,
+        tnspA,
+        tnspB,
+        tnspC,
         threadblock_tile,
         unroll,
         warp_shape,
@@ -162,21 +162,21 @@ def write_test_to_file(
       threadblock_tile[0], threadblock_tile[1], unroll
   ))
 
-  trans_typeA = "Column" if transA == "n" else "Row"
-  trans_typeB = "Column" if transB == "n" else "Row"
-  trans_typeC = "Column" if transC == "n" else "Row"
+  tnsp_typeA = "Column" if tnspA == "n" else "Row"
+  tnsp_typeB = "Column" if tnspB == "n" else "Row"
+  tnsp_typeC = "Column" if tnspC == "n" else "Row"
   print(precision_type)
   testfile.write(test_template.format(
       add_op,  # 0
       mult_op,  # 1
       precision_char,  # 2
       precision_type,  # 3
-      transA,  # 4
-      transB,  # 5
-      transC,  # 6
-      trans_typeA,  # 7
-      trans_typeB,  # 8
-      trans_typeC,  # 9
+      tnspA,  # 4
+      tnspB,  # 5
+      tnspC,  # 6
+      tnsp_typeA,  # 7
+      tnsp_typeB,  # 8
+      tnsp_typeC,  # 9
       int(threadblock_tile[0]),  # 10
       int(threadblock_tile[1]),  # 11
       int(unroll),  # 12
@@ -240,14 +240,14 @@ def main(args):
         column_major_A = transpose[0]
         column_major_B = transpose[1]
         column_major_C = transpose[2]
-        transA = "n" if column_major_A else "t"
-        transB = "n" if column_major_B else "t"
-        transC = "n" if column_major_C else "t"
+        tnspA = "n" if column_major_A else "t"
+        tnspB = "n" if column_major_B else "t"
+        tnspC = "n" if column_major_C else "t"
 
         # open file
         testfile_name = "sm{}_simt_{}_{}_{}srgemm_{}{}_{}.cu".format(
             args.sm_arch, add_op, mult_op, precision_char,
-            transA, transB, transC)
+            tnspA, tnspB, tnspC)
         print("\n", testfile_name)
 
         filePath = os.path.join(args.output_dir, testfile_name)
@@ -354,9 +354,9 @@ def main(args):
                   mult_op,
                   precision_char,
                   precision_type,
-                  transA,
-                  transB,
-                  transC,
+                  tnspA,
+                  tnspB,
+                  tnspC,
                   threadblock_tile,
                   unroll,
                   warp_shape,

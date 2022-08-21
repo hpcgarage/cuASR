@@ -1,5 +1,5 @@
 /***************************************************************************************************
-* Copyright (c) 2021, Vijay Thakkar (thakkarv@gatech.edu).
+* Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
 **************************************************************************************************/
 //////////////////////////////////////////////////////////////////////
 //  THIS BENCHMARK FILE IS GENERATED AUTOMATICALLY : DO NOT MODIFY  //
@@ -15,7 +15,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -47,7 +47,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -79,7 +79,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -111,7 +111,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -143,7 +143,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -175,7 +175,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -207,7 +207,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -239,7 +239,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -271,7 +271,7 @@ BENCHMARK(BM_SM50_device_plus_mult_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -303,7 +303,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -335,7 +335,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -367,7 +367,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -399,7 +399,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -431,7 +431,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -463,7 +463,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -495,7 +495,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_plus_mult_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_plus_mult_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -527,7 +527,7 @@ BENCHMARK(BM_SM50_device_plus_mult_ssrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -559,7 +559,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -591,7 +591,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -623,7 +623,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -655,7 +655,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -687,7 +687,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -719,7 +719,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -751,7 +751,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -783,7 +783,7 @@ BENCHMARK(BM_SM50_device_min_plus_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -815,7 +815,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -847,7 +847,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -879,7 +879,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -911,7 +911,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -943,7 +943,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -975,7 +975,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1007,7 +1007,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_plus_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_min_plus_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1039,7 +1039,7 @@ BENCHMARK(BM_SM50_device_min_plus_ssrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1071,7 +1071,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1103,7 +1103,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1135,7 +1135,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1167,7 +1167,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1199,7 +1199,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1231,7 +1231,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1263,7 +1263,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1295,7 +1295,7 @@ BENCHMARK(BM_SM50_device_max_plus_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1327,7 +1327,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1359,7 +1359,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1391,7 +1391,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1423,7 +1423,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1455,7 +1455,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1487,7 +1487,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1519,7 +1519,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_plus_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_max_plus_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1551,7 +1551,7 @@ BENCHMARK(BM_SM50_device_max_plus_ssrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1583,7 +1583,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1615,7 +1615,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1647,7 +1647,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1679,7 +1679,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1711,7 +1711,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1743,7 +1743,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1775,7 +1775,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1807,7 +1807,7 @@ BENCHMARK(BM_SM50_device_min_max_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1839,7 +1839,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1871,7 +1871,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1903,7 +1903,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1935,7 +1935,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1967,7 +1967,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -1999,7 +1999,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2031,7 +2031,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_max_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_min_max_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2063,7 +2063,7 @@ BENCHMARK(BM_SM50_device_min_max_ssrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2095,7 +2095,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2127,7 +2127,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2159,7 +2159,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2191,7 +2191,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2223,7 +2223,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2255,7 +2255,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2287,7 +2287,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2319,7 +2319,7 @@ BENCHMARK(BM_SM50_device_max_min_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2351,7 +2351,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2383,7 +2383,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2415,7 +2415,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2447,7 +2447,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2479,7 +2479,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2511,7 +2511,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2543,7 +2543,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_min_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_max_min_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2575,7 +2575,7 @@ BENCHMARK(BM_SM50_device_max_min_ssrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2607,7 +2607,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2639,7 +2639,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2671,7 +2671,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2703,7 +2703,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2735,7 +2735,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2767,7 +2767,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2799,7 +2799,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2831,7 +2831,7 @@ BENCHMARK(BM_SM50_device_min_mult_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2863,7 +2863,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2895,7 +2895,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2927,7 +2927,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2959,7 +2959,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -2991,7 +2991,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3023,7 +3023,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3055,7 +3055,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_min_mult_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_min_mult_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3087,7 +3087,7 @@ BENCHMARK(BM_SM50_device_min_mult_ssrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3119,7 +3119,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3151,7 +3151,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3183,7 +3183,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3215,7 +3215,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3247,7 +3247,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3279,7 +3279,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3311,7 +3311,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3343,7 +3343,7 @@ BENCHMARK(BM_SM50_device_max_mult_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3375,7 +3375,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3407,7 +3407,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3439,7 +3439,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3471,7 +3471,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3503,7 +3503,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3535,7 +3535,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3567,7 +3567,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_max_mult_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_max_mult_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3599,7 +3599,7 @@ BENCHMARK(BM_SM50_device_max_mult_ssrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3631,7 +3631,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3663,7 +3663,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3695,7 +3695,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3727,7 +3727,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3759,7 +3759,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3791,7 +3791,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3823,7 +3823,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_dsrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_dsrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3855,7 +3855,7 @@ BENCHMARK(BM_SM50_device_or_and_dsrgemm_nn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_tt_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_tt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3887,7 +3887,7 @@ BENCHMARK(BM_SM50_device_or_and_ssrgemm_tt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_tt_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_tt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3919,7 +3919,7 @@ BENCHMARK(BM_SM50_device_or_and_ssrgemm_tt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_tn_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_tn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3951,7 +3951,7 @@ BENCHMARK(BM_SM50_device_or_and_ssrgemm_tn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_tn_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_tn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -3983,7 +3983,7 @@ BENCHMARK(BM_SM50_device_or_and_ssrgemm_tn_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_nt_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_nt_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -4015,7 +4015,7 @@ BENCHMARK(BM_SM50_device_or_and_ssrgemm_nt_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_nt_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_nt_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -4047,7 +4047,7 @@ BENCHMARK(BM_SM50_device_or_and_ssrgemm_nt_t)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_nn_n(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_nn_n(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
@@ -4079,7 +4079,7 @@ BENCHMARK(BM_SM50_device_or_and_ssrgemm_nn_n)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM50_device_or_and_ssrgemm_nn_t(benchmark::State &state) {
+static void BM_SM50_default_or_and_ssrgemm_nn_t(benchmark::State &state) {
   const auto N = static_cast<int>(state.range(0));
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;

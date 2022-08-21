@@ -11,7 +11,7 @@ precisions = [
     ["s", "float"],
 ]
 
-transposes = [
+tnspposes = [
     [False, False, True],
     [False, False, False],
     [False, True, True],
@@ -36,7 +36,7 @@ semiring_operators = [
 
 testfile_header = """\
 /***************************************************************************************************
-* Copyright (c) 2021, Vijay Thakkar (thakkarv@gatech.edu).
+* Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
 **************************************************************************************************/
 /////////////////////////////////////////////////////////////////
 //  THIS TEST FILE IS GENERATED AUTOMATICALLY : DO NOT MODIFY  //
@@ -66,7 +66,7 @@ testfile_header = """\
 test_template = """\
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(SM{sm_arch}_device_{add_op}_{mult_op}_{precision_char}srgemm_{transA}{transB}_{transC}, default_configs) {{
+TEST(SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}_srgemm, {tnspA}{tnspB}_{tnspC}) {{
   using precision = {precision_type};
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm{sm_arch};
@@ -74,9 +74,9 @@ TEST(SM{sm_arch}_device_{add_op}_{mult_op}_{precision_char}srgemm_{transA}{trans
 
   using Srgemm = cuasr::gemm::device::Srgemm<                           //
       RingOp,                                                           //
-      precision, cutlass::layout::{trans_typeA}Major,                   //
-      precision, cutlass::layout::{trans_typeB}Major,                   //
-      precision, cutlass::layout::{trans_typeC}Major,
+      precision, cutlass::layout::{tnsp_typeA}Major,                   //
+      precision, cutlass::layout::{tnsp_typeB}Major,                   //
+      precision, cutlass::layout::{tnsp_typeC}Major,
       precision, OpClass, SmArch>;
 
   EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
@@ -96,24 +96,24 @@ def write_test_to_file(
         mult_op,
         precision_char,
         precision_type,
-        transA,
-        transB,
-        transC):
-    trans_typeA = "Column" if transA == "n" else "Row"
-    trans_typeB = "Column" if transB == "n" else "Row"
-    trans_typeC = "Column" if transC == "n" else "Row"
+        tnspA,
+        tnspB,
+        tnspC):
+    tnsp_typeA = "Column" if tnspA == "n" else "Row"
+    tnsp_typeB = "Column" if tnspB == "n" else "Row"
+    tnsp_typeC = "Column" if tnspC == "n" else "Row"
     testfile.write(test_template.format(
         sm_arch=sm_arch,
         add_op=add_op,
         mult_op=mult_op,
         precision_char=precision_char,
         precision_type=precision_type,
-        transA=transA,
-        transB=transB,
-        transC=transC,
-        trans_typeA=trans_typeA,
-        trans_typeB=trans_typeB,
-        trans_typeC=trans_typeC
+        tnspA=tnspA,
+        tnspB=tnspB,
+        tnspC=tnspC,
+        tnsp_typeA=tnsp_typeA,
+        tnsp_typeB=tnsp_typeB,
+        tnsp_typeC=tnsp_typeC
     ))
 
 
@@ -134,15 +134,15 @@ def main(args):
                 precision_char = precision[0]
                 precision_type = precision[1]
 
-                # transposes
-                for transpose in transposes:
-                    # get transpose char
-                    column_major_A = transpose[0]
-                    column_major_B = transpose[1]
-                    column_major_C = transpose[2]
-                    transA = "n" if column_major_A else "t"
-                    transB = "n" if column_major_B else "t"
-                    transC = "n" if column_major_C else "t"
+                # tnspposes
+                for tnsppose in tnspposes:
+                    # get tnsppose char
+                    column_major_A = tnsppose[0]
+                    column_major_B = tnsppose[1]
+                    column_major_C = tnsppose[2]
+                    tnspA = "n" if column_major_A else "t"
+                    tnspB = "n" if column_major_B else "t"
+                    tnspC = "n" if column_major_C else "t"
 
                     # write to file
                     write_test_to_file(
@@ -152,9 +152,9 @@ def main(args):
                         mult_op,
                         precision_char,
                         precision_type,
-                        transA,
-                        transB,
-                        transC)
+                        tnspA,
+                        tnspB,
+                        tnspC)
                     num_testes += 1
     print("Total test count per semi-ring = {}".format(
         num_testes // len(semiring_operators)))
