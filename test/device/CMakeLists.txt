@@ -48,3 +48,25 @@ endif()
 target_compile_definitions(cuasr_test_srgemm_device_sm50_shmoo
   PRIVATE CUASR_TEST_LEVEL=${CUASR_TEST_LEVEL}
 )
+
+# SM80 default tests
+add_executable(cuasr_test_srgemm_device_sm80_defaults
+  ${PROJECT_SOURCE_DIR}/test/harness.cpp
+  sm80_defaults.cu
+)
+target_include_directories(
+  cuasr_test_srgemm_device_sm80_defaults
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/include/
+  ${PROJECT_SOURCE_DIR}/tools/include/
+  ${PROJECT_SOURCE_DIR}/cutlass/include/
+  ${PROJECT_SOURCE_DIR}/cutlass/tools/util/include/
+)
+target_link_libraries(cuasr_test_srgemm_device_sm80_defaults
+  gtest
+  ${cuASR_LIB_NAME}
+)
+add_test(
+  NAME cuasr_test_srgemm_device_sm80_defaults
+  COMMAND cuasr_test_srgemm_device_sm80_defaults
+)

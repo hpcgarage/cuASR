@@ -82,7 +82,7 @@ static void BM_SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}srgemm_{tn
   state.counters["Flop/s"]
       = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
 }}
-BENCHMARK(BM_SM{sm_arch}_device_{add_op}_{mult_op}_{precision_char}srgemm_{tnspA}{tnspB}_{tnspC})
+BENCHMARK(BM_SM{sm_arch}_default_{add_op}_{mult_op}_{precision_char}srgemm_{tnspA}{tnspB}_{tnspC})
     ->RangeMultiplier(2)->Range(256, 4096);
 """
 

@@ -1,22 +1,31 @@
 /***************************************************************************************************
 * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
 **************************************************************************************************/
-//////////////////////////////////////////////////////////////////////
-//  THIS BENCHMARK FILE IS GENERATED AUTOMATICALLY : DO NOT MODIFY  //
-//////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+//  THIS TEST FILE IS GENERATED AUTOMATICALLY : DO NOT MODIFY  //
+/////////////////////////////////////////////////////////////////
 
-#include "benchmark/benchmark.h"
+#include "gtest/gtest.h"
 
+/// from upstream cutlass
+#include "cutlass/cutlass.h"
+#include "cutlass/gemm/gemm.h"
+#include "cutlass/gemm/threadblock/threadblock_swizzle.h"
+
+/// from cuasr lib
 #include "cuasr/gemm/device/default_srgemm_configuration.h"
 #include "cuasr/gemm/device/srgemm.h"
 #include "cuasr/functional.h"
 
-#include "harness.h"
+/// from cuasr tools
+#include "cuasr/reference/srgemm/host_srgemm.h"
+
+/// from local test dir
+#include "testbed.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -29,26 +38,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -61,26 +56,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -93,26 +74,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -125,26 +92,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -157,26 +110,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -189,26 +128,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -221,26 +146,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -253,26 +164,12 @@ static void BM_SM80_default_plus_mult_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -285,26 +182,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -317,26 +200,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -349,26 +218,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -381,26 +236,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -413,26 +254,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -445,26 +272,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -477,26 +290,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_plus_mult_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_plus_mult_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -509,26 +308,12 @@ static void BM_SM80_default_plus_mult_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_plus_mult_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -541,26 +326,12 @@ static void BM_SM80_default_min_plus_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -573,26 +344,12 @@ static void BM_SM80_default_min_plus_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -605,26 +362,12 @@ static void BM_SM80_default_min_plus_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -637,26 +380,12 @@ static void BM_SM80_default_min_plus_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -669,26 +398,12 @@ static void BM_SM80_default_min_plus_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -701,26 +416,12 @@ static void BM_SM80_default_min_plus_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -733,26 +434,12 @@ static void BM_SM80_default_min_plus_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -765,26 +452,12 @@ static void BM_SM80_default_min_plus_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -797,26 +470,12 @@ static void BM_SM80_default_min_plus_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -829,26 +488,12 @@ static void BM_SM80_default_min_plus_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -861,26 +506,12 @@ static void BM_SM80_default_min_plus_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -893,26 +524,12 @@ static void BM_SM80_default_min_plus_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -925,26 +542,12 @@ static void BM_SM80_default_min_plus_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -957,26 +560,12 @@ static void BM_SM80_default_min_plus_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -989,26 +578,12 @@ static void BM_SM80_default_min_plus_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_plus_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_plus_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1021,26 +596,12 @@ static void BM_SM80_default_min_plus_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_plus_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1053,26 +614,12 @@ static void BM_SM80_default_max_plus_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1085,26 +632,12 @@ static void BM_SM80_default_max_plus_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1117,26 +650,12 @@ static void BM_SM80_default_max_plus_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1149,26 +668,12 @@ static void BM_SM80_default_max_plus_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1181,26 +686,12 @@ static void BM_SM80_default_max_plus_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1213,26 +704,12 @@ static void BM_SM80_default_max_plus_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1245,26 +722,12 @@ static void BM_SM80_default_max_plus_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1277,26 +740,12 @@ static void BM_SM80_default_max_plus_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1309,26 +758,12 @@ static void BM_SM80_default_max_plus_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1341,26 +776,12 @@ static void BM_SM80_default_max_plus_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1373,26 +794,12 @@ static void BM_SM80_default_max_plus_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1405,26 +812,12 @@ static void BM_SM80_default_max_plus_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1437,26 +830,12 @@ static void BM_SM80_default_max_plus_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1469,26 +848,12 @@ static void BM_SM80_default_max_plus_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1501,26 +866,12 @@ static void BM_SM80_default_max_plus_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_plus_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_plus_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1533,26 +884,12 @@ static void BM_SM80_default_max_plus_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_plus_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1565,26 +902,12 @@ static void BM_SM80_default_min_max_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1597,26 +920,12 @@ static void BM_SM80_default_min_max_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1629,26 +938,12 @@ static void BM_SM80_default_min_max_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1661,26 +956,12 @@ static void BM_SM80_default_min_max_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1693,26 +974,12 @@ static void BM_SM80_default_min_max_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1725,26 +992,12 @@ static void BM_SM80_default_min_max_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1757,26 +1010,12 @@ static void BM_SM80_default_min_max_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1789,26 +1028,12 @@ static void BM_SM80_default_min_max_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1821,26 +1046,12 @@ static void BM_SM80_default_min_max_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1853,26 +1064,12 @@ static void BM_SM80_default_min_max_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1885,26 +1082,12 @@ static void BM_SM80_default_min_max_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1917,26 +1100,12 @@ static void BM_SM80_default_min_max_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1949,26 +1118,12 @@ static void BM_SM80_default_min_max_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -1981,26 +1136,12 @@ static void BM_SM80_default_min_max_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2013,26 +1154,12 @@ static void BM_SM80_default_min_max_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_max_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_max_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2045,26 +1172,12 @@ static void BM_SM80_default_min_max_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_max_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2077,26 +1190,12 @@ static void BM_SM80_default_max_min_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2109,26 +1208,12 @@ static void BM_SM80_default_max_min_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2141,26 +1226,12 @@ static void BM_SM80_default_max_min_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2173,26 +1244,12 @@ static void BM_SM80_default_max_min_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2205,26 +1262,12 @@ static void BM_SM80_default_max_min_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2237,26 +1280,12 @@ static void BM_SM80_default_max_min_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2269,26 +1298,12 @@ static void BM_SM80_default_max_min_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2301,26 +1316,12 @@ static void BM_SM80_default_max_min_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2333,26 +1334,12 @@ static void BM_SM80_default_max_min_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2365,26 +1352,12 @@ static void BM_SM80_default_max_min_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2397,26 +1370,12 @@ static void BM_SM80_default_max_min_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2429,26 +1388,12 @@ static void BM_SM80_default_max_min_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2461,26 +1406,12 @@ static void BM_SM80_default_max_min_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2493,26 +1424,12 @@ static void BM_SM80_default_max_min_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2525,26 +1442,12 @@ static void BM_SM80_default_max_min_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_min_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_min_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2557,26 +1460,12 @@ static void BM_SM80_default_max_min_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_min_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2589,26 +1478,12 @@ static void BM_SM80_default_min_mult_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2621,26 +1496,12 @@ static void BM_SM80_default_min_mult_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2653,26 +1514,12 @@ static void BM_SM80_default_min_mult_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2685,26 +1532,12 @@ static void BM_SM80_default_min_mult_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2717,26 +1550,12 @@ static void BM_SM80_default_min_mult_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2749,26 +1568,12 @@ static void BM_SM80_default_min_mult_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2781,26 +1586,12 @@ static void BM_SM80_default_min_mult_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2813,26 +1604,12 @@ static void BM_SM80_default_min_mult_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2845,26 +1622,12 @@ static void BM_SM80_default_min_mult_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2877,26 +1640,12 @@ static void BM_SM80_default_min_mult_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2909,26 +1658,12 @@ static void BM_SM80_default_min_mult_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2941,26 +1676,12 @@ static void BM_SM80_default_min_mult_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -2973,26 +1694,12 @@ static void BM_SM80_default_min_mult_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3005,26 +1712,12 @@ static void BM_SM80_default_min_mult_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3037,26 +1730,12 @@ static void BM_SM80_default_min_mult_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_min_mult_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_min_mult_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3069,26 +1748,12 @@ static void BM_SM80_default_min_mult_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_min_mult_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3101,26 +1766,12 @@ static void BM_SM80_default_max_mult_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3133,26 +1784,12 @@ static void BM_SM80_default_max_mult_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3165,26 +1802,12 @@ static void BM_SM80_default_max_mult_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3197,26 +1820,12 @@ static void BM_SM80_default_max_mult_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3229,26 +1838,12 @@ static void BM_SM80_default_max_mult_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3261,26 +1856,12 @@ static void BM_SM80_default_max_mult_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3293,26 +1874,12 @@ static void BM_SM80_default_max_mult_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3325,26 +1892,12 @@ static void BM_SM80_default_max_mult_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3357,26 +1910,12 @@ static void BM_SM80_default_max_mult_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3389,26 +1928,12 @@ static void BM_SM80_default_max_mult_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3421,26 +1946,12 @@ static void BM_SM80_default_max_mult_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3453,26 +1964,12 @@ static void BM_SM80_default_max_mult_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3485,26 +1982,12 @@ static void BM_SM80_default_max_mult_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3517,26 +2000,12 @@ static void BM_SM80_default_max_mult_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3549,26 +2018,12 @@ static void BM_SM80_default_max_mult_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_max_mult_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_max_mult_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3581,26 +2036,12 @@ static void BM_SM80_default_max_mult_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_max_mult_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, tt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3613,26 +2054,12 @@ static void BM_SM80_default_or_and_dsrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, tt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3645,26 +2072,12 @@ static void BM_SM80_default_or_and_dsrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, tn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3677,26 +2090,12 @@ static void BM_SM80_default_or_and_dsrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, tn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3709,26 +2108,12 @@ static void BM_SM80_default_or_and_dsrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, nt_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3741,26 +2126,12 @@ static void BM_SM80_default_or_and_dsrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, nt_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3773,26 +2144,12 @@ static void BM_SM80_default_or_and_dsrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, nn_n) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3805,26 +2162,12 @@ static void BM_SM80_default_or_and_dsrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_dsrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_d_srgemm, nn_t) {
   using precision = double;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3837,26 +2180,12 @@ static void BM_SM80_default_or_and_dsrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_dsrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_tt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, tt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3869,26 +2198,12 @@ static void BM_SM80_default_or_and_ssrgemm_tt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_tt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_tt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, tt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3901,26 +2216,12 @@ static void BM_SM80_default_or_and_ssrgemm_tt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_tt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_tn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, tn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3933,26 +2234,12 @@ static void BM_SM80_default_or_and_ssrgemm_tn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_tn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_tn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, tn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3965,26 +2252,12 @@ static void BM_SM80_default_or_and_ssrgemm_tn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_tn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_nt_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, nt_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -3997,26 +2270,12 @@ static void BM_SM80_default_or_and_ssrgemm_nt_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_nt_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_nt_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, nt_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -4029,26 +2288,12 @@ static void BM_SM80_default_or_and_ssrgemm_nt_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_nt_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_nn_n(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, nn_n) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -4061,26 +2306,12 @@ static void BM_SM80_default_or_and_ssrgemm_nn_n(benchmark::State &state) {
       precision, cutlass::layout::ColumnMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_nn_n)
-    ->RangeMultiplier(2)->Range(256, 4096);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BM_SM80_default_or_and_ssrgemm_nn_t(benchmark::State &state) {
-  const auto N = static_cast<int>(state.range(0));
+TEST(SM80_default_or_and_s_srgemm, nn_t) {
   using precision = float;
   using OpClass   = cutlass::arch::OpClassSimt;
   using SmArch    = cutlass::arch::Sm80;
@@ -4093,18 +2324,6 @@ static void BM_SM80_default_or_and_ssrgemm_nn_t(benchmark::State &state) {
       precision, cutlass::layout::RowMajor,
       precision, OpClass, SmArch>;
 
-  // setup bench harness
-  cuasr::bench::device::BenchHarness<Srgemm> bench({ N, N, N });
-
-  // benchmark loop
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(bench.run());
-    cudaDeviceSynchronize();
-  }
-
-  double flops_per_itr = 2.0 * N * N * N;
-  state.counters["Flop/s"]
-      = benchmark::Counter(flops_per_itr, benchmark::Counter::kIsIterationInvariantRate);
+  EXPECT_TRUE(cuasr::test::gemm::device::TestAllGemm<Srgemm>());
 }
-BENCHMARK(BM_SM80_default_or_and_ssrgemm_nn_t)
-    ->RangeMultiplier(2)->Range(256, 4096);
+
