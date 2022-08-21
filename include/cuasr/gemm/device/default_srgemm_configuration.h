@@ -109,7 +109,7 @@ struct DefaultSemiRingConfiguration<
   using ThreadblockShape = cutlass::gemm::GemmShape<128, 128, 8>;
   using WarpShape = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 5;
+  static int constexpr kStages = 3;
 
   using RingOp = RingOp_;
 

@@ -53,6 +53,7 @@ namespace threadblock {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 /// Structure to compute the matrix product targeting CUDA cores and SIMT math
 /// instructions.
 template <
@@ -162,8 +163,6 @@ public:
 
   using WarpLoadedFragmentA = typename Operator::FragmentA;
   using WarpLoadedFragmentB = typename Operator::FragmentB;
-  using WarpTransformedFragmentA = typename Operator::TransformedFragmentA;
-  using WarpTransformedFragmentB = typename Operator::TransformedFragmentB;
 
  private:
 
@@ -442,30 +441,19 @@ public:
 
     // Pair of fragments used to overlap shared memory loads and math
     // instructions
-    WarpLoadedFragmentA warp_loaded_frag_A[2];
-    WarpLoadedFragmentB warp_loaded_frag_B[2];
-
-    warp_loaded_frag_A[0].fill(additive_identity_);
-    warp_loaded_frag_A[1].fill(additive_identity_);
-    warp_loaded_frag_B[0].fill(additive_identity_);
-    warp_loaded_frag_B[1].fill(additive_identity_);
-
-    // WarpTransformedFragmentA warp_transformed_frag_A[2];
-    // WarpTransformedFragmentB warp_transformed_frag_B[2];
-
-    // TODO: see if we can get away without this, should be possible
-    // warp_transformed_frag_A[0].fill(additive_identity_);
-    // warp_transformed_frag_A[1].fill(additive_identity_);
-    // warp_transformed_frag_B[0].fill(additive_identity_);
-    // warp_transformed_frag_B[1].fill(additive_identity_);
+    WarpLoadedFragmentA warp_frag_A[2];
+    WarpLoadedFragmentB warp_frag_B[2];
+    warp_frag_A[0].fill(additive_identity_);
+    warp_frag_B[0].fill(additive_identity_);
+    warp_frag_A[1].fill(additive_identity_);
+    warp_frag_B[1].fill(additive_identity_);
 
     Operator warp_mma;
-
     this->warp_tile_iterator_A_.set_kgroup_index(0);
     this->warp_tile_iterator_B_.set_kgroup_index(0);
 
-    this->warp_tile_iterator_A_.load(warp_loaded_frag_A[0]);
-    this->warp_tile_iterator_B_.load(warp_loaded_frag_B[0]);
+    this->warp_tile_iterator_A_.load(warp_frag_A[0]);
+    this->warp_tile_iterator_B_.load(warp_frag_B[0]);
 
     ++this->warp_tile_iterator_A_;
     ++this->warp_tile_iterator_B_;
@@ -475,9 +463,6 @@ public:
 
     int smem_write_stage_idx = Base::kStages - 1;
     int smem_read_stage_idx = 0;
-
-    // warp_mma.transform(warp_transformed_frag_A[0], warp_transformed_frag_B[0],
-    //                    warp_loaded_frag_A[0], warp_loaded_frag_B[0]);
 
     //
     // Mainloop
@@ -501,22 +486,16 @@ public:
         this->warp_tile_iterator_A_.set_kgroup_index((warp_mma_k + 1) % Base::kWarpGemmIterations);
         this->warp_tile_iterator_B_.set_kgroup_index((warp_mma_k + 1) % Base::kWarpGemmIterations);
 
-        this->warp_tile_iterator_A_.load(warp_loaded_frag_A[(warp_mma_k + 1) % 2]);
-        this->warp_tile_iterator_B_.load(warp_loaded_frag_B[(warp_mma_k + 1) % 2]);
+        this->warp_tile_iterator_A_.load(warp_frag_A[(warp_mma_k + 1) % 2]);
+        this->warp_tile_iterator_B_.load(warp_frag_B[(warp_mma_k + 1) % 2]);
 
         ++this->warp_tile_iterator_A_;
         ++this->warp_tile_iterator_B_;
 
-        if (warp_mma_k > 0)
-          // warp_mma.transform(warp_transformed_frag_A[warp_mma_k % 2],
-          //                    warp_transformed_frag_B[warp_mma_k % 2],
-          //                    warp_loaded_frag_A[warp_mma_k % 2],
-          //                    warp_loaded_frag_B[warp_mma_k % 2]);
-
         warp_mma(
           accum,
-          warp_loaded_frag_A[warp_mma_k % 2],
-          warp_loaded_frag_B[warp_mma_k % 2],
+          warp_frag_A[warp_mma_k % 2],
+          warp_frag_B[warp_mma_k % 2],
           accum
         );
 
@@ -582,16 +561,7 @@ public:
           iterator_A.clear_mask(gemm_k_iterations == 0);
           iterator_B.clear_mask(gemm_k_iterations == 0);
         }
-
-        // Do any conversions feeding the first stage at the end of the loop so
-        // we can start right away on mma instructions
-        // if (warp_mma_k + 1 == Base::kWarpGemmIterations)
-        //   warp_mma.transform(warp_transformed_frag_A[(warp_mma_k + 1) % 2],
-        //                      warp_transformed_frag_B[(warp_mma_k + 1) % 2],
-        //                      warp_loaded_frag_A[(warp_mma_k + 1) % 2],
-        //                      warp_loaded_frag_B[(warp_mma_k + 1) % 2]);
       }
-
     }
 
     if (SharedMemoryClear == cutlass::gemm::SharedMemoryClearOption::kZfill) {
