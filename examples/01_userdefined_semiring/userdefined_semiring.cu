@@ -212,22 +212,38 @@ auto compare_host_reference(
       beta, { C, ldc }, { reference_D, ldc }, //
       RingOp::AddIdentity);
 
-  auto is_correct = true;
+  auto is_wrong = false;
+  int counter = 0;
   for (int n = 0; n < N; ++n) {
     for (int m = 0; m < M; ++m) {
-      is_correct &= (reference_D[(ldc * n) + m] == device_D[(ldc * n) + m]);
+      auto incorrect = (reference_D[(ldc * n) + m] != device_D[(ldc * n) + m]);
+      is_wrong |= incorrect;
+      if (incorrect && counter < 10) {
+        std::cout << '[' << n << ',' << m << ']'
+                  << " Expected = " << reference_D[(ldc * n) + m]
+                  << " Computed = " << device_D[(ldc * n) + m] << '\n';
+        counter++;
+      }
     }
   }
-  return is_correct;
+  return (not is_wrong);
 }
 
-
-int main() {
+int main(int argc, char* argv[]) {
   using namespace std::chrono;
   // problem size
-  constexpr int M                = 512; // 4096
-  constexpr int N                = 512;
-  constexpr int K                = 512;
+  int M = 512;
+  if (argc > 2) {
+    M = std::atoi(argv[1]);
+  }
+  int N = 512;
+  if (argc > 3) {
+    N = std::atoi(argv[2]);
+  }
+  int K = 512;
+  if (argc > 4) {
+    K = std::atoi(argv[3]);
+  }
   constexpr bool do_epilogue_and = true;
 
   std::cout << "Running Xor-And Galois Field SRGEMM on A = " << M << 'x' << K
@@ -256,12 +272,10 @@ int main() {
   cudaMemcpy(d_B, B, sizeof(int) * K * N, cudaMemcpyHostToDevice);
   cudaMemcpy(d_C, C, sizeof(int) * M * N, cudaMemcpyHostToDevice);
 
-  auto start = high_resolution_clock::now();
-
-  auto retval
-      = cuasr_gf_srgemm_nnn(M, N, K, d_A, M, d_B, K, d_C, M, do_epilogue_and, nullptr);
-  retval |= cudaDeviceSynchronize();
-  auto end               = high_resolution_clock::now();
+  auto start  = high_resolution_clock::now();
+  auto retval = cuasr_gf_srgemm_nnn(M, N, K, d_A, M, d_B, K, d_C, M, do_epilogue_and, nullptr);
+  retval     |= cudaDeviceSynchronize();
+  auto end    = high_resolution_clock::now();
   duration<double> delta = (end - start);
 
   if (retval) {
@@ -275,7 +289,7 @@ int main() {
   cudaMemcpy(device_D, d_C, sizeof(int) * M * N, cudaMemcpyDeviceToHost);
 
   // compare against host
-  std::cout << "Comparing against reference host-side SRGEMM : ";
+  std::cout << "Comparing against reference host-side SRGEMM :\n";
   int alpha = xor_and<int>::AddIdentity;
   int beta  = do_epilogue_and ? xor_and<int>::MultIdentity
                               : xor_and<int>::MultAnnihilator;
