@@ -1,3 +1,36 @@
+/***************************************************************************************************
+ * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
+ * Copyright (c) 2017 - 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ **************************************************************************************************/
+#pragma once
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -162,22 +195,16 @@ struct Testbed {
 
     if (!passed) {
       // record failed test cases to a file for debug records
-      std::string add_op_name_full(abi::__cxa_demangle(
-          typeid(typename Srgemm::AdditionOp).name(), //
+      std::string ring_op_name_full(abi::__cxa_demangle(
+          typeid(typename Srgemm::RingOp).name(), //
           nullptr, nullptr, nullptr));
 
-      std::string mult_op_name_full(abi::__cxa_demangle(
-          typeid(typename Srgemm::MultiplicationOp).name(), //
-          nullptr, nullptr, nullptr));
-
-      std::string add_op_name(
-          add_op_name_full.substr(0, add_op_name_full.find_first_of('<')));
-      std::string mult_op_name(
-          mult_op_name_full.substr(0, mult_op_name_full.find_first_of('<')));
+      std::string ring_op_name(
+          ring_op_name_full.substr(0, ring_op_name_full.find_first_of('<')));
 
       std::stringstream fname;
       fname << "error_Srgemm_device_" << problem_size.m() << 'x' << problem_size.n()
-            << 'x' << problem_size.k() << '_' << add_op_name << '_' << mult_op_name << '_'
+            << 'x' << problem_size.k() << '_' << ring_op_name << '_'
             << Srgemm::ThreadblockShape::kM << 'x' << Srgemm::ThreadblockShape::kN << 'x'
             << Srgemm::ThreadblockShape::kK << '_' << Srgemm::WarpShape::kM << 'x'
             << Srgemm::WarpShape::kN << 'x' << Srgemm::WarpShape::kK << ".txt";
@@ -186,9 +213,7 @@ struct Testbed {
       file << "problem: " << problem_size << ", alpha: " << alpha << ", beta: " << beta
            << "\n\n";
 
-      file << "Addition operator: " << add_op_name_full << '\n';
-      file << "Multiplication operator: " << mult_op_name_full << '\n';
-
+      file << "Ring Op: " << ring_op_name_full << '\n';
       file << "A =\n"
            << tensor_A.host_view() << "\nB =\n"
            << tensor_B.host_view() << "\nC =\n"
@@ -204,8 +229,7 @@ struct Testbed {
   bool verify(
       cutlass::gemm::GemmCoord problem_size, ElementCompute alpha, ElementCompute beta) {
     cuasr::reference::host::Srgemm<
-        typename Srgemm::AdditionOp,                           //
-        typename Srgemm::MultiplicationOp,                     //
+        typename Srgemm::RingOp,                               //
         typename Srgemm::ElementA, typename Srgemm::LayoutA,   //
         typename Srgemm::ElementB, typename Srgemm::LayoutB,   //
         typename Srgemm::ElementC, typename Srgemm::LayoutC,   //
@@ -217,7 +241,7 @@ struct Testbed {
     reference_srgemm(
         problem_size, alpha, tensor_A.host_ref(), tensor_B.host_ref(), //
         beta, tensor_C.host_ref(), reference_D.host_ref(),             //
-        Srgemm::AdditionOp::Identity);
+        Srgemm::RingOp::AddIdentity);
 
     return compare_reference(problem_size, alpha, beta);
   }
@@ -226,8 +250,8 @@ struct Testbed {
   bool
   run(cutlass::gemm::GemmCoord problem_size,
       int split_k_slices   = 1,
-      ElementCompute alpha = ElementCompute(Srgemm::MultiplicationOp::Identity),
-      ElementCompute beta  = ElementCompute(Srgemm::MultiplicationOp::Identity)) {
+      ElementCompute alpha = ElementCompute(Srgemm::RingOp::MultIdentity),
+      ElementCompute beta  = ElementCompute(Srgemm::RingOp::MultIdentity)) {
     this->initialize(problem_size);
 
     // Initialize the GEMM operator
@@ -310,19 +334,19 @@ bool TestAllGemm() {
       ? 4
       : kAlignment;
 
-  int problem_size_m[] = { kAlignmentM, 512 - 3 * kAlignmentM };
+  int problem_size_m[] = { 234, kAlignmentM, 512 - 3 * kAlignmentM };
 
-  int problem_size_n[] = { kAlignmentN, 512 - 2 * kAlignmentN };
+  int problem_size_n[] = { 239, kAlignmentN, 512 - 2 * kAlignmentN };
 
   int problem_size_k[]
-      = { kAlignmentK,
+      = { 237, kAlignmentK,
           Srgemm::ThreadblockShape::kK * (Srgemm::kStages + 1) - kAlignmentK };
 
   // TODO: add split-K SRGEMM
   int split_k_slices[] = { 1, 2, 3, 8 };
 
-  double problem_alpha[] = { Srgemm::MultiplicationOp::Identity };
-  double problem_beta[]  = { Srgemm::MultiplicationOp::Annihilator };
+  double problem_alpha[] = { Srgemm::RingOp::MultIdentity };
+  double problem_beta[]  = { Srgemm::RingOp::MultAnnihilator };
 
   Testbed<Srgemm> testbed;
   using ElementCompute = typename Srgemm::EpilogueOutputOp::ElementCompute;

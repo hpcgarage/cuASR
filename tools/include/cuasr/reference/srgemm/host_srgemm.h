@@ -16,8 +16,7 @@ namespace host {
 
 /// Host side SemiRing GEMM for rank-2 tensors for testing.
 template <
-    typename AdditionOp,
-    typename MultiplicationOp,
+    typename RingOp,
     typename ElementA,
     typename LayoutA,
     typename ElementB,
@@ -57,8 +56,7 @@ public:
       constexpr int Nblock = 32;
 
       ConvertOp convert_op;
-      AdditionOp add_op;
-      MultiplicationOp mult_op;
+      RingOp ring_op;
 
 #pragma omp for schedule(static) collapse(2)
       for (int row_block = 0; row_block < M; row_block += Mblock) {
@@ -84,7 +82,7 @@ public:
                   ComputeType compute_a(static_cast<ComputeType>(a));
                   ComputeType compute_b(static_cast<ComputeType>(b));
 
-                  accum[i][j] = add_op(mult_op(compute_a, compute_b), accum[i][j]);
+                  ring_op.fma(accum[i][j], compute_a, compute_b, accum[i][j]);
                 }
               }
             }
@@ -97,13 +95,15 @@ public:
               int col = col_block + j;
               cutlass::MatrixCoord coord(row, col);
               if (row < M && col < N) {
-                auto c             = tensor_c.at(coord);
-                tensor_d.at(coord) = convert_op(     //
-                    add_op(                          //
-                        mult_op(alpha, accum[i][j]), //
-                        mult_op(beta, c)             //
-                        )                            //
+                auto c = tensor_c.at(coord);
+                // clang-format off
+                tensor_d.at(coord) = convert_op(
+                    ring_op.add(
+                        ring_op.mult(alpha, accum[i][j]),
+                        ring_op.mult(beta, c)
+                    )
                 );
+                // clang-format on
               }
             }
           }

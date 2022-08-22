@@ -1,5 +1,32 @@
 /***************************************************************************************************
- * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).
+ * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
+ * Copyright (c) 2017 - 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **************************************************************************************************/
 /*! \file
     \brief Template for a pipelined Semiring GEMM kernel. Does not compute batching or support split-K.
@@ -26,10 +53,8 @@ namespace device {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <
-  /// Addition operator of the semi-ring
-  typename AdditionOp_,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp_,
+  /// Ring operation that performs FMA
+  typename RingOp_,
   /// Element type for A matrix operand
   typename ElementA_,
   /// Layout type for A matrix operand
@@ -51,34 +76,34 @@ template <
   /// Threadblock-level tile size (concept: GemmShape)
   typename ThreadblockShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::ThreadblockShape,
+      RingOp_, OperatorClass_, ArchTag_>::ThreadblockShape,
   /// Warp-level tile size (concept: GemmShape)
   typename WarpShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::WarpShape,
+      RingOp_, OperatorClass_, ArchTag_>::WarpShape,
   /// Instruction-level tile size (concept: GemmShape)
   typename InstructionShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::InstructionShape,
+      RingOp_, OperatorClass_, ArchTag_>::InstructionShape,
   /// Epilogue output operator
   typename EpilogueOutputOp_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::EpilogueOutputOp,
+      RingOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp,
   /// Threadblock-level swizzling operator
   typename ThreadblockSwizzle_ =
       typename cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<>,
   /// Number of stages used in the pipelined mainloop
   int Stages = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kStages,
+      RingOp_, OperatorClass_, ArchTag_>::kStages,
   /// Access granularity of A matrix in units of elements
   int AlignmentA = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentA,
+      RingOp_, OperatorClass_, ArchTag_>::kAlignmentA,
   /// Access granularity of B matrix in units of elements
   int AlignmentB = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentB,
+      RingOp_, OperatorClass_, ArchTag_>::kAlignmentB,
   /// If true, kernel supports split-K with serial reduction
   bool SplitKSerial = false
 >
@@ -103,8 +128,7 @@ class Srgemm {
   using InstructionShape = InstructionShape_;
   using EpilogueOutputOp = EpilogueOutputOp_;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static int const kAlignmentA = AlignmentA;
   static int const kAlignmentB = AlignmentB;
@@ -113,6 +137,7 @@ class Srgemm {
 
   /// Define the kernel
   using SrgemmKernel = typename cuasr::gemm::kernel::DefaultSrgemm<
+    RingOp,
     ElementA,
     LayoutA,
     kAlignmentA,
@@ -127,8 +152,6 @@ class Srgemm {
     ThreadblockShape,
     WarpShape,
     InstructionShape,
-    AdditionOp,
-    MultiplicationOp,
     EpilogueOutputOp,
     ThreadblockSwizzle,
     kStages,
@@ -357,10 +380,8 @@ public:
 };
 
 template <
-    /// Addition operator of the semi-ring
-    typename AdditionOp_,
-    /// Multiplication operator of the semi-ring
-    typename MultiplicationOp_,
+    /// Ring operation that performs FMA
+    typename RingOp_,
     /// Element type for A matrix operand
     typename ElementA_,
     /// Layout type for A matrix operand
@@ -395,12 +416,12 @@ template <
     int AlignmentB,
     /// If true, kernel supports split-K as a serial reduction
     bool SplitKSerial>
-class Srgemm<AdditionOp_, MultiplicationOp_,
-            ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
-            cutlass::layout::ColumnMajor,  // partially specialized on LayoutC
-            ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
-            WarpShape_, InstructionShape_, EpilogueOutputOp_,
-            ThreadblockSwizzle_, Stages, AlignmentA, AlignmentB, SplitKSerial
+class Srgemm<RingOp_,
+             ElementA_, LayoutA_, ElementB_, LayoutB_, ElementC_,
+             cutlass::layout::ColumnMajor,  // partially specialized on LayoutC
+             ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
+             WarpShape_, InstructionShape_, EpilogueOutputOp_,
+             ThreadblockSwizzle_, Stages, AlignmentA, AlignmentB, SplitKSerial
             > {
  public:
 
@@ -422,16 +443,14 @@ class Srgemm<AdditionOp_, MultiplicationOp_,
   using InstructionShape = InstructionShape_;
   using EpilogueOutputOp = EpilogueOutputOp_;
   using ThreadblockSwizzle = ThreadblockSwizzle_;
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp_;
   static int const kStages = Stages;
   static int const kAlignmentA = AlignmentA;
   static int const kAlignmentB = AlignmentB;
   static bool const kSplitKSerial = SplitKSerial;
 
   using UnderlyingOperator = Srgemm<
-    AdditionOp,
-    MultiplicationOp,
+    RingOp,
     ElementB,
     typename cutlass::layout::LayoutTranspose<LayoutB>::type,
     ElementA,

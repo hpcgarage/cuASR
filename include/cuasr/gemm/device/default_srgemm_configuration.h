@@ -1,5 +1,32 @@
 /***************************************************************************************************
- * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
+ * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
+ * Copyright (c) 2017 - 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **************************************************************************************************/
 /*! \file
     \brief Definitions for SRGEMM configuration structures.
@@ -30,251 +57,65 @@ template <
   typename ElementB,
   typename ElementC,
   typename ElementAccumulator,
+  typename RingOp,
   typename OperatorClass,
-  typename AdditionOp,
-  typename MultiplicationOp,
   typename ArchTag
 >
 struct DefaultSemiRingConfiguration;
 
 ////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// SM 50 //////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-// Plus-Times semi-ring GEMM configuration
-// this is the traditional GEMM
-template <
-  typename Element,
-  typename ArchTag
->
+template <typename Element, typename RingOp_, typename ArchTag>
 struct DefaultSemiRingConfiguration<
   Element,
   Element,
   Element,
   Element,
+  RingOp_,
   cutlass::arch::OpClassSimt,
-  cuasr::plus<Element>,
-  cuasr::multiplies<Element>,
-  ArchTag> {
-
-  static int constexpr kAlignmentA = 1;
-  static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<32, 64, 8>;
-  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 2;
-
-  using AdditionOp = cuasr::plus<Element>;
-  using MultiplicationOp = cuasr::multiplies<Element>;
-
-  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
-};
-
-// Min-Plus (tropical) semi-ring GEMM configuration
-// example application: All Pairs Shorted Path
-template <
-  typename Element,
-  typename ArchTag
->
-struct DefaultSemiRingConfiguration<
-  Element,
-  Element,
-  Element,
-  Element,
-  cutlass::arch::OpClassSimt,
-  cuasr::minimum<Element>,
-  cuasr::plus<Element>,
   ArchTag> {
 
   static int constexpr kAlignmentA = 1;
   static int constexpr kAlignmentB = 1;
   using ThreadblockShape = cutlass::gemm::GemmShape<128, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<64, 32, 8>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 8>;
   using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
   static int constexpr kStages = 2;
 
-  using AdditionOp = cuasr::minimum<Element>;
-  using MultiplicationOp = cuasr::plus<Element>;
+  using RingOp = RingOp_;
 
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
-};
-
-// Max-Plus semi-ring GEMM configuration
-// example application: Viterbi algorithm
-template <
-  typename Element,
-  typename ArchTag
->
-struct DefaultSemiRingConfiguration<
-  Element,
-  Element,
-  Element,
-  Element,
-  cutlass::arch::OpClassSimt,
-  cuasr::maximum<Element>,
-  cuasr::plus<Element>,
-  ArchTag> {
-
-  static int constexpr kAlignmentA = 1;
-  static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
-  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 2;
-
-  using AdditionOp = cuasr::maximum<Element>;
-  using MultiplicationOp = cuasr::plus<Element>;
-
-  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
-};
-
-// Max-Min
-template <
-  typename Element,
-  typename ArchTag
->
-struct DefaultSemiRingConfiguration<
-  Element,
-  Element,
-  Element,
-  Element,
-  cutlass::arch::OpClassSimt,
-  cuasr::maximum<Element>,
-  cuasr::minimum<Element>,
-  ArchTag> {
-
-  static int constexpr kAlignmentA = 1;
-  static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
-  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 2;
-
-  using AdditionOp = cuasr::maximum<Element>;
-  using MultiplicationOp = cuasr::minimum<Element>;
-
-  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
-};
-
-// Min-Max
-template <
-  typename Element,
-  typename ArchTag
->
-struct DefaultSemiRingConfiguration<
-  Element,
-  Element,
-  Element,
-  Element,
-  cutlass::arch::OpClassSimt,
-  cuasr::minimum<Element>,
-  cuasr::maximum<Element>,
-  ArchTag> {
-
-  static int constexpr kAlignmentA = 1;
-  static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
-  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 2;
-
-  using AdditionOp = cuasr::minimum<Element>;
-  using MultiplicationOp = cuasr::maximum<Element>;
-
-  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
-};
-
-// Min-Times
-template <
-  typename Element,
-  typename ArchTag
->
-struct DefaultSemiRingConfiguration<
-  Element,
-  Element,
-  Element,
-  Element,
-  cutlass::arch::OpClassSimt,
-  cuasr::minimum<Element>,
-  cuasr::multiplies<Element>,
-  ArchTag> {
-
-  static int constexpr kAlignmentA = 1;
-  static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
-  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 2;
-
-  using AdditionOp = cuasr::minimum<Element>;
-  using MultiplicationOp = cuasr::multiplies<Element>;
-
-  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
-};
-
-// Max-Times
-template <
-  typename Element,
-  typename ArchTag
->
-struct DefaultSemiRingConfiguration<
-  Element,
-  Element,
-  Element,
-  Element,
-  cutlass::arch::OpClassSimt,
-  cuasr::maximum<Element>,
-  cuasr::multiplies<Element>,
-  ArchTag> {
-
-  static int constexpr kAlignmentA = 1;
-  static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
-  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 2;
-
-  using AdditionOp = cuasr::maximum<Element>;
-  using MultiplicationOp = cuasr::multiplies<Element>;
-
-  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
-};
-
-// Or-And boolean ring
-template <
-  typename Element,
-  typename ArchTag
->
-struct DefaultSemiRingConfiguration<
-  Element,
-  Element,
-  Element,
-  Element,
-  cutlass::arch::OpClassSimt,
-  cuasr::binary_or<Element>,
-  cuasr::binary_and<Element>,
-  ArchTag> {
-
-  static int constexpr kAlignmentA = 1;
-  static int constexpr kAlignmentB = 1;
-  using ThreadblockShape = cutlass::gemm::GemmShape<64, 128, 8>;
-  using WarpShape = cutlass::gemm::GemmShape<16, 64, 8>;
-  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
-  static int constexpr kStages = 2;
-
-  using AdditionOp = cuasr::binary_or<Element>;
-  using MultiplicationOp = cuasr::binary_and<Element>;
-
-  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-    AdditionOp, MultiplicationOp, Element, 1>;
+    RingOp, Element, 1>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// SM 80 //////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename Element, typename RingOp_>
+struct DefaultSemiRingConfiguration<
+  Element,
+  Element,
+  Element,
+  Element,
+  RingOp_,
+  cutlass::arch::OpClassSimt,
+  cutlass::arch::Sm80> {
+
+  static int constexpr kAlignmentA = 1;
+  static int constexpr kAlignmentB = 1;
+  using ThreadblockShape = cutlass::gemm::GemmShape<128, 128, 8>;
+  using WarpShape = cutlass::gemm::GemmShape<32, 64, 8>;
+  using InstructionShape = cutlass::gemm::GemmShape<1, 1, 1>;
+  static int constexpr kStages = 3;
+
+  using RingOp = RingOp_;
+
+  using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
+    RingOp, Element, 1>;
+};
 
 } // namespace device
 } // namespace gemm

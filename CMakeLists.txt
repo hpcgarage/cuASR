@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.18)
 project(cuASR CUDA CXX)
 
 # RELEASE config by default if none is provided:
@@ -22,13 +22,15 @@ option(CUASR_TEST    "Build cuASR test suite. Use with CUASR_TEST_LEVEL={0|1|2}.
 option(CUASR_BENCH   "Build cuASR benchmark suite."  ON)
 option(CUASR_EXAMPLE "Build cuASR examples."  ON)
 
-# By default, build fat binaries. TODO add sm_80 here
-option(CUASR_CUDA_ARCHS "List of CUDA architectures to compile for." "60 61 70 72 75")
-
 # CUDA native compiler (nvcc) only supports upto C++14 for now
 find_package(CUDA REQUIRED)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_CUDA_STANDARD 14)
+set(CMAKE_CUDA_STANDARD_REQUIRED TRUE)
 
 # C++ compiler flags for target compile options
 set(cuASR_CXX_FLAGS -Wall -Wextra -Wno-unused-parameter -Wno-uninitialized -Wno-strict-aliasing)
@@ -41,7 +43,11 @@ set(cuASR_CUDA_FLAGS --expt-relaxed-constexpr)
 set(cuASR_CUDA_FLAGS_DEBUG          -G ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELEASE        -O3 ${cuASR_CUDA_FLAGS})
 set(cuASR_CUDA_FLAGS_RELWITHDEBINFO -G ${cuASR_CUDA_FLAGS})
-set(CMAKE_CUDA_ARCHITECTURES ${CUASR_CUDA_ARCHS})
+if(NOT DEFINED CUASR_CUDA_ARCHS)
+  set(CMAKE_CUDA_ARCHITECTURES 80)
+else()
+  set(CMAKE_CUDA_ARCHITECTURES ${CUASR_CUDA_ARCHS})
+endif()
 
 # the sub-modules update themselves with git, so find git
 find_package(Git QUIET)
@@ -94,6 +100,7 @@ message(STATUS "  C++ Compiler         : ${CMAKE_CXX_COMPILER}")
 message(STATUS "  C++ Compiler version : ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "  CUDA Compiler        : ${CMAKE_CUDA_COMPILER}")
 message(STATUS "  CUDA Compiler version: ${CMAKE_CUDA_COMPILER_VERSION}")
+message(STATUS "  CUDA Arch support    : ${CMAKE_CUDA_ARCHITECTURES}")
 message(STATUS "  Build tests          : ${CUASR_TEST}")
 message(STATUS "  Test level           : ${CUASR_TEST_LEVEL}")
 message(STATUS "  Build benchmarks     : ${CUASR_BENCH}")

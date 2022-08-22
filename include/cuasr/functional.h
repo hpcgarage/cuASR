@@ -1,14 +1,42 @@
 /***************************************************************************************************
- * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
+ * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
+ * Copyright (c) 2017 - 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
  **************************************************************************************************/
 /*! \file
     \brief Defines basic semi-ring reels together with their identity and
     annihilator constants given type T.
-
-    This is inspired by the Standard Library's <functional> header.
 */
 
 #pragma once
+
+#include "cuasr/arch/functional.h"
 
 #include "cutlass/array.h"
 #include "cutlass/cutlass.h"
@@ -34,252 +62,202 @@ template <typename T>
 constexpr auto get_neginf() noexcept {
   return std::numeric_limits<T>::min();
 }
-}
 
-template <typename T, int N = 1>
-struct plus {
-  static T constexpr Identity    = static_cast<T>(0);
-  static T constexpr Annihilator = get_inf<T>();
+} // namespace
 
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const {
-    lhs += rhs;
-    return lhs;
+///////////////////////////////////////////////////////////////////////////////
+
+// Regular FMA
+template <typename T>
+struct plus_mult {
+  static T constexpr AddIdentity     = static_cast<T>(0);
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return lhs + rhs;
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs * rhs;
   }
 };
 
-template <typename T, int N = 1>
-struct multiplies {
-  static T constexpr Identity    = static_cast<T>(1);
-  static T constexpr Annihilator = static_cast<T>(0);
+///////////////////////////////////////////////////////////////////////////////
 
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const {
-    lhs *= rhs;
-    return lhs;
+template <typename T>
+struct min_plus {
+  static T constexpr AddIdentity     = get_inf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(0);
+  static T constexpr MultAnnihilator = get_inf<T>();
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs * rhs;
   }
 };
 
-template <typename T, int N = 1>
-struct minimum {
-  static T constexpr Identity    = get_inf<T>();
-  static T constexpr Annihilator = get_neginf<T>();
+///////////////////////////////////////////////////////////////////////////////
 
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const { return (rhs < lhs ? rhs : lhs); }
+template <typename T>
+struct max_plus {
+  static T constexpr AddIdentity     = get_neginf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(0);
+  static T constexpr MultAnnihilator = get_inf<T>();
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs + rhs;
   }
 };
 
-template <typename T, int N = 1>
-struct maximum {
-  static T constexpr Identity    = get_neginf<T>();
-  static T constexpr Annihilator = get_inf<T>();
+///////////////////////////////////////////////////////////////////////////////
 
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T const &lhs, T const &rhs) const { return (lhs < rhs ? rhs : lhs); }
+template <typename T>
+struct min_mult {
+  static T constexpr AddIdentity     = get_inf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs * rhs;
   }
 };
 
-template <typename T, int N = 1>
-struct binary_and {
-  static T constexpr Identity    = static_cast<T>(true);
-  static T constexpr Annihilator = static_cast<T>(false);
+///////////////////////////////////////////////////////////////////////////////
 
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const { return lhs && rhs; }
+template <typename T>
+struct max_mult {
+  static T constexpr AddIdentity     = get_neginf<T>();
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs * rhs;
   }
 };
 
-template <typename T, int N = 1>
-struct binary_or {
-  static T constexpr Identity    = static_cast<T>(false);
-  static T constexpr Annihilator = static_cast<T>(true);
+///////////////////////////////////////////////////////////////////////////////
 
-  // scalar operator
-  CUTLASS_HOST_DEVICE
-  T operator()(T lhs, T const &rhs) const { return lhs || rhs; }
+template <typename T>
+struct min_max {
+  static T constexpr AddIdentity     = get_inf<T>();
+  static T constexpr MultIdentity    = get_neginf<T>();
+  static T constexpr MultAnnihilator = get_inf<T>();
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(Array<T, N> const &lhs, T const &scalar) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
   }
 
-  CUTLASS_HOST_DEVICE
-  Array<T, N> operator()(T const &scalar, Array<T, N> const &rhs) const {
-    Array<T, N> result;
-    CUTLASS_PRAGMA_UNROLL
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
   }
 };
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+struct max_min {
+  static T constexpr AddIdentity     = get_neginf<T>();
+  static T constexpr MultIdentity    = get_inf<T>();
+  static T constexpr MultAnnihilator = get_neginf<T>();
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return cuasr::arch::max(lhs, rhs);
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return cuasr::arch::min(lhs, rhs);
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+struct or_and {
+  static T constexpr AddIdentity     = static_cast<T>(0);
+  static T constexpr MultIdentity    = static_cast<T>(1);
+  static T constexpr MultAnnihilator = static_cast<T>(0);
+
+  __host__ __device__
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
+  }
+
+  __host__ __device__
+  T add(T const lhs, T const rhs) const {
+    return lhs || rhs;
+  }
+
+  __host__ __device__
+  T mult(T const lhs, T const rhs) const {
+    return lhs && rhs;
+  }
+};
+
+///////////////////////////////////////////////////////////////////////////////
 
 } // namespace cuasr

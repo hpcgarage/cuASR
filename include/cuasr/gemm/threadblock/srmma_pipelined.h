@@ -1,5 +1,33 @@
 /***************************************************************************************************
- * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
+ * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
+ * Copyright (c) 2017 - 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
  **************************************************************************************************/
 /*! \file
     \brief Template for a double-buffered threadblock-scoped GEMM kernel.
@@ -53,8 +81,7 @@ template <
     typename SmemIteratorA_::Element,
     typename IteratorA_::Element,
     IteratorA_::Fragment::kElements>,
-  ///
-  /// Transformation applied to A operand
+  /// Transformation applied to B operand
   typename TransformB_ = cutlass::NumericArrayConverter<
     typename SmemIteratorB_::Element,
     typename IteratorB_::Element,
@@ -124,7 +151,7 @@ public:
     int thread_idx,                                     ///< ID within the threadblock
     int warp_idx,                                       ///< ID of warp
     int lane_idx,                                       ///< ID of each thread within a warp
-    ElementC additive_identity                             ///< Identity value of multiply op
+    ElementC additive_identity                          ///< Identity value of multiply op
   ):
     Base(shared_storage, thread_idx, warp_idx, lane_idx),
     smem_iterator_A_(shared_storage.operand_A_ref(), thread_idx),
@@ -205,10 +232,8 @@ public:
     int smem_write_stage_idx = 1;
 
     // Avoid reading out of bounds
-    if (gemm_k_iterations <= 1) {
-      iterator_A.clear_mask();
-      iterator_B.clear_mask();
-    }
+    iterator_A.clear_mask(gemm_k_iterations <= 1);
+    iterator_B.clear_mask(gemm_k_iterations <= 1);
 
     // Issue loads during the first warp-level matrix multiply-add *AFTER* issuing
     // shared memory loads (which have the tighest latency requirement).
@@ -275,10 +300,8 @@ public:
           ++iterator_B;
 
           // Avoid reading out of bounds if this was the last loop iteration
-          if (gemm_k_iterations <= 2) {
-            iterator_A.clear_mask();
-            iterator_B.clear_mask();
-          }
+          iterator_A.clear_mask(gemm_k_iterations <= 2);
+          iterator_B.clear_mask(gemm_k_iterations <= 2);
         }
 
         warp_mma(accum, warp_frag_A[warp_mma_k % 2], warp_frag_B[warp_mma_k % 2], accum);

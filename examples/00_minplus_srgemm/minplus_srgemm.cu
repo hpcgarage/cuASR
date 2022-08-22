@@ -20,33 +20,31 @@ auto cuasr_minplus_srsgemm_nt_n(
     bool do_epilogue_min,
     cudaStream_t stream = nullptr) -> int {
   // compile time configuration of this srgemm kernel using OperatorClass
-  using OperatorClass    = cutlass::arch::OpClassSimt;
-  using SmArch           = cutlass::arch::Sm50;
-  using AdditionOp       = cuasr::minimum<float>;
-  using MultiplicationOp = cuasr::plus<float>;
+  using OperatorClass = cutlass::arch::OpClassSimt;
+  using SmArch        = cutlass::arch::Sm50;
+  using RingOp        = cuasr::min_plus<float>;
 
   using TropicalConfig = typename cuasr::gemm::device::DefaultSemiRingConfiguration<
-      float, float, float, float, OperatorClass, //
-      AdditionOp, MultiplicationOp, SmArch>;
+      float, float, float, float, RingOp,
+      OperatorClass, SmArch>;
 
   using ColumnMajor = cutlass::layout::ColumnMajor;
   using RowMajor    = cutlass::layout::RowMajor;
 
   using cuASR_MinPlus_SGEMM = cuasr::gemm::device::Srgemm<
-      AdditionOp,       // Thread level SemiRing operator
-      MultiplicationOp, // Thread level SemiRing operator
+      RingOp,           // SemiRing operator
       float,            // element type of A
       ColumnMajor,      // layout of A
       float,            // element type of B
       RowMajor,         // layout of B
       float,            // element t  ype of C
-      ColumnMajor,         // layout of C
+      ColumnMajor,      // layout of C
       float             // element type of D
       >;
 
-  float alpha = MultiplicationOp::Identity;
+  float alpha = RingOp::AddIdentity;
   float beta
-      = do_epilogue_min ? MultiplicationOp::Identity : MultiplicationOp::Annihilator;
+      = do_epilogue_min ? RingOp::MultIdentity : 0;
 
   // construct kernel arguments struct
   cuASR_MinPlus_SGEMM::Arguments args(
@@ -122,9 +120,9 @@ int main() {
   auto start  = high_resolution_clock::now();
   for (int i = 0; i < repeats; ++i) {
     retval |= cuasr_minplus_srsgemm_nt_n(M, N, K, d_A, M, d_B, K, d_C, M, true, nullptr);
-    cudaDeviceSynchronize();
   }
-  auto end               = high_resolution_clock::now();
+  cudaDeviceSynchronize();
+  auto end   = high_resolution_clock::now();
   auto delta = duration_cast<nanoseconds>(end - start).count();
 
   if (retval) {

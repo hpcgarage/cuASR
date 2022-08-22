@@ -51,54 +51,31 @@
  * multi-stage pipelined SRGEMM is planned for the future.
  */
 
-// clang-format off
 namespace {
-template <typename T, int N = 1>
-struct binary_xor {
-  static T constexpr Identity = static_cast<T>(false);
 
-  // expose base scalar operator
+template <class T>
+struct xor_and {
+  static T constexpr AddIdentity     = static_cast<T>(false);
+  static T constexpr MultIdentity    = static_cast<T>(true);
+  static T constexpr MultAnnihilator = static_cast<T>(false);
+
   __host__ __device__
-  T operator()(T lhs, T const &rhs) const {
-    lhs ^= rhs;
-    return lhs;
+  void fma(T& dst, T const lhs, T const rhs, T const src) const {
+    dst = add(src, mult(lhs, rhs));
   }
 
   __host__ __device__
-  cutlass::Array<T, N>
-  operator()(cutlass::Array<T, N> const &lhs, cutlass::Array<T, N> const &rhs) const {
-    cutlass::Array<T, N> result;
-    #pragma unroll
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], rhs[i]);
-    }
-    return result;
+  T add(T const lhs, T const rhs) const {
+    return lhs ^ rhs;
   }
 
   __host__ __device__
-  cutlass::Array<T, N>
-  operator()(cutlass::Array<T, N> const &lhs, T const &scalar) const {
-    cutlass::Array<T, N> result;
-    #pragma unroll
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(lhs[i], scalar);
-    }
-    return result;
-  }
-
-  __host__ __device__
-  cutlass::Array<T, N>
-  operator()(T const &scalar, cutlass::Array<T, N> const &rhs) const {
-    cutlass::Array<T, N> result;
-    #pragma unroll
-    for (int i = 0; i < N; ++i) {
-      result[i] = this->operator()(scalar, rhs[i]);
-    }
-    return result;
+  T mult(T const lhs, T const rhs) const {
+    return lhs && rhs;
   }
 };
+
 } // namespace
-// clang-format on
 
 // GF(2) xor-and SRGEMM
 auto cuasr_gf_srgemm_nnn(
@@ -118,10 +95,11 @@ auto cuasr_gf_srgemm_nnn(
   using OperatorClass = cutlass::arch::OpClassSimt;
   using SmArch        = cutlass::arch::Sm50;
 
-  using AdditionOp       = binary_xor<int>;
-  using MultiplicationOp = cuasr::binary_and<int>;
+  // using AdditionOp       = binary_xor<int>;
+  // using MultiplicationOp = cuasr::binary_and<int>;
+  using RingOp = xor_and<int>;
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-      AdditionOp, MultiplicationOp, int, 1>;
+      RingOp, int, 1>;
 
   static int constexpr AlignmentA = 1;
   static int constexpr AlignmentB = 1;
@@ -135,8 +113,7 @@ auto cuasr_gf_srgemm_nnn(
   using RowMajor = cutlass::layout::RowMajor;
 
   using cuASRGaloisFieldSrgemm = cuasr::gemm::device::Srgemm<
-      AdditionOp,         // Thread level SemiRing operator
-      MultiplicationOp,   // Thread level SemiRing operator
+      RingOp,
       int,                // element type of A
       RowMajor,           // layout of A
       int,                // element type of B
@@ -157,8 +134,8 @@ auto cuasr_gf_srgemm_nnn(
       false               // SplitKSerial
       >;
 
-  int alpha = MultiplicationOp::Identity;
-  int beta = do_epilogue_and ? MultiplicationOp::Identity : MultiplicationOp::Annihilator;
+  int alpha = RingOp::MultIdentity;
+  int beta = do_epilogue_and ? RingOp::MultIdentity : RingOp::MultAnnihilator;
 
   // construct kernel arguments struct
   cuASRGaloisFieldSrgemm::Arguments args(
@@ -214,15 +191,13 @@ auto compare_host_reference(
     int ldc,
     int *reference_D,
     int *device_D) -> bool {
-  using AdditionOp       = binary_xor<int>;
-  using MultiplicationOp = cuasr::binary_and<int>;
+  using RingOp       = xor_and<int>;
   using EpilogueOutputOp = cuasr::epilogue::thread::SemiringLinearCombination<
-      AdditionOp, MultiplicationOp, int, 1>;
+      RingOp, int, 1>;
   using RowMajor = cutlass::layout::RowMajor;
 
   cuasr::reference::host::Srgemm<
-      AdditionOp,                                    //
-      MultiplicationOp,                              //
+      RingOp,                                        //
       int, RowMajor,                                 //
       int, RowMajor,                                 //
       int, RowMajor,                                 //
@@ -235,24 +210,40 @@ auto compare_host_reference(
       { M, N, K },                            //
       alpha, { A, lda }, { B, ldb },          //
       beta, { C, ldc }, { reference_D, ldc }, //
-      AdditionOp::Identity);
+      RingOp::AddIdentity);
 
-  auto is_correct = true;
+  auto is_wrong = false;
+  int counter = 0;
   for (int n = 0; n < N; ++n) {
     for (int m = 0; m < M; ++m) {
-      is_correct &= (reference_D[(ldc * n) + m] == device_D[(ldc * n) + m]);
+      auto incorrect = (reference_D[(ldc * n) + m] != device_D[(ldc * n) + m]);
+      is_wrong |= incorrect;
+      if (incorrect && counter < 10) {
+        std::cout << '[' << n << ',' << m << ']'
+                  << " Expected = " << reference_D[(ldc * n) + m]
+                  << " Computed = " << device_D[(ldc * n) + m] << '\n';
+        counter++;
+      }
     }
   }
-  return is_correct;
+  return (not is_wrong);
 }
 
-
-int main() {
+int main(int argc, char* argv[]) {
   using namespace std::chrono;
   // problem size
-  constexpr int M                = 512; // 4096
-  constexpr int N                = 512;
-  constexpr int K                = 512;
+  int M = 512;
+  if (argc > 2) {
+    M = std::atoi(argv[1]);
+  }
+  int N = 512;
+  if (argc > 3) {
+    N = std::atoi(argv[2]);
+  }
+  int K = 512;
+  if (argc > 4) {
+    K = std::atoi(argv[3]);
+  }
   constexpr bool do_epilogue_and = true;
 
   std::cout << "Running Xor-And Galois Field SRGEMM on A = " << M << 'x' << K
@@ -281,12 +272,10 @@ int main() {
   cudaMemcpy(d_B, B, sizeof(int) * K * N, cudaMemcpyHostToDevice);
   cudaMemcpy(d_C, C, sizeof(int) * M * N, cudaMemcpyHostToDevice);
 
-  auto start = high_resolution_clock::now();
-
-  auto retval
-      = cuasr_gf_srgemm_nnn(M, N, K, d_A, M, d_B, K, d_C, M, do_epilogue_and, nullptr);
-  retval |= cudaDeviceSynchronize();
-  auto end               = high_resolution_clock::now();
+  auto start  = high_resolution_clock::now();
+  auto retval = cuasr_gf_srgemm_nnn(M, N, K, d_A, M, d_B, K, d_C, M, do_epilogue_and, nullptr);
+  retval     |= cudaDeviceSynchronize();
+  auto end    = high_resolution_clock::now();
   duration<double> delta = (end - start);
 
   if (retval) {
@@ -300,10 +289,10 @@ int main() {
   cudaMemcpy(device_D, d_C, sizeof(int) * M * N, cudaMemcpyDeviceToHost);
 
   // compare against host
-  std::cout << "Comparing against reference host-side SRGEMM : ";
-  int alpha = cuasr::binary_and<int>::Identity;
-  int beta  = do_epilogue_and ? cuasr::binary_and<int>::Identity
-                             : cuasr::binary_and<int>::Annihilator;
+  std::cout << "Comparing against reference host-side SRGEMM :\n";
+  int alpha = xor_and<int>::AddIdentity;
+  int beta  = do_epilogue_and ? xor_and<int>::MultIdentity
+                              : xor_and<int>::MultAnnihilator;
   auto is_correct = compare_host_reference(
       M, N, K, alpha, A, M, B, N, beta, C, M, reference_D, device_D);
 

@@ -1,5 +1,32 @@
 /***************************************************************************************************
- * Copyright (c) 2020, Vijay Thakkar (thakkarv@gatech.edu).  All rights reserved.
+ * Copyright (c) 2022, Vijay Thakkar (thakkarv@gatech.edu).
+ * Copyright (c) 2017 - 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **************************************************************************************************/
 /*! \file
     \brief Template for GEMM performing a reduction over K partitions in parallel.
@@ -34,10 +61,8 @@ namespace device {
   Gemm device-level operator performing parallel reduction over the K partition.
 */
 template <
-  /// Addition operator of the semi-ring
-  typename AdditionOp_,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp_,
+  /// Ring operation that performs FMA
+  typename RingOp_,
   /// Element type for A matrix operand
   typename ElementA_,
   /// Layout type for A matrix operand
@@ -59,28 +84,28 @@ template <
   /// Threadblock-level tile size (concept: GemmShape)
   typename ThreadblockShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::ThreadblockShape,
+      RingOp_, OperatorClass_, ArchTag_>::ThreadblockShape,
   /// Warp-level tile size (concept: GemmShape)
   typename WarpShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::WarpShape,
+      RingOp_, OperatorClass_, ArchTag_>::WarpShape,
   /// Instruction-level tile size (concept: GemmShape)
   typename InstructionShape_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::InstructionShape,
+      RingOp_, OperatorClass_, ArchTag_>::InstructionShape,
   /// Epilogue output operator
   typename EpilogueOutputOp_ = typename DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::EpilogueOutputOp,
+      RingOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp,
   /// Epilogue conversion operator
   typename ConvertScaledOp_ = cutlass::epilogue::thread::Convert<
       ElementAccumulator_, DefaultSemiRingConfiguration<
         ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-        OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::EpilogueOutputOp::kCount,
+        RingOp_, OperatorClass_, ArchTag_>::EpilogueOutputOp::kCount,
       ElementAccumulator_>,
   /// Reduction operator
   typename ReductionOp_ = cuasr::reduction::thread::SemiringReduce<
-      AdditionOp_, ElementAccumulator_,
+      RingOp_, ElementAccumulator_,
       typename EpilogueOutputOp_::ElementAccumulator, EpilogueOutputOp_::kCount>,
   /// Threadblock-level swizzling operator
   typename ThreadblockSwizzle_ =
@@ -88,21 +113,20 @@ template <
   /// Number of stages used in the pipelined mainloop
   int Stages = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kStages,
+      RingOp_, OperatorClass_, ArchTag_>::kStages,
   /// Access granularity of A matrix in units of elements
   int kAlignmentA = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentA,
+      RingOp_, OperatorClass_, ArchTag_>::kAlignmentA,
   /// Access granularity of B matrix in units of elements
   int kAlignmentB = DefaultSemiRingConfiguration<
       ElementA_, ElementB_, ElementC_, ElementAccumulator_,
-      OperatorClass_, AdditionOp_, MultiplicationOp_, ArchTag_>::kAlignmentB
+      RingOp_, OperatorClass_, ArchTag_>::kAlignmentB
 >
 class SrgemmSplitKParallel {
  public:
 
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp_;
   using ElementA = ElementA_;
   using LayoutA = LayoutA_;
   using ElementB = ElementB_;
@@ -123,6 +147,7 @@ class SrgemmSplitKParallel {
 
   /// GEMM kernel
   using SrgemmKernel = typename cuasr::gemm::kernel::DefaultSrgemmSplitKParallel<
+    RingOp_,
     ElementA,
     LayoutA,
     kAlignmentA,
@@ -137,8 +162,6 @@ class SrgemmSplitKParallel {
     ThreadblockShape,
     WarpShape,
     InstructionShape,
-    AdditionOp,
-    MultiplicationOp,
     ConvertScaledOp,
     ThreadblockSwizzle,
     kStages
@@ -166,7 +189,6 @@ class SrgemmSplitKParallel {
     typename EpilogueOutputOp::Params epilogue;
     int split_k_slices;
     typename ConvertScaledOp::Params convert;
-    typename ReductionOp::Params reduction;
 
     //
     // Methods
@@ -188,9 +210,7 @@ class SrgemmSplitKParallel {
         typename EpilogueOutputOp::Params(),
       int split_k_slices = 1,
       typename ConvertScaledOp::Params convert_ =
-        typename ConvertScaledOp::Params(),
-      typename ReductionOp::Params reduction_ =
-        typename ReductionOp::Params()
+        typename ConvertScaledOp::Params()
     ):
       problem_size(problem_size_),
       ref_A(ref_A_),
@@ -199,8 +219,7 @@ class SrgemmSplitKParallel {
       ref_D(ref_D_),
       epilogue(epilogue_),
       split_k_slices(split_k_slices),
-      convert(convert_),
-      reduction(reduction_) { }
+      convert(convert_) { }
   };
 
 private:
@@ -381,10 +400,8 @@ public:
 
 /// Partial specialization for column-major output
 template <
-  /// Addition operator of the semi-ring
-  typename AdditionOp_,
-  /// Multiplication operator of the semi-ring
-  typename MultiplicationOp_,
+  /// Ring operation that performs FMA
+  typename RingOp_,
   /// Element type for A matrix operand
   typename ElementA_,
   /// Layout type for A matrix operand
@@ -422,7 +439,7 @@ template <
   /// Access granularity of B matrix in units of elements
   int kAlignmentB>
 class SrgemmSplitKParallel<
-    AdditionOp_, MultiplicationOp_, ElementA_, LayoutA_, ElementB_,
+    RingOp_, ElementA_, LayoutA_, ElementB_,
     LayoutB_, ElementC_, cutlass::layout::ColumnMajor, // partially specialized on LayoutC
     ElementAccumulator_, OperatorClass_, ArchTag_, ThreadblockShape_,
     WarpShape_, InstructionShape_, EpilogueOutputOp_, ConvertScaledOp_,
@@ -430,8 +447,7 @@ class SrgemmSplitKParallel<
     > {
  public:
 
-  using AdditionOp = AdditionOp_;
-  using MultiplicationOp = MultiplicationOp_;
+  using RingOp = RingOp_;
   using ElementA = ElementA_;
   using LayoutA = LayoutA_;
   using ElementB = ElementB_;
@@ -451,8 +467,7 @@ class SrgemmSplitKParallel<
   static int const kStages = Stages;
 
   using UnderlyingOperator = SrgemmSplitKParallel<
-    AdditionOp,
-    MultiplicationOp,
+    RingOp,
     ElementB,
     typename cutlass::layout::LayoutTranspose<LayoutB>::type,
     ElementA,
@@ -493,7 +508,6 @@ class SrgemmSplitKParallel<
     typename EpilogueOutputOp::Params epilogue;
     int split_k_slices;
     typename ConvertScaledOp::Params convert;
-    typename ReductionOp::Params reduction;
 
     //
     // Methods
@@ -515,9 +529,7 @@ class SrgemmSplitKParallel<
         typename EpilogueOutputOp::Params(),
       int split_k_slices = 1,
       typename ConvertScaledOp::Params convert_ =
-        typename ConvertScaledOp::Params(),
-      typename ReductionOp::Params reduction_ =
-        typename ReductionOp::Params()
+        typename ConvertScaledOp::Params()
     ):
       problem_size(problem_size_),
       ref_A(ref_A_),
@@ -526,8 +538,7 @@ class SrgemmSplitKParallel<
       ref_D(ref_D_),
       epilogue(epilogue_),
       split_k_slices(split_k_slices),
-      convert(convert_),
-      reduction(reduction_) { }
+      convert(convert_) { }
   };
 
 private:
